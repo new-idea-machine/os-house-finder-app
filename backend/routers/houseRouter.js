@@ -1,7 +1,7 @@
 import { getHouse, getHouses, createHouse, updateHouse, deleteHouse } from '../controllers/houseController.js';
 import express from 'express';
 
-export const houseRouter = express.Router();
+const houseRouter = express.Router();
 
 // GET all houses
 houseRouter.get('/', getHouses);
@@ -17,3 +17,5 @@ houseRouter.put('/:id', updateHouse);
 
 // DELETE a specific house by ID
 houseRouter.delete('/:id', deleteHouse);
+
+export default houseRouter;
