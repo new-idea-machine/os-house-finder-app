@@ -131,6 +131,9 @@ const houseSchema = new mongoose.Schema({
   zoningCode: {
     type: String,
   },
+  imageLink: {
+    type: String,
+  },
   transit: {},
   schools: {},
   offLeashDogAreas: {},
