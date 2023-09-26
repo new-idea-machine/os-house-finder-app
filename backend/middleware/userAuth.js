@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export const userAuth = (req, res, next) => {
+export const userAuth = async (req, res, next) => {
   // Get the token from the request headers
   const token = req.header('Authorization');
 
@@ -17,11 +17,12 @@ export const userAuth = (req, res, next) => {
     req.user = {
       id: decoded.id,
       email: decoded.email,
-      role: decoded.role
+      role: decoded.role,
     };
 
     next(); // Move to the next middleware or route handler
   } catch (error) {
+    console.log(error);
     return res.status(401).json({ message: 'Invalid token' });
   }
 };

@@ -1,7 +1,10 @@
+import HomeCarousel from '../components/HomeCarousel';
+import About from '../components/About';
 const HomeScreen = () => {
   return (
     <>
-      <h1>Welcome to HouseFinder</h1>
+      <HomeCarousel />
+      <About />
     </>
   );
 };
