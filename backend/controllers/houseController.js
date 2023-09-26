@@ -1,4 +1,5 @@
 import houseModel from '../models/houseModel.js';
+const { spawn } = require('child_process');
 
 // Get all houses
 export const getHouses = async (req, res) => {
@@ -16,6 +17,35 @@ export const getHouses = async (req, res) => {
 export const getHouse = async (req, res) => {
   try {
     const house = await houseModel.findById(req.params.id);
+    res.status(200).json(house);
+  } catch (error) {
+    res.status(404).json({
+      message: error.message,
+    });
+  }
+};
+
+// Get Scraped data by 
+export const getScraped = async (req, res) => {
+  try {
+    // Now, let's call the Python function
+    const pythonProcess = spawn('python', ['../scripts/scraper.py', req.params.url]);
+
+    pythonProcess.stdout.on('data', (data) => {
+        const result = data.toString();
+        res.send(result); // Sending the Python function result as the response
+    });
+
+    pythonProcess.on('error', (error) => {
+        console.error(error);
+        res.status(500).send('Error calling Python function');
+    });
+
+    pythonProcess.on('close', (code) => {
+        if (code !== 0) {
+            console.error(`Python process exited with code ${code}`);
+        }
+    });
     res.status(200).json(house);
   } catch (error) {
     res.status(404).json({
