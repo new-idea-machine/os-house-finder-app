@@ -1,6 +1,6 @@
 import houseModel from '../models/houseModel.js';
-const { spawn } = require('child_process');
-
+// const { spawn } = require('child_process');
+import { spawn } from 'child_process';
 // Get all houses
 export const getHouses = async (req, res) => {
   try {
@@ -25,26 +25,29 @@ export const getHouse = async (req, res) => {
   }
 };
 
-// Get Scraped data by 
+// Get Scraped data by
 export const getScraped = async (req, res) => {
   try {
     // Now, let's call the Python function
-    const pythonProcess = spawn('python', ['../scripts/scraper.py', req.params.url]);
+    const pythonProcess = spawn('python', [
+      '../scripts/scraper.py',
+      req.params.url,
+    ]);
 
     pythonProcess.stdout.on('data', (data) => {
-        const result = data.toString();
-        res.send(result); // Sending the Python function result as the response
+      const result = data.toString();
+      res.send(result); // Sending the Python function result as the response
     });
 
     pythonProcess.on('error', (error) => {
-        console.error(error);
-        res.status(500).send('Error calling Python function');
+      console.error(error);
+      res.status(500).send('Error calling Python function');
     });
 
     pythonProcess.on('close', (code) => {
-        if (code !== 0) {
-            console.error(`Python process exited with code ${code}`);
-        }
+      if (code !== 0) {
+        console.error(`Python process exited with code ${code}`);
+      }
     });
     res.status(200).json(house);
   } catch (error) {
@@ -75,13 +78,22 @@ export const updateHouse = async (req, res) => {
   const updatedData = req.body;
 
   try {
-    const updatedHouse = await houseModel.findByIdAndUpdate(id, updatedData, { new: true });
+    const updatedHouse = await houseModel.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
 
     if (!updatedHouse) {
-      return res.status(404).json({ message: `House with ID ${id} not found.` });
+      return res
+        .status(404)
+        .json({ message: `House with ID ${id} not found.` });
     }
 
-    res.status(200).json({ message: `House with ID ${id} updated successfully.`, updatedHouse });
+    res
+      .status(200)
+      .json({
+        message: `House with ID ${id} updated successfully.`,
+        updatedHouse,
+      });
   } catch (error) {
     res.status(400).json({
       message: error.message,
@@ -97,10 +109,14 @@ export const deleteHouse = async (req, res) => {
     const deletedHouse = await houseModel.findByIdAndRemove(id);
 
     if (!deletedHouse) {
-      return res.status(404).json({ message: `House with ID ${id} not found.` });
+      return res
+        .status(404)
+        .json({ message: `House with ID ${id} not found.` });
     }
 
-    res.status(200).json({ message: `House with ID ${id} deleted successfully.` });
+    res
+      .status(200)
+      .json({ message: `House with ID ${id} deleted successfully.` });
   } catch (error) {
     res.status(400).json({
       message: error.message,

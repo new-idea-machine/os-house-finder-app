@@ -44,7 +44,16 @@ export const loginUser = async (req, res) => {
     // Generate a JWT token
     const token = user.generateToken();
 
-    return res.status(200).json({ token });
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_EVN !== 'development',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    });
+
+    res.json({ _id: user._id, email: user.email, role: user.role });
+
+    // return res.status(200).json({ token });
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
@@ -64,7 +73,9 @@ export const updateUser = async (req, res) => {
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res.status(403).json({ message: 'You are not authorized to perform this action' });
+      return res
+        .status(403)
+        .json({ message: 'You are not authorized to perform this action' });
     }
 
     // Check if the email is already in use
@@ -97,7 +108,9 @@ export const deleteUser = async (req, res) => {
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res.status(403).json({ message: 'You are not authorized to perform this action' });
+      return res
+        .status(403)
+        .json({ message: 'You are not authorized to perform this action' });
     }
 
     return res.status(200).json({ message: 'User deleted successfully' });
@@ -119,7 +132,9 @@ export const getUser = async (req, res) => {
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res.status(403).json({ message: 'You are not authorized to perform this action' });
+      return res
+        .status(403)
+        .json({ message: 'You are not authorized to perform this action' });
     }
 
     return res.status(200).json({ user });
@@ -133,7 +148,9 @@ export const getAllUsers = async (req, res) => {
   try {
     // Check if the user is authorized to perform this action
     if (req.user.role !== 'admin') {
-      return res.status(403).json({ message: 'You are not authorized to perform this action' });
+      return res
+        .status(403)
+        .json({ message: 'You are not authorized to perform this action' });
     }
     // Find all users
     const users = await User.find();
