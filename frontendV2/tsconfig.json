@@ -34,7 +34,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "exclude": ["node_modules", "build", "dist", "coverage"],
   "include": ["vite.config.ts",".eslintrc.cjs","src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

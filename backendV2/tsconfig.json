@@ -1,10 +1,5 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
-    "baseUrl": ".",
-    "paths": {
-      "@src/*": ["src/*"],
-    },
     "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
@@ -15,14 +10,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "test",
-    "coverage",
-    "src/**/*.spec.ts",
-    // "src/**/*.test.ts",
-  ],
   "include": [
     "./*.js",
     "src/**/*.ts",
