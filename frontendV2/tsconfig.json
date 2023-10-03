@@ -12,6 +12,7 @@
       "@services/*": ["./src/services/*"],
       "@styles/*": ["./src/styles/*"],
       "@utils/*": ["./src/utils/*"],
+      "@public/*": ["./public/*"],
       "@/*": ["./src/*"],
     },
     "target": "ES2020",

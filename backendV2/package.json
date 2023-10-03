@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon",
     "build": "tsc",
-    "lint": "eslint --fix src/**/*.ts",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },

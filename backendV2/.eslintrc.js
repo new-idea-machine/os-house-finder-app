@@ -12,17 +12,6 @@ module.exports = {
     "prettier"
   ],
   "overrides": [
-    // {
-    //   "env": {
-    //     "node": true
-    //   },
-    //   "files": [
-    //     ".eslintrc.{js,cjs}"
-    //   ],
-    //   "parserOptions": {
-    //     "sourceType": "script"
-    //   }
-    // }
   ],
   "ignorePatterns": ['dist', '.eslintrc.js'],
   "parser": "@typescript-eslint/parser",
