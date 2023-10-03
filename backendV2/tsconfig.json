@@ -16,16 +16,13 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "node_modules",
-    "dist",
-    "test",
-    "coverage",
-    "src/**/*.spec.ts",
-    // "src/**/*.test.ts",
+    "node_modules", 
+    "dist", 
+    "__tests__", 
+    "coverage"
   ],
   "include": [
     "./*.js",
     "src/**/*.ts",
-    "test/**/*.ts",
   ],
 }

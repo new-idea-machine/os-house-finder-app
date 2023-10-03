@@ -7,7 +7,7 @@
     "start": "ts-node src/index.ts",
     "dev": "nodemon",
     "build": "tsc",
-    "lint": "eslint --fix src test",
+    "lint": "eslint --fix src/**/*.ts",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },

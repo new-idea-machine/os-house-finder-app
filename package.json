@@ -12,6 +12,12 @@
     "server2": "cd backendV2 && npm run dev",
     "client2": "cd frontendV2 && npm run dev",
     "dev2": "concurrently \"npm run server2\" \"npm run client2\"",
+    "lint:server": "cd backendV2 && npm run lint",
+    "lint:client": "cd frontendV2 && npm run lint",
+    "lint": "concurrently \"npm run lint:server\" \"npm run lint:client\"",
+    "test:server": "cd backendV2 && npm run test",
+    "test:client": "cd frontendV2 && npm run test",
+    "test": "concurrently \"npm run test:server\" \"npm run test:client\"",
     "data:import": "node backend/seeder.js -i",
     "data:destroy": "node backend/seeder.js -d"
   },
