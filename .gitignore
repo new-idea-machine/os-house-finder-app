@@ -203,3 +203,5 @@ $RECYCLE.BIN/
 
 # JetBrains
 .idea/
+
+.vscode

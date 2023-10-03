@@ -9,6 +9,9 @@
     "server": "nodemon backend/server.js",
     "client": "npm start --prefix frontend",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server2": "cd backendV2 && npm run dev",
+    "client2": "cd frontendV2 && npm run dev",
+    "dev2": "concurrently \"npm run server2\" \"npm run client2\"",
     "data:import": "node backend/seeder.js -i",
     "data:destroy": "node backend/seeder.js -d"
   },
