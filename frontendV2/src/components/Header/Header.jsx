@@ -3,6 +3,7 @@ import { FaUser } from 'react-icons/fa';
 import logo from '@assets/images/HouseLogoGrey.svg';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
+import Button from '@components/ui/Button';
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -12,6 +13,7 @@ const Header = () => {
   };
   return (
     <header>
+      <Button>Test</Button>
       <Navbar bg="light" data-bs-theme="light" expand="md" collapseOnSelect>
         <Container fluid>
           <div className="d-flex align-items-center justify-content-between w-100">
