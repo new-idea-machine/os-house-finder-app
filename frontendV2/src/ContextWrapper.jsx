@@ -3,7 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import store from './app/hooks';
+import store from './app/store';
 
 export default function ContextWrapper({ children }) {
   return (

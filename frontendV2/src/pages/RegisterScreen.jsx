@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
 
-const RegisterScreen = () => {
+function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,7 +24,7 @@ const RegisterScreen = () => {
             placeholder="Enter Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="email" className="my-3">
@@ -33,7 +33,7 @@ const RegisterScreen = () => {
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="password" className="my-3">
@@ -42,7 +42,7 @@ const RegisterScreen = () => {
             placeholder="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Form.Group controlId="confirmpassword" className="my-3">
@@ -51,7 +51,7 @@ const RegisterScreen = () => {
             placeholder="Enter password again"
             value={password}
             onChange={(e) => setConfirmPassword(e.target.value)}
-          ></Form.Control>
+          />
         </Form.Group>
 
         <Button type="submit" variant="primary" className="mt-3">
@@ -60,6 +60,6 @@ const RegisterScreen = () => {
       </Form>
     </FormContainer>
   );
-};
+}
 
 export default RegisterScreen;

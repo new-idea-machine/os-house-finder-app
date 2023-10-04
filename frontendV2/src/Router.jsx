@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
 
-import HomeScreen from '@screens/HomeScreen';
-import FAQScreen from '@screens/FAQScreen';
-import DemoScreen from '@screens/DemoScreen';
-import RegisterScreen from '@pages/RegisterScreen';
+import HomeScreen from './pages/HomeScreen';
+import FAQScreen from './pages/FAQScreen';
+import DemoScreen from './pages/DemoScreen';
+import RegisterScreen from './pages/RegisterScreen';
 import Login from './pages/LoginScreen';
 
 export default function Router() {

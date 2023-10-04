@@ -1,12 +1,13 @@
 import HomeCarousel from '../components/HomeCarousel';
 import About from '../components/About';
-const HomeScreen = () => {
+
+function HomeScreen() {
   return (
     <>
       <HomeCarousel />
       <About />
     </>
   );
-};
+}
 
 export default HomeScreen;
