@@ -9,6 +9,10 @@ function App() {
 
   return (
     <>
+      <div className="w-full h-screen flex justify-center items-center">
+        test 123
+      </div>
+
       <div>
         <a href="https://vitejs.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
