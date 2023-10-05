@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 // import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
 import FormContainer from '../components/FormContainer';
@@ -7,11 +7,11 @@ function RegisterScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  // const [confirmPassword, setConfirmPassword] = useState('');
 
-  const submitHandler = (e) => {
+  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submit');
+    // console.log('submit');
   };
 
   return (
@@ -50,7 +50,7 @@ function RegisterScreen() {
             type="password"
             placeholder="Enter password again"
             value={password}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            // onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </Form.Group>
 
