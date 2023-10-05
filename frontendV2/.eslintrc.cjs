@@ -59,4 +59,5 @@ module.exports = {
     ],
     'react/jsx-props-no-spreading': 0,
   },
+  ignorePatterns: ['src/components/ui/', 'src/lib/'],
 };
