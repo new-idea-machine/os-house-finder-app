@@ -1,6 +1,16 @@
-import React from 'react';
+type ProfessionalCardProps = {
+  name: string;
+  title: string;
+  description: string;
+  image: string;
+};
 
-function ProfessionalCard({ name, title, description, image }) {
+function ProfessionalCard({
+  name,
+  title,
+  description,
+  image,
+}: ProfessionalCardProps) {
   return (
     <div className="px-5">
       <img className="mx-auto" src={image} width={200} alt="Shirt" />

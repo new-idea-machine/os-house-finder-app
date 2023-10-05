@@ -1,4 +1,4 @@
-function FAQ() {
+function FAQScreen() {
   return (
     <div className="container-xl mx-auto text-center pt-5">
       <h1 className="text-center pt-4">FAQ</h1>
@@ -8,4 +8,4 @@ function FAQ() {
   );
 }
 
-export default FAQ;
+export default FAQScreen;
