@@ -4,7 +4,7 @@ import logo from '@assets/images/HouseLogoGrey.svg';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useSelector } from 'react-redux';
 
-const Header = () => {
+function Header() {
   const { userInfo } = useSelector((state) => state.auth);
 
   const logoutHandler = () => {
@@ -76,6 +76,6 @@ const Header = () => {
       </Navbar>
     </header>
   );
-};
+}
 
 export default Header;
