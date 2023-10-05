@@ -1,7 +1,7 @@
 import ProfessionalCard from './ProfessionalCard';
 import shirt from '../assets/images/Shirt.png';
 
-function About() {
+export default function About() {
   return (
     <>
       <h1 className="pt-4 text-center text-3xl">About us</h1>
@@ -34,5 +34,3 @@ function About() {
     </>
   );
 }
-
-export default About;
