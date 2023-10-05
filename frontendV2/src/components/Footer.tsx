@@ -1,18 +1,8 @@
-import { Container, Row, Col } from 'react-bootstrap';
-
-function Footer() {
+export default function Footer() {
   const currentYear = new Date().getFullYear();
   return (
-    <footer>
-      <Container>
-        <Row>
-          <Col className="text-center py-3">
-            <p>HouseFinder &copy; {currentYear}</p>
-          </Col>
-        </Row>
-      </Container>
+    <footer className="flex p-4 text-center">
+      HouseFinder &copy; {currentYear}
     </footer>
   );
 }
-
-export default Footer;
