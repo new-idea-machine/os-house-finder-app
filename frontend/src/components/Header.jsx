@@ -1,14 +1,27 @@
+import { useNavigate } from 'react-router-dom';
 import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { FaUser } from 'react-icons/fa';
 import logo from '../assets/images/HouseLogoGrey.svg';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLogoutMutation } from '../slices/usersApiSlice';
+import { logout } from '../slices/authSlice';
 
 const Header = () => {
   const { userInfo } = useSelector((state) => state.auth);
 
-  const logoutHandler = () => {
-    console.log('logout');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [logoutApiCall] = useLogoutMutation();
+
+  const logoutHandler = async () => {
+    try {
+      await logoutApiCall().unwrap();
+      dispatch(logout());
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <header>
@@ -53,7 +66,7 @@ const Header = () => {
 
                 <div className="me-auto">
                   {userInfo ? (
-                    <NavDropdown title={userInfo.name} id="username">
+                    <NavDropdown title={userInfo.email} id="username">
                       <LinkContainer to="/profile">
                         <NavDropdown.Item>Profile</NavDropdown.Item>
                       </LinkContainer>
