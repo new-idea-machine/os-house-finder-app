@@ -23,7 +23,7 @@ export default function Header() {
             className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
           >
             <img width={40} src={logo} alt="HouseFinder" />
-            <p>Issue-Tracker</p>
+            <p>House-Tracker</p>
           </a>
           <div className="flex items-center gap-x-4 font-bold text-gray-700">
             <a className="hover:text-gray-900" href="/faq">
