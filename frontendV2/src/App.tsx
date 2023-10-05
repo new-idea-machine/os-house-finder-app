@@ -5,7 +5,7 @@ import Footer from '@components/Footer';
 import ContextWrapper from './ContextWrapper';
 import Router from './Router';
 
-function App() {
+export default function App() {
   return (
     <ContextWrapper>
       <Header />
@@ -19,5 +19,3 @@ function App() {
     </ContextWrapper>
   );
 }
-
-export default App;
