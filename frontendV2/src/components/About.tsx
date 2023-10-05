@@ -1,12 +1,11 @@
-import React from 'react';
 import ProfessionalCard from './ProfessionalCard';
 import shirt from '../assets/images/Shirt.png';
 
 function About() {
   return (
     <>
-      <h1 className="text-center pt-4">About us</h1>
-      <div className="container-xl pt-1 d-flex  justify-content-center">
+      <h1 className="pt-4 text-center text-3xl">About us</h1>
+      <div className="mx-auto grid max-w-sm items-start gap-2 md:max-w-2xl md:grid-cols-2 lg:max-w-none lg:grid-cols-3">
         <ProfessionalCard
           name="Employee 1"
           title="Frontend developer"
