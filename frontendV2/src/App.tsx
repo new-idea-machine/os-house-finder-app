@@ -1,4 +1,3 @@
-import { Container } from 'react-bootstrap';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@components/Header/Header';
@@ -11,9 +10,9 @@ function App() {
     <ContextWrapper>
       <Header />
       <main className="py-3">
-        <Container>
+        <div className="container">
           <Router />
-        </Container>
+        </div>
       </main>
       <Footer />
       <ToastContainer />
