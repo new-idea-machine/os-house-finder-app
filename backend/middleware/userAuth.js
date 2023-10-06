@@ -3,7 +3,7 @@ import User from '../models/userModel.js';
 
 export const userAuth = async (req, res, next) => {
   // Get the token from the request headers
-  // const token = req.header('Authorization');
+   //const token = req.header('Authorization');
   let token;
 
   token = req.cookies.jwt;
@@ -12,7 +12,7 @@ export const userAuth = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: 'Authorization token missing' });
   }
-
+ 
   try {
     // Verify the token and extract the payload
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
