@@ -2,12 +2,12 @@ import { useState, useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import useAuth from '@hooks/useAuth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
-import { useLoginMutation } from '../features/usersApiSlice';
-import { setCredentials } from '../features/authSlice';
+// import { useLoginMutation } from '../features/usersApiSlice';
+// import { setCredentials } from '../features/authSlice';
 
 function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -16,11 +16,11 @@ function LoginScreen() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
+  // const [login, { isLoading }] = useLoginMutation();
 
   const { userInfo } = useSelector((state) => state.auth);
 
-  const { handleLogin } = useAuth();
+  const { handleLogin, isLoginLoding } = useAuth();
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -35,26 +35,6 @@ function LoginScreen() {
   const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
     handleLogin({ email, password });
-    // try {
-    //   const res = await login({ email, password });
-
-    //   console.log(res);
-
-    //   const unwrapped = await login({ email, password }).unwrap();
-
-    //   console.log(unwrapped);
-
-    //   dispatch(
-    //     setCredentials({
-    //       email: unwrapped.email,
-    //       _id: unwrapped._id,
-    //       role: unwrapped.role,
-    //     })
-    //   );
-    //   navigate(redirect);
-    // } catch (err) {
-    //   toast.error(err?.data?.message || err.error);
-    // }
   };
 
   return (
@@ -83,12 +63,12 @@ function LoginScreen() {
           type="submit"
           variant="primary"
           className="mt-3"
-          disabled={isLoading}
+          disabled={isLoginLoding}
         >
           Sign In
         </Button>
 
-        {isLoading && <Loader />}
+        {isLoginLoding && <Loader />}
       </Form>
       <Row className="py-3">
         <Col>

@@ -1,6 +1,6 @@
-import {createSlice,PayloadAction} from '@reduxjs/toolkit';
-import {User} from '@constants/types';
-import {stat} from 'fs';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { User } from '@constants/types';
+import { stat } from 'fs';
 
 interface UserState {
   userInfo: User | null;
@@ -16,12 +16,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setCredentials: (state,action) =>
-    {
+    setCredentials: (state, action) => {
+      console.log('State, ', state);
 
-      console.log("State, ", state);
-
-      console.log("Action, ", action);
+      console.log('Action, ', action);
 
       state.userInfo = action.payload;
       localStorage.setItem('userInfo', JSON.stringify(action.payload));

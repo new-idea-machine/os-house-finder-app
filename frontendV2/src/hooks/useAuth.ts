@@ -11,7 +11,7 @@ export default function useAuth() {
   const dispatch = useAppDispatch();
   const userInfo = useAppSelector((state) => state.auth.userInfo);
 
-  const [login, loginResult] = useLoginMutation();
+  const [login, { isLoading: isLoginLoding }] = useLoginMutation();
 
   const [logout, logoutResult] = useLogoutMutation();
 
@@ -29,5 +29,5 @@ export default function useAuth() {
     }
   };
 
-  return { handleLogin };
+  return { handleLogin, isLoginLoding };
 }
