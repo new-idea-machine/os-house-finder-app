@@ -14,9 +14,7 @@ function LoginScreen() {
 
   const { userInfo } = useAppSelector((state) => state.auth);
 
-  console.log('userInfo from store: ', userInfo);
-
-  const { handleLogin, isLoginLoding } = useAuth();
+  const { handleLogin, isLoginLoading } = useAuth();
 
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
@@ -59,12 +57,12 @@ function LoginScreen() {
           type="submit"
           variant="primary"
           className="mt-3"
-          disabled={isLoginLoding}
+          disabled={isLoginLoading}
         >
           Sign In
         </Button>
 
-        {isLoginLoding && <Loader />}
+        {isLoginLoading && <Loader />}
       </Form>
       <Row className="py-3">
         <Col>

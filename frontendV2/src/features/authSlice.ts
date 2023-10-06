@@ -11,17 +11,11 @@ const initialState: UserState = {
     : null,
 };
 
-console.log('Initial state, ', initialState);
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<User | null>) => {
-      console.log('State, ', state);
-
-      console.log('Action, ', action);
-
       state.userInfo = action.payload;
       localStorage.setItem('userInfo', JSON.stringify(action.payload));
     },

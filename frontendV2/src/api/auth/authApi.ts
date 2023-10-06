@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
 import { Credentials, User } from '@constants/types';
 
 const baseQuery = fetchBaseQuery({
@@ -18,14 +17,7 @@ export const authApi = createApi({
       }),
       invalidatesTags: ['User'],
     }),
-    logout: builder.mutation({
-      query: () => ({
-        url: '/api/users/logout',
-        method: 'POST',
-      }),
-      invalidatesTags: ['User'],
-    }),
   }),
 });
 
-export const { useLoginMutation, useLogoutMutation } = authApi;
+export const { useLoginMutation } = authApi;
