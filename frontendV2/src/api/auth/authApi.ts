@@ -23,6 +23,7 @@ export const authApi = createApi({
         url: '/api/users/logout',
         method: 'POST',
       }),
+      invalidatesTags: ['User'],
     }),
   }),
 });

@@ -1,24 +1,20 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, Row, Col } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-// import { toast } from 'react-toastify';
+import { useAppSelector } from '@app/hooks';
 import useAuth from '@hooks/useAuth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
-// import { useLoginMutation } from '../features/usersApiSlice';
-// import { setCredentials } from '../features/authSlice';
 
 function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const [login, { isLoading }] = useLoginMutation();
+  const { userInfo } = useAppSelector((state) => state.auth);
 
-  const { userInfo } = useSelector((state) => state.auth);
+  console.log('userInfo from store: ', userInfo);
 
   const { handleLogin, isLoginLoding } = useAuth();
 
