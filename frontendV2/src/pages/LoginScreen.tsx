@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import useAuth from '@hooks/useAuth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
 import { useLoginMutation } from '../features/usersApiSlice';
@@ -19,6 +20,8 @@ function LoginScreen() {
 
   const { userInfo } = useSelector((state) => state.auth);
 
+  const { handleLogin } = useAuth();
+
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get('redirect') || '/';
@@ -29,15 +32,29 @@ function LoginScreen() {
     }
   }, [userInfo, redirect, navigate]);
 
-  const submitHandler = async (e) => {
+  const submitHandler = async (e: FormEvent) => {
     e.preventDefault();
-    try {
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
-      navigate(redirect);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
+    handleLogin({ email, password });
+    // try {
+    //   const res = await login({ email, password });
+
+    //   console.log(res);
+
+    //   const unwrapped = await login({ email, password }).unwrap();
+
+    //   console.log(unwrapped);
+
+    //   dispatch(
+    //     setCredentials({
+    //       email: unwrapped.email,
+    //       _id: unwrapped._id,
+    //       role: unwrapped.role,
+    //     })
+    //   );
+    //   navigate(redirect);
+    // } catch (err) {
+    //   toast.error(err?.data?.message || err.error);
+    // }
   };
 
   return (

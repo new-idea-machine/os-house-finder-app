@@ -32,8 +32,13 @@ const LoginScreen = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const res = await login({ email, password }).unwrap();
-      dispatch(setCredentials({ ...res }));
+      const res = await login({ email, password });
+      console.log('res: ', res);
+
+      const unwrappedRes = res.unwrap();
+
+      console.log('unwrappedRes: ', unwrappedRes);
+      dispatch(setCredentials({ ...unwrappedRes }));
       navigate(redirect);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
