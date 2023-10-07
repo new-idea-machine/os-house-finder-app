@@ -1,12 +1,11 @@
-import React from 'react';
 import ProfessionalCard from './ProfessionalCard';
 import shirt from '../assets/images/Shirt.png';
 
 function About() {
   return (
     <>
-      <h1 className="text-center pt-4">About us</h1>
-      <div className="container-xl pt-1 d-flex  justify-content-center">
+      <h1 className="pt-4 text-center">About us</h1>
+      <div className="container-xl d-flex justify-content-center  pt-1">
         <ProfessionalCard
           name="Employee 1"
           title="Frontend developer"
