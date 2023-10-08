@@ -1,6 +1,6 @@
 import { useAppDispatch } from '@app/hooks';
 import { useLoginMutation } from '@api/auth/authApi';
-import { Credentials, User } from '@constants/types';
+import { Credentials, UserResponse } from '@constants/types';
 import {
   isFetchBaseQueryError,
   isErrorWithMessage,
@@ -23,11 +23,11 @@ export default function useAuth() {
         return;
       }
 
-      const userData: User = response.data!;
+      const userData: UserResponse = response.data!;
 
-      const { _id, email, role } = userData;
+      const { _id: id, email, role } = userData;
 
-      dispatch(setCredentials({ _id, email, role }));
+      dispatch(setCredentials({ id, email, role }));
     } catch (error) {
       if (isFetchBaseQueryError(error)) {
         const { data } = error;
