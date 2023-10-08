@@ -9,8 +9,6 @@ export type User = {
   role: string;
 };
 
-export type UserResponse = {
+export type UserResponse = Omit<User, 'id'> & {
   _id: string;
-  email: string;
-  role: string;
 };
