@@ -1,10 +1,29 @@
 import { useState, useEffect, FormEvent } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button, Form, Row, Col } from 'react-bootstrap';
+import * as z from 'zod';
+// import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useAppSelector } from '@app/hooks';
 import useAuth from '@hooks/useAuth';
 import FormContainer from '../components/FormContainer';
 import Loader from '../components/Loader';
+
+const loginFormSchema = z.object({
+  email: z
+    .string()
+    .email()
+    .min(4, {
+      message: 'Email must be at least 4 characters long',
+    })
+    .max(255),
+  password: z
+    .string()
+    .min(8, {
+      message: 'Password must be at least 8 characters long',
+    })
+    .max(125, {
+      message: 'Password must be at most 125 characters long',
+    }),
+});
 
 function LoginScreen() {
   const [email, setEmail] = useState('');
