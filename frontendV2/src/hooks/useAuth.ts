@@ -1,8 +1,11 @@
 import { useAppDispatch } from '@app/hooks';
 import { useLoginMutation } from '@api/auth/authApi';
 import { Credentials, User } from '@constants/types';
+import {
+  isFetchBaseQueryError,
+  isErrorWithMessage,
+} from '@utils/IsFetchBaseQueryError';
 import { setCredentials, logout } from '@features/authSlice';
-
 import { toast } from 'react-toastify';
 
 export default function useAuth() {
@@ -21,12 +24,18 @@ export default function useAuth() {
       }
 
       const userData: User = response.data!;
-      // eslint-disable-next-line @typescript-eslint/naming-convention
+
       const { _id, email, role } = userData;
 
       dispatch(setCredentials({ _id, email, role }));
     } catch (error) {
-      toast.error(JSON.stringify(error));
+      if (isFetchBaseQueryError(error)) {
+        const { data } = error;
+        toast.error(JSON.stringify(data));
+      } else if (isErrorWithMessage(error)) {
+        const { message } = error;
+        toast.error(message);
+      }
     }
   };
 
