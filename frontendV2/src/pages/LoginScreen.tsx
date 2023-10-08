@@ -16,6 +16,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { Input } from '@components/ui/input';
 import { Button } from '@components/ui/button';
+import GoogleLoginButton from '@components/GoogleLoginButton';
+import { FcGoogle } from 'react-icons/fc';
 
 const loginFormSchema = z.object({
   email: z
@@ -94,33 +96,24 @@ function LoginScreen() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Please Enter Your Password." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input placeholder="Password" {...field} />
+                <Input
+                  type="password"
+                  placeholder="Please Enter Your Password."
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit">
+        <Button type="submit" variant="default">
           {isLoginLoading ? (
             <>
               <svg className="mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24">
                 {' '}
               </svg>
-              Loading...
+              Loading
             </>
           ) : (
             'Submit'
@@ -130,14 +123,20 @@ function LoginScreen() {
       <div className="mx-auto my-4 flex w-full items-center justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
         or
       </div>
-      <p className="mt-2 text-center text-sm text-gray-600">
+      <GoogleLoginButton>
+        <FcGoogle />
+        Login with Google
+      </GoogleLoginButton>
+      <p className="mt-4 text-center text-sm text-gray-600">
         If you don&apos;t have an account, please&nbsp;
-        <Link
-          to="/register"
-          className="rounded-md border p-2 font-bold text-gray-800 hover:bg-gray-100 hover:underline"
-        >
-          Register
-        </Link>
+        <Button variant="link">
+          <Link
+            to="/register"
+            className="rounded-md border p-2 font-bold hover:bg-gray-100 hover:underline"
+          >
+            Register
+          </Link>
+        </Button>
       </p>
     </Form>
 
