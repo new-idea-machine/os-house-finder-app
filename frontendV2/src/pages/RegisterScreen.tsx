@@ -1,7 +1,6 @@
 import { useState, FormEvent } from 'react';
 // import { Link } from 'react-router-dom';
 import { Button, Form } from 'react-bootstrap';
-import FormContainer from '../components/FormContainer';
 
 function RegisterScreen() {
   const [name, setName] = useState('');
@@ -15,7 +14,7 @@ function RegisterScreen() {
   };
 
   return (
-    <FormContainer>
+    <>
       <h3>Sign Up As New Customer</h3>
       <Form onSubmit={submitHandler}>
         <Form.Group controlId="name" className="my-3">
@@ -58,7 +57,7 @@ function RegisterScreen() {
           Sign Up
         </Button>
       </Form>
-    </FormContainer>
+    </>
   );
 }
 

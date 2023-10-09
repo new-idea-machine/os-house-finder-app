@@ -1,6 +1,6 @@
 function How() {
   return (
-    <div className="container-xl mx-auto text-center pt-5">
+    <div className="container-xl mx-auto pt-5 text-center">
       {/* Random video placeholder */}
       <h1>How Scoring SYSTEM works</h1>
       <iframe

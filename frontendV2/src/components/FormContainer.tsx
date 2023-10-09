@@ -1,4 +1,7 @@
-import { Container, Row, Col } from 'react-bootstrap';
+import LoginScreen from '@pages/LoginScreen';
+import React from 'react';
+import RegisterScreen from '@pages/RegisterScreen';
+import { PasswordShowProvider } from '@/context/PasswordShowProvider';
 
 interface FormContainerProps {
   children: React.ReactNode;
@@ -6,14 +9,17 @@ interface FormContainerProps {
 
 function FormContainer({ children }: FormContainerProps) {
   return (
-    <Container>
-      <Row className="justify-content-md-center">
-        <Col xs={12} md={6}>
-          {children}
-        </Col>
-      </Row>
-    </Container>
+    <PasswordShowProvider>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-center">
+          <div className="w-full max-w-md">{children}</div>
+        </div>
+      </div>
+    </PasswordShowProvider>
   );
 }
+
+FormContainer.LoginScreen = LoginScreen;
+FormContainer.RegisterScreen = RegisterScreen;
 
 export default FormContainer;
