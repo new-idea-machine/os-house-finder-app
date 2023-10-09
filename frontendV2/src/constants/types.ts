@@ -1,10 +1,14 @@
-export interface Credentials {
+export type Credentials = {
   email: string;
   password: string;
-}
+};
 
-export interface User {
+export type User = {
+  id: string;
   email: string;
-  _id: string;
   role: string;
-}
+};
+
+export type UserResponse = Omit<User, 'id'> & {
+  _id: string;
+};

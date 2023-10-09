@@ -1,12 +1,18 @@
 import { useAppDispatch } from '@app/hooks';
 import { useLoginMutation } from '@api/auth/authApi';
-import { Credentials, User } from '@constants/types';
+import { Credentials, UserResponse } from '@constants/types';
+import {
+  isFetchBaseQueryError,
+  isErrorWithMessage,
+} from '@utils/IsFetchBaseQueryError';
 import { setCredentials, logout } from '@features/authSlice';
-
-import { toast } from 'react-toastify';
+import { useToast } from '@components/ui/use-toast';
+// import { toast } from 'react-toastify';
 
 export default function useAuth() {
   const dispatch = useAppDispatch();
+
+  const { toast } = useToast();
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
 
@@ -16,17 +22,39 @@ export default function useAuth() {
 
       if ('error' in response) {
         const { error } = response;
-        toast.error(JSON.stringify(error));
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: JSON.stringify(error),
+        });
         return;
       }
 
-      const userData: User = response.data!;
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      const { _id, email, role } = userData;
+      const userData: UserResponse = response.data!;
 
-      dispatch(setCredentials({ _id, email, role }));
+      const { _id: id, email, role } = userData;
+
+      dispatch(setCredentials({ id, email, role }));
+      toast({
+        title: 'Success',
+        description: 'Login successful',
+      });
     } catch (error) {
-      toast.error(JSON.stringify(error));
+      if (isFetchBaseQueryError(error)) {
+        const { data } = error;
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: JSON.stringify(data),
+        });
+      } else if (isErrorWithMessage(error)) {
+        const { message } = error;
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: message,
+        });
+      }
     }
   };
 
@@ -35,7 +63,11 @@ export default function useAuth() {
       await logout();
       dispatch(logout());
     } catch (error) {
-      toast.error(JSON.stringify(error));
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: JSON.stringify(error),
+      });
     }
   };
 
