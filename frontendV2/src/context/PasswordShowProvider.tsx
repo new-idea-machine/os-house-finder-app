@@ -1,6 +1,18 @@
 import React, { createContext, useState, useMemo } from 'react';
 
-export const PasswordShowContext = createContext({});
+type PasswordShowContextType = {
+  isPasswordShow: boolean;
+  setIsPasswordShow: React.Dispatch<React.SetStateAction<boolean>>;
+  isConfirmPasswordShow: boolean;
+  setIsConfirmPasswordShow: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export const PasswordShowContext = createContext<PasswordShowContextType>({
+  isPasswordShow: false,
+  setIsPasswordShow: () => {},
+  isConfirmPasswordShow: false,
+  setIsConfirmPasswordShow: () => {},
+});
 
 export function PasswordShowProvider({
   children,

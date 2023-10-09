@@ -1,6 +1,6 @@
 import LoginScreen from '@pages/LoginScreen';
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import React from 'react';
+import RegisterScreen from '@pages/RegisterScreen';
 import { PasswordShowProvider } from '@/context/PasswordShowProvider';
 
 interface FormContainerProps {
@@ -20,5 +20,6 @@ function FormContainer({ children }: FormContainerProps) {
 }
 
 FormContainer.LoginScreen = LoginScreen;
+FormContainer.RegisterScreen = RegisterScreen;
 
 export default FormContainer;
