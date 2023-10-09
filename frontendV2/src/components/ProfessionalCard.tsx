@@ -20,9 +20,12 @@ export default function ProfessionalCard({
   image,
 }: ProfessionalCardProps) {
   return (
-    <Card>
-      <CardHeader className="space-y-5">
-        <img className="mx-auto" src={image} width={200} alt="Shirt" />
+    <Card className="w-4/5">
+      <CardHeader className="space-y-5 p-2">
+        <div className="flex justify-center">
+          <img src={image} width={200} height={25} alt="Shirt" />
+        </div>
+
         <div className="space-y-3">
           <CardTitle className="text-center">{name}</CardTitle>
           <CardDescription className="text-center text-base">
@@ -30,10 +33,9 @@ export default function ProfessionalCard({
           </CardDescription>
         </div>
       </CardHeader>
-      <CardContent>
+      <CardContent className="p-2">
         <p>{description}</p>
       </CardContent>
-      <CardContent />
     </Card>
   );
 }
