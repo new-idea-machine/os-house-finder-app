@@ -15,7 +15,11 @@ export default function GoogleLoginButton({
   };
 
   return (
-    <Button onClick={handleGoogleLogin} type="button" className="flex w-full">
+    <Button
+      onClick={handleGoogleLogin}
+      type="button"
+      className="flex w-full gap-4"
+    >
       {children}
     </Button>
   );
