@@ -23,7 +23,7 @@ export default function ProfessionalCard({
     <Card className="w-4/5">
       <CardHeader className="space-y-5 p-2">
         <div className="flex justify-center">
-          <img src={image} width={200} height={25} alt="Shirt" />
+          <img src={image} height={25} alt="Shirt" />
         </div>
 
         <div className="space-y-3">
