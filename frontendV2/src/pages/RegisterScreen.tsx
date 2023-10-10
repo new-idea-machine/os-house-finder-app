@@ -1,64 +1,136 @@
-import { useState, FormEvent } from 'react';
-// import { Link } from 'react-router-dom';
-import { Button, Form } from 'react-bootstrap';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormRootErrorMessage,
+} from '@components/ui/form';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Input } from '@components/ui/input';
+import { Button } from '@components/ui/button';
+import { useContext } from 'react';
+import { Checkbox } from '@components/ui/checkbox';
+import { useRegisterMutation } from '@api/auth/authApi';
+import { useNavigate } from 'react-router-dom';
+import { isErrorWithMessage } from '@utils/IsFetchBaseQueryError';
+import { useAppDispatch } from '@app/hooks';
+import { setCredentials } from '@features/authSlice';
+import { PasswordShowContext } from '@/context/PasswordShowProvider';
 
-function RegisterScreen() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  // const [confirmPassword, setConfirmPassword] = useState('');
+const registerFormSchema = z.object({
+  email: z.string().email({
+    message: 'You must enter a valid email.',
+  }),
+  password: z
+    .string()
+    .min(6, {
+      message: `Your password isn't long enough.`,
+    })
+    .max(24, {
+      message: `Your password is to long.`,
+    }),
+});
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // console.log('submit');
-  };
+type RegisterSchemaType = z.infer<typeof registerFormSchema>;
+
+export default function RegisterScreen() {
+  const navigate = useNavigate();
+  const form = useForm<RegisterSchemaType>({
+    resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+    },
+  });
+  const dispatch = useAppDispatch();
+  const [register, registerResult] = useRegisterMutation();
+  const { isPasswordShow, setIsPasswordShow } = useContext(PasswordShowContext);
+
+  async function onSubmit(values: RegisterSchemaType) {
+    register(values)
+      .unwrap()
+      .then((registerResponse) => {
+        // TODO: Move register logic into useAuth hook?
+        dispatch(
+          setCredentials({
+            id: registerResponse.id,
+            email: registerResponse.email,
+            role: registerResponse.role,
+          })
+        );
+        localStorage.setItem('token', registerResponse.token);
+        navigate('/');
+      })
+      .catch((error) => {
+        // TODO: Move into helper function?
+        if (isErrorWithMessage(error)) {
+          form.setError('root', {
+            message: error.message,
+          });
+        } else {
+          form.setError('root', {
+            message:
+              'There was an error creating your account. Please try again.',
+          });
+        }
+      });
+  }
 
   return (
-    <>
-      <h3>Sign Up As New Customer</h3>
-      <Form onSubmit={submitHandler}>
-        <Form.Group controlId="name" className="my-3">
-          <Form.Control
-            type="name"
-            placeholder="Enter Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </Form.Group>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input placeholder="Email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-        <Form.Group controlId="email" className="my-3">
-          <Form.Control
-            type="email"
-            placeholder="Enter email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </Form.Group>
+        <FormField
+          control={form.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Password"
+                  type={isPasswordShow ? 'text' : 'password'}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+              <div className="flex items-center gap-x-1">
+                Show Password
+                <Checkbox onClick={() => setIsPasswordShow(!isPasswordShow)} />
+              </div>
+            </FormItem>
+          )}
+        />
 
-        <Form.Group controlId="password" className="my-3">
-          <Form.Control
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </Form.Group>
+        <FormRootErrorMessage errors={form.formState.errors} />
 
-        <Form.Group controlId="confirmpassword" className="my-3">
-          <Form.Control
-            type="password"
-            placeholder="Enter password again"
-            value={password}
-            // onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </Form.Group>
-
-        <Button type="submit" variant="primary" className="mt-3">
-          Sign Up
-        </Button>
-      </Form>
-    </>
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting || registerResult.isLoading}
+            className="bg-slate-800"
+          >
+            Submit
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
-
-export default RegisterScreen;
