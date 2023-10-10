@@ -1,8 +1,10 @@
 {
-"compilerOptions": {
-    "types": [
-      "jest"
-    ]
+    "esModuleInterop": true,
 
-  }
+    "compilerOptions": {
+        "types": [
+            "jest"
+        ]
+
+    }
 }
