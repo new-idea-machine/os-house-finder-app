@@ -4,6 +4,7 @@ import { Slot } from '@radix-ui/react-slot';
 import {
   Controller,
   ControllerProps,
+  FieldErrors,
   FieldPath,
   FieldValues,
   FormProvider,
@@ -161,6 +162,21 @@ const FormMessage = React.forwardRef<
 });
 FormMessage.displayName = 'FormMessage';
 
+const FormRootErrorMessage = React.forwardRef<
+  HTMLParagraphElement,
+  { errors: FieldErrors<FieldValues> } & React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <>
+      {props.errors.root &&
+        <FormErrorMessage ref={ref} {...props}>
+          {props.errors.root.message}
+        </FormErrorMessage>}
+    </>
+  );
+});
+FormRootErrorMessage.displayName = 'FormRootErrorMessage';
+
 const FormErrorMessage = React.forwardRef<
   HTMLParagraphElement,
   React.HTMLAttributes<HTMLParagraphElement>
@@ -186,5 +202,6 @@ export {
   FormDescription,
   FormMessage,
   FormErrorMessage,
+  FormRootErrorMessage,
   FormField,
 };
