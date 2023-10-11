@@ -39,6 +39,18 @@ export const registerUser = async (req, res) => {
   }
 };
 
+export const logoutUser = async (req, res) => {
+  try {
+    res.cookie('jwt', '', {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    return res.status(200).json({ message: 'Successfully logged out' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
 // Controller for user login
 export const loginUser = async (req, res) => {
   try {

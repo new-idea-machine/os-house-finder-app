@@ -2,6 +2,7 @@ import express from 'express';
 import {
   registerUser,
   loginUser,
+  logoutUser,
   updateUser,
   deleteUser,
   getUser,
@@ -16,6 +17,9 @@ userRouter.post('/register', registerUser);
 
 // User login
 userRouter.post('/login', loginUser);
+
+// User logout
+userRouter.post('/logout', logoutUser);
 
 // Update user's email and password
 userRouter.put('/:id', userAuth, updateUser);

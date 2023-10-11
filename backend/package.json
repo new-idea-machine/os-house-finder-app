@@ -13,7 +13,9 @@
     "jsonwebtoken": "^9.0.1",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.1",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "cors": "^2.8.5",
+    "jsonwebtoken": "^9.0.1"
   },
   "scripts": {
     "test": "jest --detectOpenHandles --runInBand",
