@@ -1,5 +1,5 @@
 import logo from '@assets/images/HouseLogoGrey.svg';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '@app/hooks';
 import { LogOut, User, UserCircle, Menu } from 'lucide-react';
 import {
   DropdownMenu,
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/sheet';
 
 export default function Header() {
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo } = useAppSelector((state) => state.auth);
 
   return (
     <header>
@@ -33,7 +33,7 @@ export default function Header() {
             className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
           >
             <img width={40} src={logo} alt="HouseFinder" />
-            <p>House-Tracker</p>
+            <p>HouseFinder</p>
           </a>
 
           <div className="lg:hidden">
@@ -47,7 +47,7 @@ export default function Header() {
                   side="top"
                   className="h-screen data-[state=open]:duration-300"
                 >
-                  <ol className="pt-12 flex flex-col items-end pr-8 space-y-4 font-bold text-2xl">
+                  <ol className="flex flex-col items-end space-y-4 pr-8 pt-12 text-2xl font-bold">
                     <a href="/">Profile</a>
                     <a href="/">Logout</a>
                   </ol>
@@ -60,7 +60,7 @@ export default function Header() {
             </Sheet>
           </div>
 
-          <div className="hidden lg:flex lg:mx-auto lg:items-center lg:w-auto lg:space-x-6">
+          <div className="hidden lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
             <a className="hover:text-gray-900" href="/faq">
               FAQ
             </a>
