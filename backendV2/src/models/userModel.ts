@@ -35,7 +35,7 @@ const userSchema: Schema<IUser> = new Schema(
 );
 
 // Hash and salt password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function hashAndSaltPassword(next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -45,19 +45,19 @@ userSchema.pre('save', async function(next) {
     const salt = await bcrypt.genSalt(10);
     // Hash the password with the generated salt
     this.password = await bcrypt.hash(this.password, salt);
-    next();
+    return next();
   } catch (error) {
     return next(error as Error);
   }
 });
 
 // Method to compare passwords
-userSchema.methods.comparePassword = async function(password: string) {
+userSchema.methods.comparePassword = async function comparePassword(password: string) {
   return bcrypt.compare(password, this.password);
 };
 
 // Method to generate a JWT token
-userSchema.methods.generateToken = function() {
+userSchema.methods.generateToken = function generateToken() {
   const payload = {
     id: this._id,
     email: this.email,

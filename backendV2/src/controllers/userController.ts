@@ -37,8 +37,8 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
 
+    const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
@@ -59,8 +59,7 @@ export const loginUser = async (req: Request, res: Response) => {
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-
-    res.json({ _id: user._id, email: user.email, role: user.role });
+    return res.json({ _id: user._id, email: user.email, role: user.role });
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
