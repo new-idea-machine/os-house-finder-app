@@ -8,6 +8,7 @@
     "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
+    "types": ["node"],
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,13 +17,14 @@
     "skipLibCheck": true
   },
   "exclude": [
-    "node_modules", 
-    "dist", 
-    "__tests__", 
+    "node_modules",
+    "dist",
+    "__tests__",
     "coverage"
   ],
   "include": [
     "./*.js",
     "src/**/*.ts",
   ],
+  "files": ["src/types.d.ts"]
 }
