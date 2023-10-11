@@ -10,7 +10,7 @@ interface FormContainerProps {
 function FormContainer({ children }: FormContainerProps) {
   return (
     <PasswordShowProvider>
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto mt-20 px-4">
         <div className="flex items-center justify-center">
           <div className="w-full max-w-md">{children}</div>
         </div>
