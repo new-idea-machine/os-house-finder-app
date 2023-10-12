@@ -5,7 +5,7 @@ export default function About() {
   return (
     <>
       <h1 className="pt-4 text-center text-3xl">About us</h1>
-      <div className="grid max-w-sm gap-2 md:max-w-2xl md:grid-cols-2 lg:max-w-none lg:grid-cols-3 place-items-center">
+      <div className="grid max-w-sm place-items-center gap-2 md:max-w-2xl md:grid-cols-2 lg:max-w-none lg:grid-cols-3">
         <ProfessionalCard
           name="Employee 1"
           title="Frontend developer"

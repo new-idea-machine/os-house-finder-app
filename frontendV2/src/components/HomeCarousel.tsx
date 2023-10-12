@@ -5,7 +5,7 @@ import decision from '../assets/images/Decision.jpg';
 export default function HomeCarousel() {
   return (
     <div className="flex justify-center">
-      <img className="w-4/6 h-5/6" src={decision} alt="One" />
+      <img className="h-5/6 w-4/6" src={decision} alt="One" />
     </div>
   );
 }
