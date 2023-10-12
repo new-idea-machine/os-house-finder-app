@@ -30,7 +30,10 @@ export const registerUser = async (req, res) => {
     const token = newUser.generateToken();
 
     return res.status(201).json({
-      token
+      token,
+      id: newUser._id,
+      email: newUser.email,
+      role: newUser.role,
     });
   } catch (error) {
     return res.status(500).json({

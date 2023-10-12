@@ -4,6 +4,7 @@ import { Slot } from '@radix-ui/react-slot';
 import {
   Controller,
   ControllerProps,
+  FieldErrors,
   FieldPath,
   FieldValues,
   FormProvider,
@@ -154,17 +155,43 @@ const FormMessage = React.forwardRef<
   }
 
   return (
-    <p
-      ref={ref}
-      id={formMessageId}
-      className={cn('text-[0.8rem] font-medium text-destructive', className)}
-      {...props}
-    >
+    <FormErrorMessage id={formMessageId} ref={ref} {...props}>
       {body}
-    </p>
+    </FormErrorMessage>
   );
 });
 FormMessage.displayName = 'FormMessage';
+
+const FormRootErrorMessage = React.forwardRef<
+  HTMLParagraphElement,
+  { errors: FieldErrors<FieldValues> } & React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <>
+      {props.errors.root &&
+        <FormErrorMessage ref={ref} {...props}>
+          {props.errors.root.message}
+        </FormErrorMessage>}
+    </>
+  );
+});
+FormRootErrorMessage.displayName = 'FormRootErrorMessage';
+
+const FormErrorMessage = React.forwardRef<
+  HTMLParagraphElement,
+  React.HTMLAttributes<HTMLParagraphElement>
+>(({ className, children, ...props }, ref) => {
+  return (
+    <p
+      ref={ref}
+      className={cn('text-[0.8rem] font-medium text-destructive', className)}
+      {...props}
+    >
+      {children}
+    </p>
+  );
+});
+FormErrorMessage.displayName = 'FormErrorMessage';
 
 export {
   useFormField,
@@ -174,5 +201,7 @@ export {
   FormControl,
   FormDescription,
   FormMessage,
+  FormErrorMessage,
+  FormRootErrorMessage,
   FormField,
 };
