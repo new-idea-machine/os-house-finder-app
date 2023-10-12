@@ -2,27 +2,23 @@ import User from '../models/userModel.js';
 
 // Controller for user registration
 export const registerUser = async (req, res) => {
-
   try {
-    const {
-      email,
-      password
-    } = req.body;
+    const { email, password } = req.body;
 
     // Check if the email is already in use
     const existingUser = await User.findOne({
-      email
+      email,
     });
     if (existingUser) {
       return res.status(400).json({
-        message: 'Email already in use'
+        message: 'Email already in use',
       });
     }
 
     // Create a new user instance
     const newUser = new User({
       email,
-      password
+      password,
     });
     await newUser.save();
 
@@ -30,11 +26,11 @@ export const registerUser = async (req, res) => {
     const token = newUser.generateToken();
 
     return res.status(201).json({
-      token
+      token,
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
@@ -54,18 +50,15 @@ export const logoutUser = async (req, res) => {
 // Controller for user login
 export const loginUser = async (req, res) => {
   try {
-    const {
-      email,
-      password
-    } = req.body;
+    const { email, password } = req.body;
 
     // Find the user by email
     const user = await User.findOne({
-      email
+      email,
     });
     if (!user) {
       return res.status(401).json({
-        message: 'Invalid credentials'
+        message: 'Invalid credentials',
       });
     }
 
@@ -73,7 +66,7 @@ export const loginUser = async (req, res) => {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({
-        message: 'Invalid credentials'
+        message: 'Invalid credentials',
       });
     }
 
@@ -86,17 +79,19 @@ export const loginUser = async (req, res) => {
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
+    // TODO to be removed when frontend team figure out cookie setting
+    res.setHeader('Authorization', `Bearer ${token}`);
 
     res.json({
       _id: user._id,
       email: user.email,
-      role: user.role
+      role: user.role,
     });
 
     // return res.status(200).json({ token });
   } catch (error) {
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
@@ -105,35 +100,30 @@ export const loginUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const {
-      email,
-      password
-    } = req.body;
+    const { email, password } = req.body;
 
     // Find the user by ID
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
-        message: 'User not found'
+        message: 'User not found',
       });
     }
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res
-        .status(403)
-        .json({
-          message: 'You are not authorized to perform this action'
-        });
+      return res.status(403).json({
+        message: 'You are not authorized to perform this action',
+      });
     }
 
     // Check if the email is already in use
     const temp = await User.findOne({
-      email
+      email,
     });
     if (email && email !== user.email && temp) {
       return res.status(400).json({
-        message: 'Email already in use'
+        message: 'Email already in use',
       });
     }
 
@@ -143,11 +133,11 @@ export const updateUser = async (req, res) => {
     await user.save();
 
     return res.status(200).json({
-      message: 'User updated successfully'
+      message: 'User updated successfully',
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
@@ -161,25 +151,23 @@ export const deleteUser = async (req, res) => {
     const user = await User.findByIdAndDelete(userId);
     if (!user) {
       return res.status(404).json({
-        message: 'User not found'
+        message: 'User not found',
       });
     }
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res
-        .status(403)
-        .json({
-          message: 'You are not authorized to perform this action'
-        });
+      return res.status(403).json({
+        message: 'You are not authorized to perform this action',
+      });
     }
 
     return res.status(200).json({
-      message: 'User deleted successfully'
+      message: 'User deleted successfully',
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
@@ -193,25 +181,23 @@ export const getUser = async (req, res) => {
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
-        message: 'User not found'
+        message: 'User not found',
       });
     }
 
     // Check if the user is authorized to perform this action
     if (!(user.email === req.user.email || req.user.role === 'admin')) {
-      return res
-        .status(403)
-        .json({
-          message: 'You are not authorized to perform this action'
-        });
+      return res.status(403).json({
+        message: 'You are not authorized to perform this action',
+      });
     }
 
     return res.status(200).json({
-      user
+      user,
     });
   } catch (error) {
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
@@ -221,22 +207,20 @@ export const getAllUsers = async (req, res) => {
   try {
     // Check if the user is authorized to perform this action
     if (req.user.role !== 'admin') {
-      return res
-        .status(403)
-        .json({
-          message: 'You are not authorized to perform this action'
-        });
+      return res.status(403).json({
+        message: 'You are not authorized to perform this action',
+      });
     }
     // Find all users
     const users = await User.find();
 
     return res.status(200).json({
-      users
+      users,
     });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
-      message: 'Server error'
+      message: 'Server error',
     });
   }
 };
