@@ -60,8 +60,11 @@ export default function useAuth() {
 
   const handleLogout = async () => {
     try {
-      await logout();
       dispatch(logout());
+      toast({
+        title: 'Success',
+        description: 'Logout successful',
+      });
     } catch (error) {
       toast({
         variant: 'destructive',

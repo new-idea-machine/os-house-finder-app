@@ -1,0 +1,10 @@
+{
+    "esModuleInterop": true,
+
+    "compilerOptions": {
+        "types": [
+            "jest"
+        ]
+
+    }
+}
