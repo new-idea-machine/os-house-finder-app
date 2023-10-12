@@ -54,11 +54,14 @@ export const authApi = createApi({
         method: 'POST',
         body: credentials,
       }),
-      // transformResponse(baseQueryReturnValue) {
-      //   return {
-      //     token: baseQueryReturnValue.token,
-      //   };
-      // },
+      transformResponse(baseQueryReturnValue: RegisterResponse) {
+        return {
+          id: baseQueryReturnValue.id,
+          email: baseQueryReturnValue.email,
+          role: baseQueryReturnValue.role,
+          token: baseQueryReturnValue.token,
+        };
+      },
       transformErrorResponse(baseQueryReturnValue) {
         return baseQueryReturnValue.data;
       },
