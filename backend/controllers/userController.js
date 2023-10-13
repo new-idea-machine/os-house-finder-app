@@ -25,14 +25,18 @@ export const registerUser = async (req, res) => {
     // Generate a JWT token
     const token = newUser.generateToken();
 
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_EVN !== 'development',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    });
+
     return res.status(201).json({
       token,
-<<<<<<< HEAD
-=======
       id: newUser._id,
       email: newUser.email,
       role: newUser.role,
->>>>>>> main
     });
   } catch (error) {
     return res.status(500).json({

@@ -35,13 +35,7 @@ const registerFormSchema = z.object({
     }),
 });
 
-<<<<<<< HEAD
-  const submitHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-=======
 type RegisterSchemaType = z.infer<typeof registerFormSchema>;
->>>>>>> main
 
 export default function RegisterScreen() {
   const navigate = useNavigate();
