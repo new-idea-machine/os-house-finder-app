@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '@constants/types';
+import Cookie from 'js-cookie';
 
 interface UserState {
   userInfo: User | null;
@@ -23,7 +24,7 @@ const authSlice = createSlice({
       state.userInfo = null;
       localStorage.removeItem('userInfo');
       localStorage.removeItem('token');
-      document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      Cookie.remove('jwt');
     },
   },
 });
