@@ -14,14 +14,27 @@ export const authApi = createApi({
         url: '/api/users/login',
         method: 'POST',
         body: credentials,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        credentials: 'include',
       }),
       invalidatesTags: ['User'],
+      transformResponse: async (response: UserResponse) => {
+        return response;
+      },
     }),
     register: builder.mutation<RegisterResponse, Credentials>({
       query: (credentials) => ({
         url: '/api/users/register',
         method: 'POST',
         body: credentials,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        credentials: 'include',
       }),
       transformResponse(baseQueryReturnValue: RegisterResponse) {
         return {

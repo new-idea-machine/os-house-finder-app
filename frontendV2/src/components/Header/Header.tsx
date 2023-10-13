@@ -24,7 +24,6 @@ import {
 
 export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
-
   const { handleLogout } = useAuth();
 
   return (
@@ -53,7 +52,9 @@ export default function Header() {
                   <ol className="flex flex-col items-end space-y-4 pr-8 pt-12 text-2xl font-bold">
                     <a href="/">Profile</a>
                     {userInfo ? (
-                      <a href="/">Logout</a>
+                      <a href="/" onClick={handleLogout}>
+                        Logout
+                      </a>
                     ) : (
                       <>
                         <a href="/login">Login</a>
@@ -77,7 +78,7 @@ export default function Header() {
             <a className="hover:text-gray-900" href="/demo">
               Scoring Demo
             </a>
-            {userInfo ? (
+            {userInfo?.email ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
@@ -89,25 +90,22 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      <a href="/">Profile</a>
+                      <a href="/" className="flex gap-1">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </a>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <a href="/" onClick={handleLogout}>
+                    <a href="/" className="flex gap-1" onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
                       Log out
                     </a>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              // <a href="/login" className="flex gap-1">
-              //   <UserCircle className="h-7 w-7" />
-              //   Login
-              // </a>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">

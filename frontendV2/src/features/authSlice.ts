@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User } from '@constants/types';
+import Cookie from 'js-cookie';
 
 interface UserState {
   userInfo: User | null;
@@ -22,6 +23,8 @@ const authSlice = createSlice({
     logout: (state) => {
       state.userInfo = null;
       localStorage.removeItem('userInfo');
+      localStorage.removeItem('token');
+      Cookie.remove('jwt');
     },
   },
 });
