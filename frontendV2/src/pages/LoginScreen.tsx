@@ -1,6 +1,7 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAppSelector } from '@app/hooks';
+import { axiosLogin } from '@api/auth/authApi';
 import useAuth from '@hooks/useAuth';
 import {
   Form,
@@ -61,6 +62,7 @@ function LoginScreen() {
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     handleLogin(values);
+    // axiosLogin(values);
   }
 
   const form = useForm<z.infer<typeof loginFormSchema>>({

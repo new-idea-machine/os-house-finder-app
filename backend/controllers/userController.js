@@ -79,10 +79,8 @@ export const loginUser = async (req, res) => {
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-    // TODO to be removed when frontend team figure out cookie setting
-    res.setHeader('Authorization', `Bearer ${token}`);
 
-    res.json({
+    res.status(200).json({
       _id: user._id,
       email: user.email,
       role: user.role,

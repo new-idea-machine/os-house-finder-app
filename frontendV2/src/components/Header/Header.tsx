@@ -1,7 +1,8 @@
 import logo from '@assets/images/HouseLogoGrey.svg';
-import { useAppSelector } from '@app/hooks';
+import { useAppSelector, useAppDispatch } from '@app/hooks';
 import { LogOut, User, UserCircle, Menu, UserPlus2 } from 'lucide-react';
 import useAuth from '@hooks/useAuth';
+import { logout } from '@features/authSlice';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +14,7 @@ import {
 } from '@components/ui/dropdown';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { useEffect } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -24,8 +26,18 @@ import {
 
 export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
-
   const { handleLogout } = useAuth();
+  // const dispatch = useAppDispatch();
+  // const user = localStorage.getItem('userInfo');
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     localStorage.removeItem('userInfo');
+  //     dispatch(logout());
+  //   }
+  // }, [user]);
+
+  // console.log(user);
 
   return (
     <header>
@@ -53,7 +65,9 @@ export default function Header() {
                   <ol className="flex flex-col items-end space-y-4 pr-8 pt-12 text-2xl font-bold">
                     <a href="/">Profile</a>
                     {userInfo ? (
-                      <a href="/">Logout</a>
+                      <a href="/" onClick={handleLogout}>
+                        Logout
+                      </a>
                     ) : (
                       <>
                         <a href="/login">Login</a>
@@ -77,7 +91,7 @@ export default function Header() {
             <a className="hover:text-gray-900" href="/demo">
               Scoring Demo
             </a>
-            {userInfo ? (
+            {userInfo?.email ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
@@ -103,11 +117,6 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              // <a href="/login" className="flex gap-1">
-              //   <UserCircle className="h-7 w-7" />
-              //   Login
-              // </a>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">

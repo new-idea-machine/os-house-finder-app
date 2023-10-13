@@ -10,7 +10,6 @@ function RegisterScreen() {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log('submit');
   };
 
   return (

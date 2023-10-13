@@ -10,6 +10,8 @@ export const authApi = createApi({
   tagTypes: ['User'],
   endpoints: (builder) => ({
     login: builder.mutation<UserResponse, Credentials>({
+      // queryFn: axiosLogin,
+
       query: (credentials) => ({
         url: '/api/users/login',
         method: 'POST',
@@ -17,6 +19,8 @@ export const authApi = createApi({
         headers: {
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
+        credentials: 'include',
       }),
       invalidatesTags: ['User'],
       transformResponse: async (response: UserResponse, meta) => {
