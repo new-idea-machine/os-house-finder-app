@@ -90,14 +90,16 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      <a href="/">Profile</a>
+                      <a href="/">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </a>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
                     <a href="/" onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
                       Log out
                     </a>
                   </DropdownMenuItem>

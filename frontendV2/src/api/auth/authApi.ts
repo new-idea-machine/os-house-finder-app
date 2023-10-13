@@ -30,6 +30,11 @@ export const authApi = createApi({
         url: '/api/users/register',
         method: 'POST',
         body: credentials,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        credentials: 'include',
       }),
       transformResponse(baseQueryReturnValue: RegisterResponse) {
         return {
