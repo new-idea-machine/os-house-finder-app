@@ -90,7 +90,7 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      <a href="/">
+                      <a href="/" className="flex gap-1">
                         <User className="mr-2 h-4 w-4" />
                         Profile
                       </a>
@@ -98,7 +98,7 @@ export default function Header() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <a href="/" onClick={handleLogout}>
+                    <a href="/" className="flex gap-1" onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       Log out
                     </a>
