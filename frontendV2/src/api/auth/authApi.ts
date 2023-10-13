@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Credentials, UserResponse } from '@constants/types';
+import { Credentials, RegisterResponse, UserResponse } from '@constants/types';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_BASE_URL,
@@ -25,7 +25,25 @@ export const authApi = createApi({
         return response;
       },
     }),
+    register: builder.mutation<RegisterResponse, Credentials>({
+      query: (credentials) => ({
+        url: '/api/users/register',
+        method: 'POST',
+        body: credentials,
+      }),
+      transformResponse(baseQueryReturnValue: RegisterResponse) {
+        return {
+          id: baseQueryReturnValue.id,
+          email: baseQueryReturnValue.email,
+          role: baseQueryReturnValue.role,
+          token: baseQueryReturnValue.token,
+        };
+      },
+      transformErrorResponse(baseQueryReturnValue) {
+        return baseQueryReturnValue.data;
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation } = authApi;

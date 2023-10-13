@@ -27,6 +27,12 @@ export const registerUser = async (req, res) => {
 
     return res.status(201).json({
       token,
+<<<<<<< HEAD
+=======
+      id: newUser._id,
+      email: newUser.email,
+      role: newUser.role,
+>>>>>>> main
     });
   } catch (error) {
     return res.status(500).json({
