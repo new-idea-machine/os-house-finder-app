@@ -1,8 +1,7 @@
 import logo from '@assets/images/HouseLogoGrey.svg';
-import { useAppSelector, useAppDispatch } from '@app/hooks';
+import { useAppSelector } from '@app/hooks';
 import { LogOut, User, UserCircle, Menu, UserPlus2 } from 'lucide-react';
 import useAuth from '@hooks/useAuth';
-import { logout } from '@features/authSlice';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +13,6 @@ import {
 } from '@components/ui/dropdown';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { useEffect } from 'react';
 import {
   Sheet,
   SheetClose,
@@ -27,17 +25,6 @@ import {
 export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
   const { handleLogout } = useAuth();
-  // const dispatch = useAppDispatch();
-  // const user = localStorage.getItem('userInfo');
-
-  // useEffect(() => {
-  //   if (!user) {
-  //     localStorage.removeItem('userInfo');
-  //     dispatch(logout());
-  //   }
-  // }, [user]);
-
-  // console.log(user);
 
   return (
     <header>

@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAppSelector } from '@app/hooks';
-import { axiosLogin } from '@api/auth/authApi';
 import useAuth from '@hooks/useAuth';
 import {
   Form,
