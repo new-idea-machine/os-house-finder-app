@@ -13,6 +13,7 @@ import {
 } from '@components/ui/dropdown';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { useLocation } from 'react-router-dom';
 import {
   Sheet,
   SheetClose,
@@ -21,16 +22,42 @@ import {
   SheetPrimitiveContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+
+export type MenuItem = {
+  title: string;
+  href: string;
+};
+
+const menuItems: MenuItem[] = [
+  {
+    title: 'Profiles',
+    href: '/profiles',
+  },
+  {
+    title: 'History',
+    href: '/history',
+  },
+  {
+    title: 'Bookmark',
+    href: '/bookmark',
+  },
+  {
+    title: 'FAQ',
+    href: '/faq',
+  },
+];
 
 export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
 
+  const location = useLocation();
   const { handleLogout } = useAuth();
 
   return (
     <header>
-      <div className="sticky top-0 z-50 border-b border-gray-200 bg-gray-300 px-9">
-        <div className="flex h-28 items-center justify-between space-x-3">
+      <div className="sticky top-0 z-40 bg-gray-300 px-9">
+        <div className="flex h-20 items-center justify-between space-x-3">
           <a
             href="/"
             className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
@@ -39,7 +66,7 @@ export default function Header() {
             <p>HouseFinder</p>
           </a>
 
-          <div className="lg:hidden">
+          <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Menu className="h-6 w-6 hover:text-gray-500" />
@@ -70,13 +97,30 @@ export default function Header() {
             </Sheet>
           </div>
 
-          <div className="hidden lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
-            <a className="hover:text-gray-900" href="/faq">
-              FAQ
-            </a>
-            <a className="hover:text-gray-900" href="/demo">
-              Scoring Demo
-            </a>
+          <div className="hidden h-full w-full items-center justify-between md:flex">
+            <div className="flex h-full space-x-6 px-9">
+              {menuItems.map((menuItem) => {
+                return (
+                  <div className="relative flex h-full w-24 items-center justify-center hover:bg-red-500">
+                    {/* {location.pathname.startsWith(menuItem.href) && ( */}
+                    <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-orange-500" />
+                    {/* )} */}
+                    <div>{menuItem.title}</div>
+                  </div>
+                  // <a
+                  //   key={menuItem.href}
+                  //   href={menuItem.href}
+                  //   className={cn(
+                  //     'flex h-full w-24 items-center justify-center hover:border-b-8 hover:border-b-blue-600 hover:bg-red-500 hover:text-gray-900',
+                  //     location.pathname.startsWith(menuItem.href) &&
+                  //       'hover:text-gray-900'
+                  //   )}
+                  // >
+                  //   {menuItem.title}
+                  // </a>
+                );
+              })}
+            </div>
             {userInfo ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
