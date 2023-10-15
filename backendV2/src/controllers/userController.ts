@@ -1,14 +1,25 @@
 import { Request, Response } from 'express';
-import User, { IUser } from '../models/userModel';
+import User, { IUser } from '@models/userModel';
+import { UserAuthInfoRequest } from '@src/middleware/userAuth';
+import { UserRegisterRequest } from '@src/interfaces/requests/userController';
+import {
+  GeneralResponse,
+  RegisterUserResponse,
+} from '@src/interfaces/responses/userController';
 
-export const registerUser = async (req: Request, res: Response) => {
+export const registerUser = async (
+  req: UserRegisterRequest,
+  res: Response<GeneralResponse<RegisterUserResponse>>
+) => {
   try {
     const { email, password } = req.body;
 
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(400).json({ message: 'Email already in use' });
+      return res
+        .status(400)
+        .json({ message: 'Email already in use', status: 400 }); // 1
     }
 
     const newUser: IUser = new User({ email, password });
@@ -16,9 +27,11 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const token: string = newUser.generateToken();
 
-    return res.status(201).json({ token });
+    return res
+      .status(201)
+      .json({ message: 'success', status: 300, data: { token } }); // 2
   } catch (error) {
-    return res.status(500).json({ message: 'Server error' });
+    return res.status(500).json({ message: 'Server error', status: 200 }); // 3
   }
 };
 
@@ -35,14 +48,13 @@ export const logoutUser = async (req: Request, res: Response) => {
   }
 };
 
-export const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: UserRegisterRequest, res: Response) => {
   try {
-
     const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ message: 'Invalid credentials' }); // 1
     }
 
     const isMatch: boolean = await user.comparePassword(password);
@@ -59,15 +71,15 @@ export const loginUser = async (req: Request, res: Response) => {
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-    return res.json({ _id: user._id, email: user.email, role: user.role });
+    return res.json({ _id: user._id, email: user.email, role: user.role }); // 2
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: UserAuthInfoRequest, res: Response) => {
   try {
-    const userId: string = req.params.id;
+    const userId = req.params.id as string;
     const { email, password } = req.body;
 
     const user: IUser | null = await User.findById(userId);
@@ -98,9 +110,9 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: UserAuthInfoRequest, res: Response) => {
   try {
-    const userId: string = req.params.id;
+    const userId = req.params.id as string;
 
     const user: IUser | null = await User.findByIdAndDelete(userId);
 
@@ -120,9 +132,9 @@ export const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = async (req: UserAuthInfoRequest, res: Response) => {
   try {
-    const userId: string = req.params.id;
+    const userId: string = req.params.id as string;
 
     const user: IUser | null = await User.findById(userId);
 
@@ -142,7 +154,7 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getAllUsers = async (req: UserAuthInfoRequest, res: Response) => {
   try {
     if (req.user?.role !== 'admin') {
       return res
