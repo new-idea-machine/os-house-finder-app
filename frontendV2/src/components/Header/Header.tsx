@@ -100,23 +100,19 @@ export default function Header() {
             <div className="flex h-full space-x-6 px-9">
               {menuItems.map((menuItem) => {
                 return (
-                  <div className="relative flex h-full w-24 items-center justify-center hover:bg-red-500">
-                    {/* {location.pathname.startsWith(menuItem.href) && ( */}
-                    <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-orange-500" />
-                    {/* )} */}
+                  <a
+                    href={menuItem.href}
+                    className={cn(
+                      'relative flex h-full w-24 items-center justify-center hover:bg-gray-400',
+                      location.pathname.startsWith(menuItem.href) &&
+                        'bg-gray-400'
+                    )}
+                  >
+                    {location.pathname.startsWith(menuItem.href) && (
+                      <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-gray-500" />
+                    )}
                     <div>{menuItem.title}</div>
-                  </div>
-                  // <a
-                  //   key={menuItem.href}
-                  //   href={menuItem.href}
-                  //   className={cn(
-                  //     'flex h-full w-24 items-center justify-center hover:border-b-8 hover:border-b-blue-600 hover:bg-red-500 hover:text-gray-900',
-                  //     location.pathname.startsWith(menuItem.href) &&
-                  //       'hover:text-gray-900'
-                  //   )}
-                  // >
-                  //   {menuItem.title}
-                  // </a>
+                  </a>
                 );
               })}
             </div>
@@ -146,11 +142,6 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              // <a href="/login" className="flex gap-1">
-              //   <UserCircle className="h-7 w-7" />
-              //   Login
-              // </a>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
