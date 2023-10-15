@@ -66,6 +66,24 @@ export const authApi = createApi({
         return baseQueryReturnValue.data;
       },
     }),
+    register: builder.mutation<RegisterResponse, Credentials>({
+      query: (credentials) => ({
+        url: '/api/users/register',
+        method: 'POST',
+        body: credentials,
+      }),
+      transformResponse(baseQueryReturnValue: RegisterResponse) {
+        return {
+          id: baseQueryReturnValue.id,
+          email: baseQueryReturnValue.email,
+          role: baseQueryReturnValue.role,
+          token: baseQueryReturnValue.token,
+        };
+      },
+      transformErrorResponse(baseQueryReturnValue) {
+        return baseQueryReturnValue.data;
+      },
+    }),
   }),
 });
 
