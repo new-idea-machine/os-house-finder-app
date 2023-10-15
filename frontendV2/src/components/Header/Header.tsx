@@ -61,7 +61,12 @@ export default function Header() {
             href="/"
             className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
           >
-            <img width={40} src={logo} alt="HouseFinder" />
+            <img
+              width={40}
+              src={logo}
+              alt="HouseFinder"
+              className="rounded-sm"
+            />
             <p>HouseFinder</p>
           </a>
 
