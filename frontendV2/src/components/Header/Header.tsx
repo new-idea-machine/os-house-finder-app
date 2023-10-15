@@ -155,16 +155,22 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <a href="/login" className="flex gap-1">
+                    <DropdownMenuItem asChild>
+                      <a
+                        href="/login"
+                        className="flex gap-1 hover:cursor-pointer"
+                      >
                         <User className="mr-2 h-4 w-4" />
                         Login
                       </a>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <a href="/register" className="flex gap-1">
+                  <DropdownMenuItem asChild>
+                    <a
+                      href="/register"
+                      className="flex gap-1 hover:cursor-pointer"
+                    >
                       <UserPlus2 className="mr-2 h-4 w-4" />
                       Register
                     </a>
