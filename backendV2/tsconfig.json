@@ -8,7 +8,10 @@
     "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
-    "types": ["node"],
+    "types": [
+      "node",
+      "jest"
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,6 +19,7 @@
     "strict": true,
     "skipLibCheck": true
   },
+
   "exclude": [
     "node_modules",
     "dist",
