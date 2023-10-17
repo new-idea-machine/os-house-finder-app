@@ -1,4 +1,3 @@
-import { config } from "dotenv";
 import 'jest';
 import * as request from 'supertest'
 import app from '../app.js';
@@ -6,46 +5,42 @@ import mongoose from "mongoose";
 
 beforeAll(() => {
     mongoose
-    .connect(process.env.MONGODB_TEST_URI)
-    .then(() => console.log('MongoDB connected to TEST DB'))
-    .catch((err) => console.log(err));
+        .connect(process.env.MONGODB_TEST_URI)
+        .then(() => console.log('MongoDB connected to TEST DB'))
+        .catch((err) => console.log(err));
 })
 
 afterAll(() => {
     mongoose.connection.close();
 })
 
-let testUser = {
-    'email': 'test@jest.com',
-    'password': 'jestTest123'
-}
-
-let firstUserPut = {
-    'email': 'test1@jest.com',
-
-}
-
-let loginFirstUserPut = {
-    'email': 'test1@jest.com',
-    'password': 'jestTest123'
-}
-
-let secondUserPut = {
-    'password': 'jestTest234'
-}
-
-let loginSecondUserPut = {
-    'email': 'test1@jest.com',
-    'password': 'jestTest234'
-}
-
-let thirdUserPut = {
-    'email': 'test2@jest.com',
-    'password': 'jestTest2345'
-}
-let loginThirdUserPut = {
-    'email': 'test2@jest.com',
-    'password': 'jestTest2345'
+let testData = {
+    testUser: {
+        'email': 'test@jest.com',
+        'password': 'jestTest123'
+    },
+    firstUserPut: {
+        'email': 'test1@jest.com',
+    },
+    loginFirstUserPut: {
+        'email': 'test1@jest.com',
+        'password': 'jestTest123'
+    },
+    secondUserPut: {
+        'password': 'jestTest234'
+    },
+    loginSecondUserPut: {
+        'email': 'test1@jest.com',
+        'password': 'jestTest234'
+    },
+    thirdUserPut: {
+        'email': 'test2@jest.com',
+        'password': 'jestTest2345'
+    },
+    loginThirdUserPut: {
+        'email': 'test2@jest.com',
+        'password': 'jestTest2345'
+    }
 }
 
 let userID: string = "";
@@ -56,7 +51,7 @@ describe("POST /register", () => {
     it("Should be able to create user", async () => {
         const res = await request(app)
             .post("/api/users/register")
-            .send(testUser);
+            .send(testData.testUser);
 
         let registerText = JSON.parse(res.text);
         let registerToken = registerText.token;
@@ -65,13 +60,11 @@ describe("POST /register", () => {
 
     });
 
-
-
     describe("POST /login", () => {
         it("should be able to login to the newly created user", async () => {
             const res = await request(app)
                 .post("/api/users/login")
-                .send(testUser);
+                .send(testData.testUser);
 
             let loginText = JSON.parse(res.text);
 
@@ -90,13 +83,11 @@ describe("POST /register", () => {
 
         });
 
-
-
         describe("PUT /users/:id", () => {
             it("should be able to edit the user with only the email changing", async () => {
                 const res = await request(app)
                     .put(`/api/users/${userID}`)
-                    .send(firstUserPut)
+                    .send(testData.firstUserPut)
                     .set('Cookie', [`jwt=${loginToken}`]);
                 let putText = JSON.parse(res.text);
                 // We want a 200 status code.
@@ -110,7 +101,7 @@ describe("POST /register", () => {
             it("should be able to login to the edited user (1)", async () => {
                 const res = await request(app)
                     .post("/api/users/login")
-                    .send(loginFirstUserPut);
+                    .send(testData.loginFirstUserPut);
 
                 let loginText = JSON.parse(res.text);
 
@@ -132,7 +123,7 @@ describe("POST /register", () => {
             it("should be able to edit the user with only the password changing", async () => {
                 const res = await request(app)
                     .put(`/api/users/${userID}`)
-                    .send(secondUserPut)
+                    .send(testData.secondUserPut)
                     .set('Cookie', [`jwt=${loginToken}`]);
 
                 let putText = JSON.parse(res.text);
@@ -145,7 +136,7 @@ describe("POST /register", () => {
             it("should be able to login to the edited user (2)", async () => {
                 const res = await request(app)
                     .post("/api/users/login")
-                    .send(loginSecondUserPut);
+                    .send(testData.loginSecondUserPut);
 
                 let loginText = JSON.parse(res.text);
 
@@ -167,7 +158,7 @@ describe("POST /register", () => {
             it("should be able to edit the user with both email and password changing", async () => {
                 const res = await request(app)
                     .put(`/api/users/${userID}`)
-                    .send(thirdUserPut)
+                    .send(testData.thirdUserPut)
                     .set('Cookie', [`jwt=${loginToken}`]);
 
                 let putText = JSON.parse(res.text);
@@ -180,7 +171,7 @@ describe("POST /register", () => {
             it("should be able to login to the edited user (3)", async () => {
                 const res = await request(app)
                     .post("/api/users/login")
-                    .send(loginThirdUserPut);
+                    .send(testData.loginThirdUserPut);
 
                 let loginText = JSON.parse(res.text);
 
