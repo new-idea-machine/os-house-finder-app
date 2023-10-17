@@ -13,6 +13,7 @@ import {
 } from '@components/ui/dropdown';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
+import { useLocation } from 'react-router-dom';
 import {
   Sheet,
   SheetClose,
@@ -21,25 +22,55 @@ import {
   SheetPrimitiveContent,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { cn } from '@/lib/utils';
+
+export type MenuItem = {
+  title: string;
+  href: string;
+};
+
+const menuItems: MenuItem[] = [
+  {
+    title: 'Profiles',
+    href: '/profiles',
+  },
+  {
+    title: 'History',
+    href: '/history',
+  },
+  {
+    title: 'Bookmark',
+    href: '/bookmark',
+  },
+  {
+    title: 'FAQ',
+    href: '/faq',
+  },
+];
 
 export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
-
   const { handleLogout } = useAuth();
+  const location = useLocation();
 
   return (
     <header>
-      <div className="sticky top-0 z-50 border-b border-gray-200 bg-gray-300 px-9">
-        <div className="flex h-28 items-center justify-between space-x-3">
+      <div className="sticky top-0 z-40 bg-gray-300 px-9">
+        <div className="flex h-20 items-center justify-between space-x-3">
           <a
             href="/"
             className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
           >
-            <img width={40} src={logo} alt="HouseFinder" />
+            <img
+              width={40}
+              src={logo}
+              alt="HouseFinder"
+              className="rounded-sm"
+            />
             <p>HouseFinder</p>
           </a>
 
-          <div className="lg:hidden">
+          <div className="md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Menu className="h-6 w-6 hover:text-gray-500" />
@@ -70,13 +101,26 @@ export default function Header() {
             </Sheet>
           </div>
 
-          <div className="hidden lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
-            <a className="hover:text-gray-900" href="/faq">
-              FAQ
-            </a>
-            <a className="hover:text-gray-900" href="/demo">
-              Scoring Demo
-            </a>
+          <div className="hidden h-full w-full items-center justify-between md:flex">
+            <div className="flex h-full space-x-6 px-9">
+              {menuItems.map((menuItem) => {
+                return (
+                  <a
+                    href={menuItem.href}
+                    className={cn(
+                      'relative flex h-full w-24 items-center justify-center hover:bg-gray-400',
+                      location.pathname.startsWith(menuItem.href) &&
+                        'bg-gray-400'
+                    )}
+                  >
+                    {location.pathname.startsWith(menuItem.href) && (
+                      <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-gray-500" />
+                    )}
+                    <div>{menuItem.title}</div>
+                  </a>
+                );
+              })}
+            </div>
             {userInfo ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -103,11 +147,6 @@ export default function Header() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              // <a href="/login" className="flex gap-1">
-              //   <UserCircle className="h-7 w-7" />
-              //   Login
-              // </a>
-
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
@@ -116,16 +155,22 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      <a href="/login" className="flex gap-1">
+                    <DropdownMenuItem asChild>
+                      <a
+                        href="/login"
+                        className="flex gap-1 hover:cursor-pointer"
+                      >
                         <User className="mr-2 h-4 w-4" />
                         Login
                       </a>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <a href="/register" className="flex gap-1">
+                  <DropdownMenuItem asChild>
+                    <a
+                      href="/register"
+                      className="flex gap-1 hover:cursor-pointer"
+                    >
                       <UserPlus2 className="mr-2 h-4 w-4" />
                       Register
                     </a>

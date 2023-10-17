@@ -12,7 +12,7 @@ function FormContainer({ children }: FormContainerProps) {
     <PasswordShowProvider>
       <div className="container mx-auto mt-20 px-4">
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-md">{children}</div>
+          <div className="w-full max-w-md p-6">{children}</div>
         </div>
       </div>
     </PasswordShowProvider>
