@@ -41,21 +41,17 @@ function NotLoginDropdown() {
                 </Button>
               </DropdownMenuItem>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg xl:max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Login</DialogTitle>
                 <DialogDescription>
-                  Make changes to your profile here. Click save when you are
-                  done.
+                  Please login with email and password to continue.
                 </DialogDescription>
               </DialogHeader>
 
               <FormContainer>
                 <FormContainer.LoginScreen />
               </FormContainer>
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
             </DialogContent>
           </Dialog>
         </DropdownMenuGroup>
@@ -72,21 +68,17 @@ function NotLoginDropdown() {
               </Button>
             </DropdownMenuItem>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg xl:max-w-2xl">
             <DialogHeader>
               <DialogTitle>Register</DialogTitle>
               <DialogDescription>
-                Make changes to your profile here. Click save when you are done.
+                Please register with email and password to continue.
               </DialogDescription>
             </DialogHeader>
 
             <FormContainer>
               <FormContainer.RegisterScreen />
             </FormContainer>
-
-            <DialogFooter>
-              <Button type="submit">Save changes</Button>
-            </DialogFooter>
           </DialogContent>
         </Dialog>
       </DropdownMenuContent>

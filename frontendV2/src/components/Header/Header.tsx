@@ -1,6 +1,6 @@
 import logo from '@assets/images/HouseLogoGrey.svg';
 import { useAppSelector } from '@app/hooks';
-import { LogOut, User, UserCircle, Menu, UserPlus2 } from 'lucide-react';
+import { LogOut, User, UserCircle, Menu } from 'lucide-react';
 import useAuth from '@hooks/useAuth';
 import {
   DropdownMenu,
@@ -12,23 +12,12 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown';
 
-import LoginScreen from '@pages/LoginScreen';
-
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
-import LoginSignupModal from '@components/LoginSignupModal/LoginSignupModal';
-import RegisterScreen from '@pages/RegisterScreen';
+
 import NotLoginDropdown from '@components/HeaderLoginRegisterBtn/NotLoginDropdown';
 import NotLoginHamburger from '@components/HeaderLoginRegisterBtn/NotLoginHamburger';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+
 import { Button } from '@/components/ui/button';
 import {
   Sheet,

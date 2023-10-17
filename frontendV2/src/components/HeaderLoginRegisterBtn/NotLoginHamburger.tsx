@@ -22,7 +22,7 @@ function NotLoginHamburger() {
             Login
           </Button>
         </DialogTrigger>
-        <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg">
+        <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg xl:max-w-2xl">
           {/* <DialogHeader>
             <DialogTitle>Login</DialogTitle>
             <DialogDescription>
@@ -47,7 +47,7 @@ function NotLoginHamburger() {
             Register
           </Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg xl:max-w-2xl">
           <DialogHeader>
             <DialogTitle>Register</DialogTitle>
             {/* <DialogDescription>
