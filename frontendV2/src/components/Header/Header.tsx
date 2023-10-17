@@ -12,8 +12,21 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown';
 
+import LoginScreen from '@pages/LoginScreen';
+
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
+import LoginSignupModal from '@components/LoginSignupModal/LoginSignupModal';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetClose,
@@ -87,7 +100,8 @@ export default function Header() {
                       <a href="/">Logout</a>
                     ) : (
                       <>
-                        <a href="/login">Login</a>
+                        {/* <a href="/login">Login</a> */}
+                        <LoginSignupModal />
                         <a href="/register">Register</a>
                       </>
                     )}
@@ -106,6 +120,7 @@ export default function Header() {
               {menuItems.map((menuItem) => {
                 return (
                   <a
+                    key={menuItem.title}
                     href={menuItem.href}
                     className={cn(
                       'relative flex h-full w-24 items-center justify-center hover:bg-gray-400',
@@ -156,13 +171,16 @@ export default function Header() {
                 <DropdownMenuContent>
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <a
+                      {/* <a
                         href="/login"
                         className="flex gap-1 hover:cursor-pointer"
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        Login
-                      </a>
+                      > */}
+                      <Button variant="link">
+                        <LoginSignupModal />
+                        {/* <User className="mr-2 h-4 w-4" />
+                          Login */}
+                      </Button>
+                      {/* </a> */}
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
