@@ -14,11 +14,7 @@ import { Input } from '@components/ui/input';
 import { Button } from '@components/ui/button';
 import { useContext } from 'react';
 import { Checkbox } from '@components/ui/checkbox';
-import { useRegisterMutation } from '@api/auth/authApi';
-import { useNavigate } from 'react-router-dom';
-import { isErrorWithMessage } from '@utils/IsFetchBaseQueryError';
-import { useAppDispatch } from '@app/hooks';
-import { setCredentials } from '@features/authSlice';
+import useAuth from '@hooks/useAuth';
 import { PasswordShowContext } from '@/context/PasswordShowProvider';
 
 const registerFormSchema = z
@@ -51,7 +47,6 @@ const registerFormSchema = z
 type RegisterSchemaType = z.infer<typeof registerFormSchema>;
 
 export default function RegisterScreen() {
-  const navigate = useNavigate();
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -59,8 +54,8 @@ export default function RegisterScreen() {
       password: '',
     },
   });
-  const dispatch = useAppDispatch();
-  const [register, registerResult] = useRegisterMutation();
+
+  const { handleRegister, registerResult } = useAuth();
   const {
     isPasswordShow,
     setIsPasswordShow,
@@ -69,33 +64,7 @@ export default function RegisterScreen() {
   } = useContext(PasswordShowContext);
 
   async function onSubmit(values: RegisterSchemaType) {
-    register(values)
-      .unwrap()
-      .then((registerResponse) => {
-        // TODO: Move register logic into useAuth hook?
-        dispatch(
-          setCredentials({
-            id: registerResponse.id,
-            email: registerResponse.email,
-            role: registerResponse.role,
-          })
-        );
-        localStorage.setItem('token', registerResponse.token);
-        navigate('/');
-      })
-      .catch((error) => {
-        // TODO: Move into helper function?
-        if (isErrorWithMessage(error)) {
-          form.setError('root', {
-            message: error.message,
-          });
-        } else {
-          form.setError('root', {
-            message:
-              'There was an error creating your account. Please try again.',
-          });
-        }
-      });
+    handleRegister(values);
   }
 
   return (

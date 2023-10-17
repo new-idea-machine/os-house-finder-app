@@ -15,8 +15,19 @@ export const registerUser = async (req: Request, res: Response) => {
     await newUser.save();
 
     const token: string = newUser.generateToken();
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    });
 
-    return res.status(201).json({ token });
+    return res.status(201).json({
+      token,
+      id: newUser._id,
+      email: newUser.email,
+      role: newUser.role,
+    });
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
@@ -37,7 +48,6 @@ export const logoutUser = async (req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response) => {
   try {
-
     const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
 
