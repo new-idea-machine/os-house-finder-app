@@ -3,7 +3,3 @@ export interface GeneralResponse<T> {
   status: number;
   data?: T;
 }
-
-export interface RegisterUserResponse {
-  token?: string;
-}

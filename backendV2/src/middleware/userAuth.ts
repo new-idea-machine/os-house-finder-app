@@ -4,9 +4,6 @@ import User, { IUser } from '@models/userModel';
 
 export interface UserAuthInfoRequest extends Request {
   user?: DecodedToken;
-  params: {
-    id?: string;
-  };
 }
 
 interface DecodedToken {
