@@ -2,6 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAppSelector } from '@app/hooks';
 import useAuth from '@hooks/useAuth';
+import FormContainer from '@components/FormContainer';
 import {
   Form,
   FormControl,
@@ -10,6 +11,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from '@components/ui/dialog';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -148,14 +157,28 @@ function LoginScreen() {
       </GoogleLoginButton>
       <p className="mt-4 text-center text-sm text-gray-600">
         If you don&apos;t have an account, please&nbsp;
-        <Button variant="link">
-          <Link
-            to="/register"
-            className="rounded-md p-2 font-bold hover:bg-gray-100 hover:underline"
-          >
-            Register
-          </Link>
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="link"
+              className="rounded-md p-2 font-bold hover:bg-gray-100 hover:underline"
+            >
+              Register
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-sm sm:max-w-[425px] lg:max-w-lg xl:max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Register</DialogTitle>
+              <DialogDescription>
+                Please register with email and password to continue.
+              </DialogDescription>
+            </DialogHeader>
+
+            <FormContainer>
+              <FormContainer.RegisterScreen />
+            </FormContainer>
+          </DialogContent>
+        </Dialog>
       </p>
     </Form>
   );

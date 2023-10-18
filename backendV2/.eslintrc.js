@@ -1,31 +1,26 @@
 module.exports = {
-  "root": true,
-  "env": {
-    "browser": true,
-    "es2021": true,
-    "jest": true,
+  root: true,
+  env: {
+    browser: true,
+    es2021: true,
+    jest: true,
   },
-  "extends": [
-    "airbnb-base",
-    "airbnb-typescript/base",
-    "plugin:@typescript-eslint/recommended",
-    "prettier"
-  ],
-  "overrides": [
-  ],
-  "ignorePatterns": ['dist', '.eslintrc.js'],
-  "parser": "@typescript-eslint/parser",
-  "parserOptions": {
-    "ecmaVersion": "latest",
-    "sourceType": "module",
-    "project": "./tsconfig.json"
-  },
-  "plugins": [
-    "@typescript-eslint",
+  extends: [
+    'airbnb-base',
+    'airbnb-typescript/base',
+    'plugin:@typescript-eslint/recommended',
     'prettier',
-    'import'
   ],
-  "rules": {
+  overrides: [],
+  ignorePatterns: ['dist', '.eslintrc.js', 'src/__tests__'],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    project: './tsconfig.json',
+  },
+  plugins: ['@typescript-eslint', 'prettier', 'import'],
+  rules: {
     'import/extensions': [
       'error',
       'ignorePackages',
@@ -49,12 +44,12 @@ module.exports = {
       },
     ],
   },
-  "settings": {
-    "import/resolver": {
-      "typescript": {
-        "alwaysTryTypes": true,
-        "project": "./tsconfig.json"
-      }
-    }
-  }
+  settings: {
+    'import/resolver': {
+      typescript: {
+        alwaysTryTypes: true,
+        project: './tsconfig.json',
+      },
+    },
+  },
 };

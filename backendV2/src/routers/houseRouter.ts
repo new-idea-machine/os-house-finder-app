@@ -1,5 +1,12 @@
 import express from 'express';
-import { getHouse, getHouses, createHouse, updateHouse, deleteHouse, getScraped } from '../controllers/houseController';
+import {
+  getHouse,
+  getHouses,
+  createHouse,
+  updateHouse,
+  deleteHouse,
+  getScraped,
+} from '@controllers/houseController';
 
 const houseRouter = express.Router();
 
@@ -12,7 +19,7 @@ houseRouter.post('/', createHouse);
 // GET a specific house by ID
 houseRouter.get('/:id', getHouse);
 
-// GET Screaped data by realtor.ca url
+// GET Scraped data by realtor.ca url
 houseRouter.get('/:url', getScraped);
 
 // PUT update a specific house by ID

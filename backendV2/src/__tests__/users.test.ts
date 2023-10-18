@@ -46,8 +46,8 @@ let testData = {
     }
 }
 
-let userID: string = "";
-let loginToken: string = "";
+let userID: string = '';
+let loginToken: string = '';
 
 describe("POST /register", () => {
 
@@ -56,8 +56,8 @@ describe("POST /register", () => {
             .post("/api/users/register")
             .send(testData.testUser);
 
-        let registerText = JSON.parse(res.text);
-        let registerToken = registerText.token;
+    let registerText = JSON.parse(res.text);
+    let registerToken = registerText.token;
 
         expect(res.statusCode).toEqual(201);
 
@@ -69,13 +69,12 @@ describe("POST /register", () => {
                 .post("/api/users/login")
                 .send(testData.testUser);
 
-            let loginText = JSON.parse(res.text);
+      let loginText = JSON.parse(res.text);
 
-            let split = res.header['set-cookie'][0].substring(4).split(" ");
-            loginToken = split[0].slice(0, -1);
-            userID = loginText._id;
-            let userEmail = loginText.email;
-
+      let split = res.header['set-cookie'][0].substring(4).split(' ');
+      loginToken = split[0].slice(0, -1);
+      userID = loginText._id;
+      let userEmail = loginText.email;
 
             // We want a 200 status code.
             expect(res.statusCode).toEqual(200);
@@ -129,12 +128,12 @@ describe("POST /register", () => {
                     .send(testData.secondUserPut)
                     .set('Cookie', [`jwt=${loginToken}`]);
 
-                let putText = JSON.parse(res.text);
-                // We want a 200 status code.
-                expect(res.statusCode).toEqual(200);
-                // We want the correct server message.
-                expect(putText.message).toEqual('User updated successfully');
-            });
+        let putText = JSON.parse(res.text);
+        // We want a 200 status code.
+        expect(res.statusCode).toEqual(200);
+        // We want the correct server message.
+        expect(putText.message).toEqual('User updated successfully');
+      });
 
             it("should be able to login to the edited user (2)", async () => {
                 const res = await request(app)
@@ -193,7 +192,7 @@ describe("POST /register", () => {
 
             });
 
-            // DELETE section is grouped with PUT to ensure the DELETE runs after the PUTs run.
+      // DELETE section is grouped with PUT to ensure the DELETE runs after the PUTs run.
 
             describe("DELETE /users/:id", () => {
                 it("delete the user", async () => {
@@ -201,7 +200,7 @@ describe("POST /register", () => {
                         .delete(`/api/users/${userID}`)
                         .set('Cookie', [`jwt=${loginToken}`]);
 
-                    let deleteText = JSON.parse(res.text);
+          let deleteText = JSON.parse(res.text);
 
                     // We want a 200 status code.
                     expect(res.statusCode).toEqual(200);

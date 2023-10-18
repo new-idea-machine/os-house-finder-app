@@ -1,31 +1,62 @@
 import { Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import House, { IHouse } from '../models/houseModel';
+import House, { IHouse } from '@models/houseModel';
+import {
+  CreateHouseRequest,
+  DeleteHouseRequest,
+  GetAHouseRequest,
+  GetScrapedRequest,
+  UpdateHouseRequest,
+} from '@interfaces/requests/house';
+import { StatusCodes } from '@src/constant';
+import {
+  GetHouseResponse,
+  GetHousesResponse,
+  UpdateHouseResponse,
+} from '@interfaces/responses/house';
+import { GeneralResponse } from '@interfaces/responses/general';
 
 // Get all houses
-export const getHouses = async (req: Request, res: Response): Promise<void> => {
+export const getHouses = async (
+  _: Request,
+  res: Response<GetHousesResponse>
+): Promise<void> => {
   try {
     const houses = await House.find();
-    res.status(200).json(houses);
+
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'Houses found', status: StatusCodes.OK, data: houses });
   } catch (error) {
-    res.status(404).json(error);
+    res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ message: 'Houses not found', status: StatusCodes.NOT_FOUND });
   }
 };
 
 // Get a specific house by ID
-export const getHouse = async (req: Request, res: Response): Promise<void> => {
+export const getHouse = async (
+  req: GetAHouseRequest,
+  res: Response<GetHouseResponse>
+): Promise<void> => {
   try {
-    const house = await House.findById(req.params.id);
-    res.status(200).json(house);
+    const house = (await House.findById(req.params.id)) as IHouse;
+    res
+      .status(StatusCodes.OK)
+      .json({ message: 'House found', status: StatusCodes.OK, data: house });
   } catch (error) {
-    res.status(404).json(error);
+    res
+      .status(StatusCodes.NOT_FOUND)
+      .json({ message: 'House not found', status: StatusCodes.NOT_FOUND });
   }
 };
 
 // Get Scraped data by
-export const getScraped = async (req: Request, res: Response): Promise<void> => {
+export const getScraped = async (
+  req: GetScrapedRequest,
+  res: Response
+): Promise<void> => {
   try {
-    // Now, let's call the Python function
     const pythonProcess: ChildProcess = spawn('python', [
       '../scripts/scraper.py',
       req.params.url,
@@ -33,38 +64,55 @@ export const getScraped = async (req: Request, res: Response): Promise<void> => 
 
     pythonProcess.stdout?.on('data', (data) => {
       const result: string = data.toString();
-      res.send(result); // Sending the Python function result as the response
+      res.send(result);
     });
 
     pythonProcess.on('error', (error) => {
+      // eslint-disable-next-line no-console
       console.error(error);
-      res.status(500).send('Error calling Python function');
+      res
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
+        .send('Error calling Python function');
     });
 
     pythonProcess.on('close', (code) => {
       if (code !== 0) {
+        // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);
       }
     });
   } catch (error) {
-    res.status(404).json(error);
+    res.status(StatusCodes.NOT_FOUND).json(error);
   }
 };
 
 // Create a new house
-export const createHouse = async (req: Request, res: Response): Promise<void> => {
+export const createHouse = async (
+  req: CreateHouseRequest,
+  res: Response<GetHouseResponse>
+): Promise<void> => {
   const house: IHouse = new House(req.body);
 
   try {
     await house.save();
-    res.status(201).json(house);
+    res.status(StatusCodes.CREATED).json({
+      message: 'House created',
+      status: StatusCodes.CREATED,
+      data: house,
+    });
   } catch (error) {
-    res.status(409).json(error);
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Failed to create a house',
+      status: StatusCodes.BAD_REQUEST,
+    });
   }
 };
 
 // Update a specific house by ID
-export const updateHouse = async (req: Request, res: Response): Promise<void> => {
+export const updateHouse = async (
+  req: UpdateHouseRequest,
+  res: Response<UpdateHouseResponse>
+): Promise<void> => {
   const { id } = req.params;
   const updatedData = req.body;
 
@@ -74,33 +122,52 @@ export const updateHouse = async (req: Request, res: Response): Promise<void> =>
     });
 
     if (!updatedHouse) {
-      res.status(404).json({ message: `House with ID ${id} not found.` });
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: `House with ID ${id} not found.`,
+        status: StatusCodes.NOT_FOUND,
+      });
       return;
     }
 
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       message: `House with ID ${id} updated successfully.`,
-      updatedHouse,
+      status: StatusCodes.OK,
+      data: updatedHouse,
     });
   } catch (error) {
-    res.status(400).json(error);
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Fail to update a house',
+      status: StatusCodes.BAD_REQUEST,
+    });
   }
 };
 
 // Delete a specific house by ID
-export const deleteHouse = async (req: Request, res: Response): Promise<void> => {
+export const deleteHouse = async (
+  req: DeleteHouseRequest,
+  res: Response<GeneralResponse<null>>
+): Promise<void> => {
   const { id } = req.params;
 
   try {
     const deletedHouse = await House.findByIdAndRemove(id);
 
     if (!deletedHouse) {
-      res.status(404).json({ message: `House with ID ${id} not found.` });
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: `House with ID ${id} not found.`,
+        status: StatusCodes.NOT_FOUND,
+      });
       return;
     }
 
-    res.status(200).json({ message: `House with ID ${id} deleted successfully.` });
+    res.status(StatusCodes.OK).json({
+      message: `House with ID ${id} deleted successfully.`,
+      status: StatusCodes.OK,
+    });
   } catch (error) {
-    res.status(400).json(error);
+    res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Fail to delete a house',
+      status: StatusCodes.BAD_REQUEST,
+    });
   }
 };
