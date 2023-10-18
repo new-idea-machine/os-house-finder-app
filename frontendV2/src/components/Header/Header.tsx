@@ -1,6 +1,6 @@
 import logo from '@assets/images/HouseLogoGrey.svg';
 import { useAppSelector } from '@app/hooks';
-import { LogOut, User, UserCircle, Menu, UserPlus2 } from 'lucide-react';
+import { LogOut, User, UserCircle, Menu } from 'lucide-react';
 import useAuth from '@hooks/useAuth';
 import {
   DropdownMenu,
@@ -14,6 +14,11 @@ import {
 
 import { Cross2Icon } from '@radix-ui/react-icons';
 import { useLocation } from 'react-router-dom';
+
+import NotLoginDropdown from '@components/HeaderLoginRegisterBtn/NotLoginDropdown';
+import NotLoginHamburger from '@components/HeaderLoginRegisterBtn/NotLoginHamburger';
+
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetClose,
@@ -82,14 +87,18 @@ export default function Header() {
                   className="h-screen data-[state=open]:duration-300"
                 >
                   <ol className="flex flex-col items-end space-y-4 pr-8 pt-12 text-2xl font-bold">
-                    <a href="/">Profile</a>
+                    <Button
+                      variant="ghost"
+                      className="flex justify-evenly hover:cursor-pointer"
+                    >
+                      Profile
+                    </Button>
                     {userInfo ? (
-                      <a href="/">Logout</a>
+                      <Button variant="ghost" onClick={handleLogout}>
+                        Logout
+                      </Button>
                     ) : (
-                      <>
-                        <a href="/login">Login</a>
-                        <a href="/register">Register</a>
-                      </>
+                      <NotLoginHamburger />
                     )}
                   </ol>
                   <SheetClose className="absolute right-9 top-8 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-0 disabled:pointer-events-none data-[state=open]:bg-secondary">
@@ -106,6 +115,7 @@ export default function Header() {
               {menuItems.map((menuItem) => {
                 return (
                   <a
+                    key={menuItem.title}
                     href={menuItem.href}
                     className={cn(
                       'relative flex h-full w-24 items-center justify-center hover:bg-gray-400',
@@ -133,50 +143,23 @@ export default function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem>
-                      <User className="mr-2 h-4 w-4" />
-                      <a href="/">Profile</a>
+                      <Button variant="ghost">
+                        <User className="mr-2 h-4 w-4" />
+                        Profile
+                      </Button>
                     </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <a href="/" onClick={handleLogout}>
+                    <Button variant="ghost" onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
                       Log out
-                    </a>
+                    </Button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
-                    <UserCircle className="h-7 w-7" />
-                  </div>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem asChild>
-                      <a
-                        href="/login"
-                        className="flex gap-1 hover:cursor-pointer"
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        Login
-                      </a>
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <a
-                      href="/register"
-                      className="flex gap-1 hover:cursor-pointer"
-                    >
-                      <UserPlus2 className="mr-2 h-4 w-4" />
-                      Register
-                    </a>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <NotLoginDropdown />
             )}
           </div>
         </div>

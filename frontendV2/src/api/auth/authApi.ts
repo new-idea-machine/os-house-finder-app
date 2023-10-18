@@ -48,7 +48,20 @@ export const authApi = createApi({
         return baseQueryReturnValue.data;
       },
     }),
+    logout: builder.mutation<void, void>({
+      query: () => ({
+        url: '/api/users/logout',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true,
+        credentials: 'include',
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation } =
+  authApi;

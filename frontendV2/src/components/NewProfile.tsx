@@ -3,7 +3,6 @@ import * as z from 'zod';
 import { useForm } from 'react-hook-form';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
-import { Slider } from '@/components/ui/slider';
 import {
   Form,
   FormControl,
@@ -12,6 +11,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { Slider } from '@/components/ui/slider';
 
 const formSchema = z.object({
   profileName: z
@@ -56,6 +56,7 @@ function NewProfile() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    // eslint-disable-next-line no-console
     console.log(values);
   }
 
@@ -94,7 +95,7 @@ function NewProfile() {
               doloremque ea magnam. Quia, itaque!
             </p>
           </div>
-          <hr className="bg-black"></hr>
+          <hr className="bg-black" />
           <h3 className="mb-2 font-bold">Square Footage</h3>
           <FormField
             control={form.control}

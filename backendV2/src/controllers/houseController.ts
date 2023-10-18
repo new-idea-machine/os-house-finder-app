@@ -68,6 +68,7 @@ export const getScraped = async (
     });
 
     pythonProcess.on('error', (error) => {
+      // eslint-disable-next-line no-console
       console.error(error);
       res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
@@ -76,6 +77,7 @@ export const getScraped = async (
 
     pythonProcess.on('close', (code) => {
       if (code !== 0) {
+        // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);
       }
     });

@@ -35,6 +35,12 @@ export const registerUser = async (
     await newUser.save();
 
     const token: string = newUser.generateToken();
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
+    });
 
     return res.status(StatusCodes.CREATED).json({
       message: 'success',
@@ -130,7 +136,6 @@ export const updateUser = async (
         .status(StatusCodes.NOT_FOUND)
         .json({ message: 'User not found', status: StatusCodes.NOT_FOUND });
     }
-
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
       return res.status(StatusCodes.FORBIDDEN).json({
         message: 'You are not authorized to perform this action',
