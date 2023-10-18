@@ -1,6 +1,6 @@
 import 'jest';
 import request from 'supertest'
-import app from '@src/app';
+import app from '../app';
 import mongoose from "mongoose";
 
 let Mongo_TEST_DB_URI: string = process.env.MONGODB_TEST_URI!;
