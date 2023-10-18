@@ -1,16 +1,23 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import User, { IUser } from '../models/userModel';
+import User, { IUser } from '@models/userModel';
 
-export const userAuth = async (req: Request, res: Response, next: NextFunction) => {
+export interface UserAuthInfoRequest extends Request {
+  user?: DecodedToken;
+}
 
+interface DecodedToken {
+  _id?: string;
+  email: string;
+  role: string;
+}
+
+export const userAuth = async (
+  req: UserAuthInfoRequest,
+  res: Response,
+  next: NextFunction
+) => {
   const token: string = req.cookies.jwt;
-
-  interface DecodedToken {
-    _id: string;
-    email: string;
-    role: string;
-  }
 
   // Check if the token exists
   if (!token) {
@@ -19,7 +26,10 @@ export const userAuth = async (req: Request, res: Response, next: NextFunction) 
 
   try {
     // Verify the token and extract the payload
-    const decoded: DecodedToken = jwt.verify(token, process.env.JWT_SECRET || 'Bearer') as DecodedToken;
+    const decoded: DecodedToken = jwt.verify(
+      token,
+      process.env.JWT_SECRET || 'Bearer'
+    ) as DecodedToken;
 
     // Attach the user's ID and email to the request object
     // req.user = {
