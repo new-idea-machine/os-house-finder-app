@@ -1,4 +1,4 @@
-import { IHouse } from '@src/models/houseModel';
+import { IHouse } from '@models/houseModel';
 import { Request } from 'express';
 
 export interface GetAHouseRequest extends Request {
