@@ -4,6 +4,12 @@
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@config/*": ["src/config/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@models/*": ["src/models/*"],
+      "@routers/*": ["src/routers/*"],
+      "@middleware/*": ["src/middleware/*"],
     },
     "outDir": "dist",
     "sourceMap": true,
@@ -19,7 +25,9 @@
     "strict": true,
     "skipLibCheck": true
   },
-
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  },
   "exclude": [
     "node_modules",
     "dist",
@@ -30,5 +38,5 @@
     "./*.js",
     "src/**/*.ts",
   ],
-  "files": ["src/types.d.ts"]
+  // "files": ["src/types.d.ts"]
 }
