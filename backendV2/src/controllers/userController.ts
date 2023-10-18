@@ -85,7 +85,6 @@ export const updateUser = async (req: Request, res: Response) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
       return res
         .status(403)

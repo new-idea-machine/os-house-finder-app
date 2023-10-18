@@ -23,7 +23,10 @@ export const getHouse = async (req: Request, res: Response): Promise<void> => {
 };
 
 // Get Scraped data by
-export const getScraped = async (req: Request, res: Response): Promise<void> => {
+export const getScraped = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   try {
     // Now, let's call the Python function
     const pythonProcess: ChildProcess = spawn('python', [
@@ -37,12 +40,14 @@ export const getScraped = async (req: Request, res: Response): Promise<void> => 
     });
 
     pythonProcess.on('error', (error) => {
+      // eslint-disable-next-line no-console
       console.error(error);
       res.status(500).send('Error calling Python function');
     });
 
     pythonProcess.on('close', (code) => {
       if (code !== 0) {
+        // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);
       }
     });
@@ -52,7 +57,10 @@ export const getScraped = async (req: Request, res: Response): Promise<void> => 
 };
 
 // Create a new house
-export const createHouse = async (req: Request, res: Response): Promise<void> => {
+export const createHouse = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const house: IHouse = new House(req.body);
 
   try {
@@ -64,7 +72,10 @@ export const createHouse = async (req: Request, res: Response): Promise<void> =>
 };
 
 // Update a specific house by ID
-export const updateHouse = async (req: Request, res: Response): Promise<void> => {
+export const updateHouse = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
   const updatedData = req.body;
 
@@ -88,7 +99,10 @@ export const updateHouse = async (req: Request, res: Response): Promise<void> =>
 };
 
 // Delete a specific house by ID
-export const deleteHouse = async (req: Request, res: Response): Promise<void> => {
+export const deleteHouse = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const { id } = req.params;
 
   try {
@@ -99,7 +113,9 @@ export const deleteHouse = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    res.status(200).json({ message: `House with ID ${id} deleted successfully.` });
+    res
+      .status(200)
+      .json({ message: `House with ID ${id} deleted successfully.` });
   } catch (error) {
     res.status(400).json(error);
   }
