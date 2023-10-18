@@ -14,7 +14,10 @@
     "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
-    "types": ["node"],
+    "types": [
+      "node",
+      "jest"
+    ],
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -35,5 +38,5 @@
     "./*.js",
     "src/**/*.ts",
   ],
-  "files": ["src/types.d.ts"]
+  // "files": ["src/types.d.ts"]
 }
