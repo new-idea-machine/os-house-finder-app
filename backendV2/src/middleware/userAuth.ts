@@ -12,6 +12,12 @@ interface DecodedToken {
   role: string;
 }
 
+interface DecodedTokenFromCookie extends DecodedToken {
+  id: string;
+  iat: number;
+  exp: number;
+}
+
 export const userAuth = async (
   req: UserAuthInfoRequest,
   res: Response,
@@ -26,10 +32,10 @@ export const userAuth = async (
 
   try {
     // Verify the token and extract the payload
-    const decoded: DecodedToken = jwt.verify(
+    const decoded: DecodedTokenFromCookie = jwt.verify(
       token,
       process.env.JWT_SECRET || 'Bearer'
-    ) as DecodedToken;
+    ) as DecodedTokenFromCookie;
 
     // Attach the user's ID and email to the request object
     // req.user = {
@@ -38,7 +44,7 @@ export const userAuth = async (
     //   role: decoded.role,
     // };
 
-    req.user = (await User.findById(decoded._id).select('-password')) as IUser;
+    req.user = (await User.findById(decoded.id).select('-password')) as IUser;
 
     return next(); // Move to the next middleware or route handler
   } catch (error) {
