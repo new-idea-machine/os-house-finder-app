@@ -130,13 +130,7 @@ export const updateUser = async (
     const { email, password } = req.body;
 
     const user: IUser | null = await User.findById(userId);
-
-    console.log(req.params.id);
-    console.log(user?.email);
-    console.log(req.user?.email);
-    console.log(req.user);
     
-
     if (!user) {
       return res
         .status(StatusCodes.NOT_FOUND)
