@@ -1,18 +1,18 @@
 import { Request, Response } from 'express';
-import User, { IUser } from '../models/userModel';
-import { UserAuthInfoRequest } from '../middleware/userAuth';
+import User, { IUser } from '@models/userModel';
+import { UserAuthInfoRequest } from '@middleware/userAuth';
 import {
   UserAuthInfoParamIdRequest,
   UserLoginRequest,
   UserRegisterRequest,
-} from '../interfaces/requests/user';
+} from '@interfaces/requests/user';
 import {
   GetUserResponse,
   GetUsersResponse,
   LoginUserResponse,
   RegisterUserResponse,
-} from '../interfaces/responses/user';
-import { GeneralResponse } from '../interfaces/responses/general';
+} from '@interfaces/responses/user';
+import { GeneralResponse } from '@interfaces/responses/general';
 import { StatusCodes } from '../constant';
 
 export const registerUser = async (

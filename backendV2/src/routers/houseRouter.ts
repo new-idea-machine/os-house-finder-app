@@ -6,7 +6,7 @@ import {
   updateHouse,
   deleteHouse,
   getScraped,
-} from '../controllers/houseController';
+} from '@controllers/houseController';
 
 const houseRouter = express.Router();
 
