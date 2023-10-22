@@ -1,20 +1,20 @@
 import { Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import House, { IHouse } from '../models/houseModel';
+import House, { IHouse } from '@models/houseModel';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
   GetAHouseRequest,
   GetScrapedRequest,
   UpdateHouseRequest,
-} from '../interfaces/requests/house';
+} from '@interfaces/requests/house';
 import { StatusCodes } from '../constant';
 import {
   GetHouseResponse,
   GetHousesResponse,
   UpdateHouseResponse,
-} from '../interfaces/responses/house';
-import { GeneralResponse } from '../interfaces/responses/general';
+} from '@interfaces/responses/house';
+import { GeneralResponse } from '@interfaces/responses/general';
 
 // Get all houses
 export const getHouses = async (
