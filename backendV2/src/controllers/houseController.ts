@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import HouseModel, { IHouse } from '@models/house.model';
+import HouseModel, { HouseZodSchema, IHouse } from '@models/house.model';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -41,6 +41,12 @@ export const getHouse = async (
 ): Promise<void> => {
   try {
     const house = (await HouseModel.findById(req.params.id)) as IHouse;
+    if (!house) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'House not found', status: StatusCodes.NOT_FOUND });
+      return;
+    }
     res
       .status(StatusCodes.OK)
       .json({ message: 'House found', status: StatusCodes.OK, data: house });
@@ -89,35 +95,44 @@ export const getScraped = async (
 // Create a new house
 export const createHouse = async (
   req: CreateHouseRequest,
-  res: Response<GetHouseResponse>
-): Promise<void> => {
-  const house: IHouse = new HouseModel(req.body);
-
-  // Address + City + Province should be unique
-  const houseExists = await HouseModel.findOne({
-    address: house.address,
-    city: house.city,
-    province: house.province,
-  });
-
-  if (houseExists) {
-    res.status(StatusCodes.FORBIDDEN).json({
-      message: 'House already exists',
-      status: StatusCodes.FORBIDDEN,
-    });
-    return;
-  }
-
+  res: Response<GetHouseResponse>,
+) => {
   try {
-    await house.save();
-    res.status(StatusCodes.CREATED).json({
-      message: 'House created',
-      status: StatusCodes.CREATED,
-      data: house,
+    const validatedData = HouseZodSchema.parse(req.body);
+
+    // Address + City + Province should be unique
+    const houseExists = await HouseModel.findOne({
+      address: validatedData.address,
+      city: validatedData.city,
+      province: validatedData.province,
     });
+
+    if (houseExists) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: 'House already exists',
+        status: StatusCodes.FORBIDDEN,
+      });
+      return;
+    }
+
+    const house: IHouse = new HouseModel(validatedData);
+
+    try {
+      await house.save();
+      res.status(StatusCodes.CREATED).json({
+        message: 'House created',
+        status: StatusCodes.CREATED,
+        data: house,
+      });
+    } catch (error) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Failed to create a house',
+        status: StatusCodes.BAD_REQUEST,
+      });
+    }
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Failed to create a house',
+    return res.status(StatusCodes.BAD_REQUEST).json({
+      message: 'Invalid data',
       status: StatusCodes.BAD_REQUEST,
     });
   }
@@ -129,10 +144,38 @@ export const updateHouse = async (
   res: Response<UpdateHouseResponse>
 ): Promise<void> => {
   const { id } = req.params;
-  const updatedData = req.body;
 
   try {
-    const updatedHouse = await HouseModel.findByIdAndUpdate(id, updatedData, {
+    const house: IHouse | null = await HouseModel.findById(id);
+    if (!house) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: `House with ID ${id} not found.`,
+        status: StatusCodes.NOT_FOUND,
+      });
+      return;
+    }
+    // Validate data
+    const validatedData = HouseZodSchema.parse(req.body);
+
+
+    // Address + City + Province should be unique
+    if (validatedData.address || validatedData.city || validatedData.province) {
+      const houseExists = await HouseModel.findOne({
+        address: validatedData.address || house.address,
+        city: validatedData.city || house.city,
+        province: validatedData.province || house.province,
+      });
+
+      if (houseExists && houseExists._id != id) {
+        res.status(StatusCodes.FORBIDDEN).json({
+          message: 'House already exists',
+          status: StatusCodes.FORBIDDEN,
+        });
+        return;
+      }
+    }
+
+    const updatedHouse = await HouseModel.findByIdAndUpdate(id, validatedData, {
       new: true,
     });
 
