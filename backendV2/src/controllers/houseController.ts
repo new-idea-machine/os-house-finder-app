@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import House, { IHouse } from '@models/houseModel';
+import HouseModel, { IHouse } from '@models/house.model';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -22,7 +22,7 @@ export const getHouses = async (
   res: Response<GetHousesResponse>
 ): Promise<void> => {
   try {
-    const houses = await House.find();
+    const houses = await HouseModel.find();
 
     res
       .status(StatusCodes.OK)
@@ -40,7 +40,7 @@ export const getHouse = async (
   res: Response<GetHouseResponse>
 ): Promise<void> => {
   try {
-    const house = (await House.findById(req.params.id)) as IHouse;
+    const house = (await HouseModel.findById(req.params.id)) as IHouse;
     res
       .status(StatusCodes.OK)
       .json({ message: 'House found', status: StatusCodes.OK, data: house });
@@ -91,7 +91,22 @@ export const createHouse = async (
   req: CreateHouseRequest,
   res: Response<GetHouseResponse>
 ): Promise<void> => {
-  const house: IHouse = new House(req.body);
+  const house: IHouse = new HouseModel(req.body);
+
+  // Address + City + Province should be unique
+  const houseExists = await HouseModel.findOne({
+    address: house.address,
+    city: house.city,
+    province: house.province,
+  });
+
+  if (houseExists) {
+    res.status(StatusCodes.FORBIDDEN).json({
+      message: 'House already exists',
+      status: StatusCodes.FORBIDDEN,
+    });
+    return;
+  }
 
   try {
     await house.save();
@@ -117,7 +132,7 @@ export const updateHouse = async (
   const updatedData = req.body;
 
   try {
-    const updatedHouse = await House.findByIdAndUpdate(id, updatedData, {
+    const updatedHouse = await HouseModel.findByIdAndUpdate(id, updatedData, {
       new: true,
     });
 
@@ -150,7 +165,7 @@ export const deleteHouse = async (
   const { id } = req.params;
 
   try {
-    const deletedHouse = await House.findByIdAndRemove(id);
+    const deletedHouse = await HouseModel.findByIdAndRemove(id);
 
     if (!deletedHouse) {
       res.status(StatusCodes.NOT_FOUND).json({
