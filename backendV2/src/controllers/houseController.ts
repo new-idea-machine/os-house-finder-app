@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import House, { IHouse } from '@models/houseModel';
+import HouseModel, { HouseZodSchema, IHouse } from '@models/house.model';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -19,10 +19,10 @@ import { GeneralResponse } from '@interfaces/responses/general';
 // Get all houses
 export const getHouses = async (
   _: Request,
-  res: Response<GetHousesResponse>
+  res: Response<GetHousesResponse>,
 ): Promise<void> => {
   try {
-    const houses = await House.find();
+    const houses = await HouseModel.find();
 
     res
       .status(StatusCodes.OK)
@@ -37,10 +37,16 @@ export const getHouses = async (
 // Get a specific house by ID
 export const getHouse = async (
   req: GetAHouseRequest,
-  res: Response<GetHouseResponse>
+  res: Response<GetHouseResponse>,
 ): Promise<void> => {
   try {
-    const house = (await House.findById(req.params.id)) as IHouse;
+    const house = (await HouseModel.findById(req.params.id)) as IHouse;
+    if (!house) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ message: 'House not found', status: StatusCodes.NOT_FOUND });
+      return;
+    }
     res
       .status(StatusCodes.OK)
       .json({ message: 'House found', status: StatusCodes.OK, data: house });
@@ -54,7 +60,7 @@ export const getHouse = async (
 // Get Scraped data by
 export const getScraped = async (
   req: GetScrapedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const pythonProcess: ChildProcess = spawn('python', [
@@ -89,20 +95,44 @@ export const getScraped = async (
 // Create a new house
 export const createHouse = async (
   req: CreateHouseRequest,
-  res: Response<GetHouseResponse>
-): Promise<void> => {
-  const house: IHouse = new House(req.body);
-
+  res: Response<GetHouseResponse>,
+) => {
   try {
-    await house.save();
-    res.status(StatusCodes.CREATED).json({
-      message: 'House created',
-      status: StatusCodes.CREATED,
-      data: house,
+    const validatedData = HouseZodSchema.parse(req.body);
+
+    // Address + City + Province should be unique
+    const houseExists = await HouseModel.findOne({
+      address: validatedData.address,
+      city: validatedData.city,
+      province: validatedData.province,
     });
+
+    if (houseExists) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: 'House already exists',
+        status: StatusCodes.FORBIDDEN,
+      });
+      return;
+    }
+
+    const house: IHouse = new HouseModel(validatedData);
+
+    try {
+      await house.save();
+      res.status(StatusCodes.CREATED).json({
+        message: 'House created',
+        status: StatusCodes.CREATED,
+        data: house,
+      });
+    } catch (error) {
+      res.status(StatusCodes.BAD_REQUEST).json({
+        message: 'Failed to create a house',
+        status: StatusCodes.BAD_REQUEST,
+      });
+    }
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Failed to create a house',
+      message: 'Invalid data',
       status: StatusCodes.BAD_REQUEST,
     });
   }
@@ -111,13 +141,41 @@ export const createHouse = async (
 // Update a specific house by ID
 export const updateHouse = async (
   req: UpdateHouseRequest,
-  res: Response<UpdateHouseResponse>
+  res: Response<UpdateHouseResponse>,
 ): Promise<void> => {
   const { id } = req.params;
-  const updatedData = req.body;
 
   try {
-    const updatedHouse = await House.findByIdAndUpdate(id, updatedData, {
+    const house: IHouse | null = await HouseModel.findById(id);
+    if (!house) {
+      res.status(StatusCodes.NOT_FOUND).json({
+        message: `House with ID ${id} not found.`,
+        status: StatusCodes.NOT_FOUND,
+      });
+      return;
+    }
+    // Validate data
+    const validatedData = HouseZodSchema.parse(req.body);
+
+
+    // Address + City + Province should be unique
+    if (validatedData.address || validatedData.city || validatedData.province) {
+      const houseExists = await HouseModel.findOne({
+        address: validatedData.address || house.address,
+        city: validatedData.city || house.city,
+        province: validatedData.province || house.province,
+      });
+
+      if (houseExists && houseExists._id.toString() !== id) {
+        res.status(StatusCodes.FORBIDDEN).json({
+          message: 'House already exists',
+          status: StatusCodes.FORBIDDEN,
+        });
+        return;
+      }
+    }
+
+    const updatedHouse = await HouseModel.findByIdAndUpdate(id, validatedData, {
       new: true,
     });
 
@@ -145,12 +203,12 @@ export const updateHouse = async (
 // Delete a specific house by ID
 export const deleteHouse = async (
   req: DeleteHouseRequest,
-  res: Response<GeneralResponse<null>>
+  res: Response<GeneralResponse<null>>,
 ): Promise<void> => {
   const { id } = req.params;
 
   try {
-    const deletedHouse = await House.findByIdAndRemove(id);
+    const deletedHouse = await HouseModel.findByIdAndRemove(id);
 
     if (!deletedHouse) {
       res.status(StatusCodes.NOT_FOUND).json({
