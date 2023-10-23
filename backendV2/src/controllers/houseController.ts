@@ -19,7 +19,7 @@ import { GeneralResponse } from '@interfaces/responses/general';
 // Get all houses
 export const getHouses = async (
   _: Request,
-  res: Response<GetHousesResponse>
+  res: Response<GetHousesResponse>,
 ): Promise<void> => {
   try {
     const houses = await HouseModel.find();
@@ -37,7 +37,7 @@ export const getHouses = async (
 // Get a specific house by ID
 export const getHouse = async (
   req: GetAHouseRequest,
-  res: Response<GetHouseResponse>
+  res: Response<GetHouseResponse>,
 ): Promise<void> => {
   try {
     const house = (await HouseModel.findById(req.params.id)) as IHouse;
@@ -60,7 +60,7 @@ export const getHouse = async (
 // Get Scraped data by
 export const getScraped = async (
   req: GetScrapedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const pythonProcess: ChildProcess = spawn('python', [
@@ -131,7 +131,7 @@ export const createHouse = async (
       });
     }
   } catch (error) {
-    return res.status(StatusCodes.BAD_REQUEST).json({
+    res.status(StatusCodes.BAD_REQUEST).json({
       message: 'Invalid data',
       status: StatusCodes.BAD_REQUEST,
     });
@@ -141,7 +141,7 @@ export const createHouse = async (
 // Update a specific house by ID
 export const updateHouse = async (
   req: UpdateHouseRequest,
-  res: Response<UpdateHouseResponse>
+  res: Response<UpdateHouseResponse>,
 ): Promise<void> => {
   const { id } = req.params;
 
@@ -166,7 +166,7 @@ export const updateHouse = async (
         province: validatedData.province || house.province,
       });
 
-      if (houseExists && houseExists._id != id) {
+      if (houseExists && houseExists._id.toString() !== id) {
         res.status(StatusCodes.FORBIDDEN).json({
           message: 'House already exists',
           status: StatusCodes.FORBIDDEN,
@@ -203,7 +203,7 @@ export const updateHouse = async (
 // Delete a specific house by ID
 export const deleteHouse = async (
   req: DeleteHouseRequest,
-  res: Response<GeneralResponse<null>>
+  res: Response<GeneralResponse<null>>,
 ): Promise<void> => {
   const { id } = req.params;
 
