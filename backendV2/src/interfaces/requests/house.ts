@@ -1,5 +1,9 @@
 import { IHouse } from '@models/house.model';
+import { URLParamZodSchema } from '@validator/houseValidator';
 import { Request } from 'express';
+import { z } from 'zod';
+
+type URLParamInferType = z.infer<typeof URLParamZodSchema>;
 
 export interface GetAHouseRequest extends Request {
   params: {
@@ -10,9 +14,7 @@ export interface GetAHouseRequest extends Request {
 export interface DeleteHouseRequest extends GetAHouseRequest {}
 
 export interface GetScrapedRequest extends Request {
-  params: {
-    url: string;
-  };
+  body: URLParamInferType;
 }
 
 export interface CreateHouseRequest extends Request {

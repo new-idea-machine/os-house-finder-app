@@ -9,6 +9,7 @@ import {
 } from '@controllers/houseController';
 import { validateRequest } from '@middleware/validator';
 import { HouseZodSchema } from '@models/house.model';
+import { URLParamZodSchema } from '@validator/houseValidator';
 
 const houseRouter = express.Router();
 
@@ -18,11 +19,15 @@ houseRouter.get('/', getHouses);
 // POST create a new house
 houseRouter.post('/', validateRequest({ body: HouseZodSchema }), createHouse);
 
+// GET Scraped data by realtor.ca url
+houseRouter.get(
+  '/scrape',
+  validateRequest({ body: URLParamZodSchema }),
+  getScraped
+);
+
 // GET a specific house by ID
 houseRouter.get('/:id', getHouse);
-
-// GET Scraped data by realtor.ca url
-houseRouter.get('/:url', getScraped);
 
 // PUT update a specific house by ID
 houseRouter.put('/:id', validateRequest({ body: HouseZodSchema }), updateHouse);

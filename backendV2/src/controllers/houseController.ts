@@ -63,7 +63,7 @@ export const getScraped = async (
   try {
     const pythonProcess: ChildProcess = spawn('python', [
       '../scripts/scraper.py',
-      req.params.url,
+      req.body.url,
     ]) as ChildProcess;
 
     pythonProcess.stdout?.on('data', (data) => {
