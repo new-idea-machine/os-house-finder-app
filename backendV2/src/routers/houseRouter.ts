@@ -7,6 +7,8 @@ import {
   deleteHouse,
   getScraped,
 } from '@controllers/houseController';
+import { validateRequest } from '@middleware/validator';
+import { HouseZodSchema } from '@models/house.model';
 
 const houseRouter = express.Router();
 
@@ -14,7 +16,7 @@ const houseRouter = express.Router();
 houseRouter.get('/', getHouses);
 
 // POST create a new house
-houseRouter.post('/', createHouse);
+houseRouter.post('/', validateRequest({ body: HouseZodSchema }), createHouse);
 
 // GET a specific house by ID
 houseRouter.get('/:id', getHouse);
@@ -23,7 +25,7 @@ houseRouter.get('/:id', getHouse);
 houseRouter.get('/:url', getScraped);
 
 // PUT update a specific house by ID
-houseRouter.put('/:id', updateHouse);
+houseRouter.put('/:id', validateRequest({ body: HouseZodSchema }), updateHouse);
 
 // DELETE a specific house by ID
 houseRouter.delete('/:id', deleteHouse);
