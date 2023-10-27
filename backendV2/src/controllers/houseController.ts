@@ -43,13 +43,13 @@ export const getHouse = async (
   try {
     const house = (await HouseModel.findById(req.params.id)) as IHouse;
     if (!house) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error('House not found');
     }
     res
       .status(StatusCodes.OK)
       .json({ message: 'House found', status: StatusCodes.OK, data: house });
   } catch (error) {
-    res.status(StatusCodes.NOT_FOUND);
     next(error);
   }
 };
@@ -74,9 +74,8 @@ export const getScraped = async (
     pythonProcess.on('error', (error) => {
       // eslint-disable-next-line no-console
       console.error(error);
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send('Error calling Python function');
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      throw new Error('Error calling Python function');
     });
 
     pythonProcess.on('close', (code) => {
@@ -86,7 +85,6 @@ export const getScraped = async (
       }
     });
   } catch (error) {
-    res.status(StatusCodes.NOT_FOUND);
     next(error);
   }
 };
@@ -108,24 +106,21 @@ export const createHouse = async (
     });
 
     if (houseExists) {
+      res.status(StatusCodes.FORBIDDEN);
       throw new Error('House already exists');
     }
 
     const house: IHouse = new HouseModel(validatedData);
 
     await house.save();
+
     res.status(StatusCodes.CREATED).json({
       message: 'House created',
       status: StatusCodes.CREATED,
       data: house,
     });
   } catch (error) {
-    if (error instanceof Error && error.message === 'House already exists') {
-      res.status(StatusCodes.FORBIDDEN);
-      next(error);
-    }
-    res.status(StatusCodes.BAD_REQUEST);
-    next(new Error('Fail to create a house'));
+    next(error);
   }
 };
 
@@ -140,6 +135,7 @@ export const updateHouse = async (
   try {
     const house: IHouse | null = await HouseModel.findById(id);
     if (!house) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error(`House with ID ${id} not found.`);
     }
 
@@ -154,6 +150,7 @@ export const updateHouse = async (
       });
 
       if (houseExists && houseExists._id.toString() !== id) {
+        res.status(StatusCodes.FORBIDDEN);
         throw new Error('House already exists');
       }
     }
@@ -163,6 +160,7 @@ export const updateHouse = async (
     });
 
     if (!updatedHouse) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error(`House with ID ${id} not found.`);
     }
 
@@ -172,17 +170,7 @@ export const updateHouse = async (
       data: updatedHouse,
     });
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === 'House already exists') {
-        res.status(StatusCodes.FORBIDDEN);
-        next(error);
-      } else {
-        res.status(StatusCodes.NOT_FOUND);
-        next(error);
-      }
-    }
-    res.status(StatusCodes.BAD_REQUEST);
-    next(new Error('Fail to update a house'));
+    next(error);
   }
 };
 
@@ -198,6 +186,7 @@ export const deleteHouse = async (
     const deletedHouse = await HouseModel.findByIdAndRemove(id);
 
     if (!deletedHouse) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error(`House with ID ${id} not found.`);
     }
 
@@ -206,11 +195,6 @@ export const deleteHouse = async (
       status: StatusCodes.OK,
     });
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(StatusCodes.NOT_FOUND);
-      next(error);
-    }
-    res.status(StatusCodes.BAD_REQUEST);
-    next(new Error('Fail to delete a house'));
+    next(error);
   }
 };

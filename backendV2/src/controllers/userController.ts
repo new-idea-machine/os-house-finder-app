@@ -27,10 +27,8 @@ export const registerUser = async (
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Email already in use',
-        status: StatusCodes.BAD_REQUEST,
-      });
+      res.status(StatusCodes.BAD_REQUEST);
+      throw new Error('Email already in use');
     }
 
     const newUser: IUser = new User({ email, password });
@@ -50,7 +48,6 @@ export const registerUser = async (
       data: { token },
     });
   } catch (error) {
-    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
     next(error);
   }
 };
@@ -85,12 +82,14 @@ export const loginUser = async (
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
+      res.status(StatusCodes.UNAUTHORIZED);
       throw new Error('Invalid credentials');
     }
 
     const isMatch: boolean = await user.comparePassword(password);
 
     if (!isMatch) {
+      res.status(StatusCodes.UNAUTHORIZED);
       throw new Error('Invalid credentials');
     }
 
@@ -108,11 +107,6 @@ export const loginUser = async (
       data: { _id: user._id, email: user.email, role: user.role },
     });
   } catch (error) {
-    if (error instanceof Error && error.message === 'Invalid credentials') {
-      res.status(StatusCodes.UNAUTHORIZED);
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
     next(error);
   }
 };
@@ -128,16 +122,19 @@ export const updateUser = async (
     const user: IUser | null = await User.findById(userId);
 
     if (!user) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error('User not found');
     }
 
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
+      res.status(StatusCodes.FORBIDDEN);
       throw new Error('You are not authorized to perform this action');
     }
 
     const temp: IUser | null = await User.findOne({ email });
 
     if (email && email !== user.email && temp) {
+      res.status(StatusCodes.BAD_REQUEST);
       throw new Error('Email already in use');
     }
 
@@ -149,19 +146,6 @@ export const updateUser = async (
       .status(StatusCodes.OK)
       .json({ message: 'User updated successfully', status: StatusCodes.OK });
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === 'User not found') {
-        res.status(StatusCodes.NOT_FOUND);
-      } else if (
-        error.message === 'You are not authorized to perform this action'
-      ) {
-        res.status(StatusCodes.FORBIDDEN);
-      } else if (error.message === 'Email already in use') {
-        res.status(StatusCodes.BAD_REQUEST);
-      }
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
     next(error);
   }
 };
@@ -177,10 +161,12 @@ export const deleteUser = async (
     const user: IUser | null = await User.findByIdAndDelete(userId);
 
     if (!user) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error('User not found');
     }
 
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
+      res.status(StatusCodes.FORBIDDEN);
       throw new Error('You are not authorized to perform this action');
     }
 
@@ -188,17 +174,6 @@ export const deleteUser = async (
       .status(StatusCodes.OK)
       .json({ message: 'User deleted successfully', status: StatusCodes.OK });
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === 'User not found') {
-        res.status(StatusCodes.NOT_FOUND);
-      } else if (
-        error.message === 'You are not authorized to perform this action'
-      ) {
-        res.status(StatusCodes.FORBIDDEN);
-      }
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
     next(error);
   }
 };
@@ -213,10 +188,12 @@ export const getUser = async (
     const user: IUser | null = await User.findById(userId);
 
     if (!user) {
+      res.status(StatusCodes.NOT_FOUND);
       throw new Error('User not found');
     }
 
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
+      res.status(StatusCodes.FORBIDDEN);
       throw new Error('You are not authorized to perform this action');
     }
 
@@ -224,17 +201,6 @@ export const getUser = async (
       .status(StatusCodes.OK)
       .json({ message: 'success', status: StatusCodes.OK, data: user });
   } catch (error) {
-    if (error instanceof Error) {
-      if (error.message === 'User not found') {
-        res.status(StatusCodes.NOT_FOUND);
-      } else if (
-        error.message === 'You are not authorized to perform this action'
-      ) {
-        res.status(StatusCodes.FORBIDDEN);
-      }
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
     next(error);
   }
 };
@@ -246,6 +212,7 @@ export const getAllUsers = async (
 ): Promise<void> => {
   try {
     if (req.user?.role !== 'admin') {
+      res.status(StatusCodes.FORBIDDEN);
       throw new Error('You are not authorized to perform this action');
     }
 
@@ -255,14 +222,6 @@ export const getAllUsers = async (
       .status(StatusCodes.OK)
       .json({ message: 'success', status: StatusCodes.OK, data: users });
   } catch (error) {
-    if (
-      error instanceof Error &&
-      error.message === 'You are not authorized to perform this action'
-    ) {
-      res.status(StatusCodes.FORBIDDEN);
-    } else {
-      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
-    }
     next(error);
   }
 };

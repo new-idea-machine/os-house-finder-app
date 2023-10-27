@@ -11,7 +11,7 @@ export function notFound(req: Request, res: Response, next: NextFunction) {
 
 export function errorHandler(
   err: Error,
-  req: Request,
+  _: Request,
   res: Response<ErrorResponse>,
   _next: NextFunction
 ) {
