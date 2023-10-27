@@ -8,7 +8,7 @@ import {
   GetScrapedRequest,
   UpdateHouseRequest,
 } from '@interfaces/requests/house';
-import { StatusCodes } from '@src/constant';
+import { StatusCodes } from '../constant';
 import {
   GetHouseResponse,
   GetHousesResponse,

@@ -13,7 +13,7 @@ import {
   RegisterUserResponse,
 } from '@interfaces/responses/user';
 import { GeneralResponse } from '@interfaces/responses/general';
-import { StatusCodes } from '@src/constant';
+import { StatusCodes } from '../constant';
 
 export const registerUser = async (
   req: UserRegisterRequest,
@@ -130,7 +130,7 @@ export const updateUser = async (
     const { email, password } = req.body;
 
     const user: IUser | null = await User.findById(userId);
-
+    
     if (!user) {
       return res
         .status(StatusCodes.NOT_FOUND)
