@@ -1,6 +1,6 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import HouseModel, { HouseZodSchema, IHouse } from '@models/house.model';
+import HouseModel, { IHouse } from '@models/house.model';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -8,18 +8,19 @@ import {
   GetScrapedRequest,
   UpdateHouseRequest,
 } from '@interfaces/requests/house';
-import { StatusCodes } from '../constant';
 import {
   GetHouseResponse,
   GetHousesResponse,
   UpdateHouseResponse,
 } from '@interfaces/responses/house';
 import { GeneralResponse } from '@interfaces/responses/general';
+import { StatusCodes } from '../constant';
 
 // Get all houses
 export const getHouses = async (
   _: Request,
   res: Response<GetHousesResponse>,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const houses = await HouseModel.find();
@@ -28,9 +29,8 @@ export const getHouses = async (
       .status(StatusCodes.OK)
       .json({ message: 'Houses found', status: StatusCodes.OK, data: houses });
   } catch (error) {
-    res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: 'Houses not found', status: StatusCodes.NOT_FOUND });
+    res.status(StatusCodes.NOT_FOUND);
+    next(new Error('Houses not found'));
   }
 };
 
@@ -38,22 +38,19 @@ export const getHouses = async (
 export const getHouse = async (
   req: GetAHouseRequest,
   res: Response<GetHouseResponse>,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const house = (await HouseModel.findById(req.params.id)) as IHouse;
     if (!house) {
-      res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'House not found', status: StatusCodes.NOT_FOUND });
-      return;
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error('House not found');
     }
     res
       .status(StatusCodes.OK)
       .json({ message: 'House found', status: StatusCodes.OK, data: house });
   } catch (error) {
-    res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ message: 'House not found', status: StatusCodes.NOT_FOUND });
+    next(error);
   }
 };
 
@@ -61,11 +58,12 @@ export const getHouse = async (
 export const getScraped = async (
   req: GetScrapedRequest,
   res: Response,
+  next: NextFunction
 ): Promise<void> => {
   try {
     const pythonProcess: ChildProcess = spawn('python', [
       '../scripts/scraper.py',
-      req.params.url,
+      req.body.url,
     ]) as ChildProcess;
 
     pythonProcess.stdout?.on('data', (data) => {
@@ -76,9 +74,8 @@ export const getScraped = async (
     pythonProcess.on('error', (error) => {
       // eslint-disable-next-line no-console
       console.error(error);
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send('Error calling Python function');
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+      throw new Error('Error calling Python function');
     });
 
     pythonProcess.on('close', (code) => {
@@ -88,7 +85,7 @@ export const getScraped = async (
       }
     });
   } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).json(error);
+    next(error);
   }
 };
 
@@ -96,9 +93,10 @@ export const getScraped = async (
 export const createHouse = async (
   req: CreateHouseRequest,
   res: Response<GetHouseResponse>,
+  next: NextFunction
 ) => {
   try {
-    const validatedData = HouseZodSchema.parse(req.body);
+    const validatedData = req.body;
 
     // Address + City + Province should be unique
     const houseExists = await HouseModel.findOne({
@@ -108,33 +106,21 @@ export const createHouse = async (
     });
 
     if (houseExists) {
-      res.status(StatusCodes.FORBIDDEN).json({
-        message: 'House already exists',
-        status: StatusCodes.FORBIDDEN,
-      });
-      return;
+      res.status(StatusCodes.FORBIDDEN);
+      throw new Error('House already exists');
     }
 
     const house: IHouse = new HouseModel(validatedData);
 
-    try {
-      await house.save();
-      res.status(StatusCodes.CREATED).json({
-        message: 'House created',
-        status: StatusCodes.CREATED,
-        data: house,
-      });
-    } catch (error) {
-      res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Failed to create a house',
-        status: StatusCodes.BAD_REQUEST,
-      });
-    }
-  } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Invalid data',
-      status: StatusCodes.BAD_REQUEST,
+    await house.save();
+
+    res.status(StatusCodes.CREATED).json({
+      message: 'House created',
+      status: StatusCodes.CREATED,
+      data: house,
     });
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -142,21 +128,18 @@ export const createHouse = async (
 export const updateHouse = async (
   req: UpdateHouseRequest,
   res: Response<UpdateHouseResponse>,
+  next: NextFunction
 ): Promise<void> => {
   const { id } = req.params;
 
   try {
     const house: IHouse | null = await HouseModel.findById(id);
     if (!house) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: `House with ID ${id} not found.`,
-        status: StatusCodes.NOT_FOUND,
-      });
-      return;
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error(`House with ID ${id} not found.`);
     }
-    // Validate data
-    const validatedData = HouseZodSchema.parse(req.body);
 
+    const validatedData = req.body;
 
     // Address + City + Province should be unique
     if (validatedData.address || validatedData.city || validatedData.province) {
@@ -167,11 +150,8 @@ export const updateHouse = async (
       });
 
       if (houseExists && houseExists._id.toString() !== id) {
-        res.status(StatusCodes.FORBIDDEN).json({
-          message: 'House already exists',
-          status: StatusCodes.FORBIDDEN,
-        });
-        return;
+        res.status(StatusCodes.FORBIDDEN);
+        throw new Error('House already exists');
       }
     }
 
@@ -180,11 +160,8 @@ export const updateHouse = async (
     });
 
     if (!updatedHouse) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: `House with ID ${id} not found.`,
-        status: StatusCodes.NOT_FOUND,
-      });
-      return;
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error(`House with ID ${id} not found.`);
     }
 
     res.status(StatusCodes.OK).json({
@@ -193,10 +170,7 @@ export const updateHouse = async (
       data: updatedHouse,
     });
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Fail to update a house',
-      status: StatusCodes.BAD_REQUEST,
-    });
+    next(error);
   }
 };
 
@@ -204,6 +178,7 @@ export const updateHouse = async (
 export const deleteHouse = async (
   req: DeleteHouseRequest,
   res: Response<GeneralResponse<null>>,
+  next: NextFunction
 ): Promise<void> => {
   const { id } = req.params;
 
@@ -211,11 +186,8 @@ export const deleteHouse = async (
     const deletedHouse = await HouseModel.findByIdAndRemove(id);
 
     if (!deletedHouse) {
-      res.status(StatusCodes.NOT_FOUND).json({
-        message: `House with ID ${id} not found.`,
-        status: StatusCodes.NOT_FOUND,
-      });
-      return;
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error(`House with ID ${id} not found.`);
     }
 
     res.status(StatusCodes.OK).json({
@@ -223,9 +195,6 @@ export const deleteHouse = async (
       status: StatusCodes.OK,
     });
   } catch (error) {
-    res.status(StatusCodes.BAD_REQUEST).json({
-      message: 'Fail to delete a house',
-      status: StatusCodes.BAD_REQUEST,
-    });
+    next(error);
   }
 };

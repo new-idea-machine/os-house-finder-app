@@ -11,7 +11,7 @@ export function notFound(req: Request, res: Response, next: NextFunction) {
 
 export function errorHandler(
   err: Error,
-  req: Request,
+  _: Request,
   res: Response<ErrorResponse>,
   _next: NextFunction
 ) {
@@ -19,6 +19,6 @@ export function errorHandler(
   res.status(statusCode);
   res.json({
     message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack,
+    status: statusCode,
   });
 }

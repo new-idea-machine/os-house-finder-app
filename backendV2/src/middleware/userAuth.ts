@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
 import User, { IUser } from '@models/userModel';
+import { StatusCodes } from '@src/constant';
 
 export interface UserAuthInfoRequest extends Request {
   user?: DecodedToken;
@@ -27,7 +28,7 @@ export const userAuth = async (
 
   // Check if the token exists
   if (!token) {
-    return res.status(401).json({ message: 'Authorization token missing' });
+    throw new Error('Authorization token missing');
   }
 
   try {
@@ -48,6 +49,7 @@ export const userAuth = async (
 
     return next(); // Move to the next middleware or route handler
   } catch (error) {
-    return res.status(401).json({ message: 'Invalid token' });
+    res.status(StatusCodes.UNAUTHORIZED);
+    return next(error);
   }
 };
