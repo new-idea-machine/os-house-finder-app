@@ -75,7 +75,6 @@ describe('POST /register', () => {
         .send(testData.testUser);
 
       let loginText = JSON.parse(res.text);
-      console.log(loginText.data._id);
 
       let split = res.header['set-cookie'][0].substring(4).split(' ');
       loginToken = split[0].slice(0, -1);
