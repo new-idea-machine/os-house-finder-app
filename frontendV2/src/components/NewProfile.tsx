@@ -16,22 +16,13 @@ import { Slider } from '@/components/ui/slider';
 const formSchema = z.object({
   profileName: z
     .string()
-    .min(2, {
+    .min(1, {
       message: 'Profile name must be at least 1 character.',
     })
     .max(100, {
       message: 'Profile name must be at most 100 character.',
     }),
-  height: z
-    .number()
-    .min(1, {
-      message: 'Height must be at least 1.',
-    })
-    .max(100, {
-      message: 'Height must be at most 100.',
-    })
-    .default(0),
-  weight: z
+  squareFootageWeight: z // Square Footage Input
     .number()
     .min(1, {
       message: 'Weight must be at least 1.',
@@ -40,6 +31,65 @@ const formSchema = z.object({
       message: 'Weight must be at most 100.',
     })
     .default(0),
+  squareFootageMin: z
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    }),
+  squareFootageMax: z
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    }),
+  bedroomWeight: z // Bedroom Input
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    })
+    .default(0),
+  bedroomAmount: z
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    })
+    .default(0),
+  travelRequirementWeight: z // Travel Requirement Input
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    })
+    .default(0),
+  travelRequirementMin: z
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    }),
+  travelRequirementMax: z
+    .number()
+    .min(1, {
+      message: 'Weight must be at least 1.',
+    })
+    .max(100, {
+      message: 'Weight must be at most 100.',
+    }),
 });
 
 function NewProfile() {
@@ -47,8 +97,14 @@ function NewProfile() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       profileName: '',
-      height: 0,
-      weight: 0,
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
     },
   });
 
@@ -62,11 +118,14 @@ function NewProfile() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="h-2/5">
-        <div className="m-0 w-6/12 rounded-t-lg bg-[#dcdcdc] p-5">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="h-[35rem] w-6/12 overflow-auto "
+      >
+        <div className="sticky top-0  m-0 w-full rounded-t-lg bg-[#dcdcdc] p-5">
           <h3 className="text-sm font-bold">New Profile</h3>
         </div>
-        <div className="mt-0 flex w-6/12 flex-col space-y-8 rounded-md bg-[#efefef] p-10">
+        <div className="mt-0 flex flex-col space-y-8 rounded-md bg-[#efefef] p-10">
           <FormField
             control={form.control}
             name="profileName"
@@ -96,35 +155,13 @@ function NewProfile() {
             </p>
           </div>
           <hr className="bg-black" />
+
+          {/*Square Footage Input */}
+
           <h3 className="mb-2 font-bold">Square Footage</h3>
           <FormField
             control={form.control}
-            name="height"
-            render={({ field: { value, onChange } }) => (
-              <FormItem>
-                <div className="flex flex-row justify-between">
-                  <p className="text-sm">Height</p>
-                  <div className="flex flex-row">
-                    <FormControl>
-                      <Slider
-                        className="mr-5 w-40"
-                        min={0}
-                        max={100}
-                        step={1}
-                        defaultValue={[value]}
-                        onValueChange={(val) => onChange(val[0])}
-                      />
-                    </FormControl>
-                    <p>{value}</p>
-                  </div>
-                </div>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="weight"
+            name="squareFootageWeight"
             render={({ field: { value, onChange } }) => (
               <FormItem>
                 <div className="flex flex-row justify-between">
@@ -147,9 +184,161 @@ function NewProfile() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="squareFootageMin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Min</FormLabel>
+                <FormControl>
+                  <Input
+                    className="bg-white"
+                    placeholder="Profile Name"
+                    {...field}
+                    onChange={(event) => field.onChange(+event.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="squareFootageMax"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Max</FormLabel>
+                <FormControl>
+                  <Input
+                    className="bg-white"
+                    placeholder="Profile Name"
+                    {...field}
+                    onChange={(event) => field.onChange(+event.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <hr className="bg-black" />
+
+          {/*Bedroom Input */}
+
+          <h3 className="mb-2 font-bold">Bedroom</h3>
+          <FormField
+            control={form.control}
+            name="bedroomWeight"
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <div className="flex flex-row justify-between">
+                  <p className="text-sm">Weight</p>
+                  <div className="flex flex-row">
+                    <FormControl>
+                      <Slider
+                        className="mr-5 w-40"
+                        min={0}
+                        max={100}
+                        step={1}
+                        defaultValue={[value]}
+                        onValueChange={(val) => onChange(val[0])}
+                      />
+                    </FormControl>
+                    <p>{value}</p>
+                  </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="bedroomAmount"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Amount</FormLabel>
+                <FormControl>
+                  <Input
+                    className="bg-white"
+                    placeholder="Profile Name"
+                    {...field}
+                    onChange={(event) => field.onChange(+event.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <hr className="bg-black" />
+
+          {/*Travel Requirements Input */}
+
+          <h3 className="mb-2 font-bold">Travel Requirements</h3>
+          <FormField
+            control={form.control}
+            name="travelRequirementWeight"
+            render={({ field: { value, onChange } }) => (
+              <FormItem>
+                <div className="flex flex-row justify-between">
+                  <p className="text-sm">Weight</p>
+                  <div className="flex flex-row">
+                    <FormControl>
+                      <Slider
+                        className="mr-5 w-40"
+                        min={0}
+                        max={100}
+                        step={1}
+                        defaultValue={[value]}
+                        onValueChange={(val) => onChange(val[0])}
+                      />
+                    </FormControl>
+                    <p>{value}</p>
+                  </div>
+                </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="travelRequirementMin"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Min</FormLabel>
+                <FormControl>
+                  <Input
+                    className="bg-white"
+                    placeholder="Profile Name"
+                    {...field}
+                    onChange={(event) => field.onChange(+event.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="travelRequirementMax"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="font-bold">Max</FormLabel>
+                <FormControl>
+                  <Input
+                    className="bg-white"
+                    placeholder="Profile Name"
+                    {...field}
+                    onChange={(event) => field.onChange(+event.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <hr className="bg-black" />
         </div>
 
-        <div className="flex w-6/12 flex-row justify-end rounded-b-lg bg-[#dcdcdc] p-3">
+        {/* Form Buttons */}
+        <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
           <Button className="w-24 bg-[#cccccc] text-sm" type="submit">
             ADD
           </Button>
