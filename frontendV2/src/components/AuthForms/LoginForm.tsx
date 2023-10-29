@@ -2,7 +2,7 @@ import { useContext, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAppSelector } from '@app/hooks';
 import useAuth from '@hooks/useAuth';
-import FormContainer from '@components/FormContainer';
+import FormContainer from '@components/AuthForms/FormContainer';
 import {
   Form,
   FormControl,
@@ -50,7 +50,7 @@ const loginFormSchema = z.object({
     }),
 });
 
-function LoginScreen() {
+function LoginForm() {
   const navigate = useNavigate();
 
   const { userInfo } = useAppSelector((state) => state.auth);
@@ -167,7 +167,7 @@ function LoginScreen() {
             </DialogHeader>
 
             <FormContainer>
-              <FormContainer.RegisterScreen />
+              <FormContainer.RegisterForm />
             </FormContainer>
           </DialogContent>
         </Dialog>
@@ -176,4 +176,4 @@ function LoginScreen() {
   );
 }
 
-export default LoginScreen;
+export default LoginForm;

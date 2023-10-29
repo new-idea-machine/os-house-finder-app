@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@components/ui/dialog';
 import { Button } from '@components/ui/button';
-import FormContainer from '@components/FormContainer';
+import FormContainer from '@components/AuthForms/FormContainer';
 
 function NotLoginHamburger() {
   return (
@@ -30,7 +30,7 @@ function NotLoginHamburger() {
           </DialogHeader> */}
 
           <FormContainer>
-            <FormContainer.LoginScreen />
+            <FormContainer.LoginForm />
           </FormContainer>
           <DialogFooter>
             <Button type="submit">Save changes</Button>
@@ -55,7 +55,7 @@ function NotLoginHamburger() {
           </DialogHeader>
 
           <FormContainer>
-            <FormContainer.RegisterScreen />
+            <FormContainer.RegisterForm />
           </FormContainer>
 
           <DialogFooter>

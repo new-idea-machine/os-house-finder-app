@@ -46,7 +46,7 @@ const registerFormSchema = z
 
 type RegisterSchemaType = z.infer<typeof registerFormSchema>;
 
-export default function RegisterScreen() {
+export default function RegisterForm() {
   const form = useForm<RegisterSchemaType>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
