@@ -4,13 +4,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
-import { connectDB } from '@config/database';
-import UserRouter from '@routers/userRouter';
-import HouseRouter from '@routers/houseRouter';
 import * as middlewares from './middleware/middlewares';
+import UserRouter from './routers/userRouter';
+import HouseRouter from './routers/houseRouter';
 
 dotenv.config();
-connectDB();
 
 const app = express();
 

@@ -1,4 +1,4 @@
-import { getHouse, getHouses, createHouse, updateHouse, deleteHouse, getScraped } from '../controllers/houseController.js';
+import { getHouse, getHouses, createHouse, updateHouse, deleteHouse, getScraped } from '@controllers/houseController.js';
 import express from 'express';
 
 const houseRouter = express.Router();

@@ -20,6 +20,7 @@ module.exports = {
     '@models/(.*)': '<rootDir>/src/models/$1',
     '@routers/(.*)': '<rootDir>/src/routers/$1',
     '@middleware/(.*)': '<rootDir>/src/middleware/$1',
+    '@validator/(.*)': '<rootDir>/src/validator/$1',
   },
   moduleDirectories: ['node_modules', 'src'],
 };
