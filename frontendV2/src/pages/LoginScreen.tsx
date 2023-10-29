@@ -27,6 +27,7 @@ import { Button } from '@components/ui/button';
 import GoogleLoginButton from '@components/GoogleLoginButton';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
+import SpinnerButton from '@components/SpinnerButton';
 import { PasswordShowContext } from '@/context/PasswordShowProvider';
 
 const loginFormSchema = z.object({
@@ -127,16 +128,7 @@ function LoginScreen() {
         />
         <div className="flex justify-between">
           <Button type="submit" variant="default">
-            {isLoginLoading ? (
-              <>
-                <svg className="mr-3 h-5 w-5 animate-spin" viewBox="0 0 24 24">
-                  {' '}
-                </svg>
-                Loading
-              </>
-            ) : (
-              'Submit'
-            )}
+            {isLoginLoading ? <SpinnerButton /> : 'Submit'}
           </Button>
           <Button variant="link">
             <Link
