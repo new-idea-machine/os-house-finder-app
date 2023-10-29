@@ -45,7 +45,11 @@ export const registerUser = async (
     return res.status(StatusCodes.CREATED).json({
       message: 'success',
       status: StatusCodes.CREATED,
-      data: { token },
+      data: {
+        _id: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   } catch (error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
