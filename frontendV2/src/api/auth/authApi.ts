@@ -43,8 +43,6 @@ export const authApi = createApi({
         credentials: 'include',
       }),
       transformResponse(baseQueryReturnValue: RegisterResponse) {
-        console.log('baseQueryReturnValue: ', baseQueryReturnValue);
-
         return {
           id: baseQueryReturnValue.data._id,
           email: baseQueryReturnValue.data.email,
@@ -52,8 +50,6 @@ export const authApi = createApi({
         };
       },
       transformErrorResponse(baseQueryReturnValue) {
-        console.log('baseQueryReturnValue: ', baseQueryReturnValue);
-
         return baseQueryReturnValue.data;
       },
     }),
