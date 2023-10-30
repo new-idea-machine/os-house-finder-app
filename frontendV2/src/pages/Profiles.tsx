@@ -17,7 +17,7 @@ function Profiles() {
       className="flex h-full max-w-none px-9 animate-in animate-out"
     >
       <TabsList
-        className="flex h-full min-h-[75vh] w-1/4 flex-col justify-between rounded-none border-r-2
+        className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2
       border-primary bg-white"
       >
         <section className="mt-8 flex w-full flex-col space-y-4">

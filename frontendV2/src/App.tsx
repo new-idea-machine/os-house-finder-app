@@ -1,7 +1,7 @@
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from '@components/Header/Header';
-import Footer from '@components/Footer';
+// import Footer from '@components/Footer';
 import ContextWrapper from './ContextWrapper';
 import Router from './Router';
 
@@ -12,7 +12,7 @@ export default function App() {
       <main>
         <Router />
       </main>
-      <Footer />
+      {/* <Footer /> */}
       <ToastContainer />
     </ContextWrapper>
   );
