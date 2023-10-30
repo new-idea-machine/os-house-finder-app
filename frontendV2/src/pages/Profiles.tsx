@@ -14,10 +14,10 @@ function Profiles() {
   return (
     <Tabs
       defaultValue="profile1"
-      className="flex h-full max-w-none animate-in animate-out"
+      className="flex h-full max-w-none px-9 animate-in animate-out"
     >
       <TabsList
-        className="flex h-full min-h-[75vh] w-1/4 flex-col justify-between space-y-5 rounded-none border-r-2
+        className="flex h-full min-h-[75vh] w-1/4 flex-col justify-between rounded-none border-r-2
       border-primary bg-white"
       >
         <section className="mt-8 flex w-full flex-col space-y-4">
@@ -32,11 +32,13 @@ function Profiles() {
             </TabsTrigger>
           ))}
         </section>
-        <Button>Add New Profile</Button>
+        <Button className=" mx-9 w-[88%] text-xs md:text-sm lg:text-base">
+          + Add New Profile
+        </Button>
       </TabsList>
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value}>
-          <div className="p-4">{tab.value}</div>
+          <div className="">{tab.value}</div>
         </TabsContent>
       ))}
     </Tabs>
