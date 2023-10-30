@@ -9,10 +9,8 @@ export default function App() {
   return (
     <ContextWrapper>
       <Header />
-      <main className="py-3">
-        <div className="container">
-          <Router />
-        </div>
+      <main>
+        <Router />
       </main>
       <Footer />
       <ToastContainer />
