@@ -61,10 +61,10 @@ export default function Header() {
   return (
     <header>
       <div className="sticky top-0 z-40 bg-gray-300 px-9">
-        <div className="flex h-20 items-center justify-between space-x-3">
+        <div className="flex h-20 items-center justify-between">
           <a
             href="/"
-            className="flex items-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
+            className="flex w-1/3 items-center justify-center space-x-2 text-lg font-bold text-gray-700 hover:text-gray-900"
           >
             <img
               width={40}
@@ -72,7 +72,9 @@ export default function Header() {
               alt="HouseFinder"
               className="rounded-sm"
             />
-            <p>HouseFinder</p>
+            <p className="text-sm sm:text-base lg:text-lg xl:text-3xl">
+              HouseFinder
+            </p>
           </a>
 
           <div className="md:hidden">
@@ -111,14 +113,14 @@ export default function Header() {
           </div>
 
           <div className="hidden h-full w-full items-center justify-between md:flex">
-            <div className="flex h-full space-x-6 px-9">
+            <div className="flex h-full space-x-2 pr-9 lg:space-x-8">
               {menuItems.map((menuItem) => {
                 return (
                   <a
                     key={menuItem.title}
                     href={menuItem.href}
                     className={cn(
-                      'relative flex h-full w-24 items-center justify-center hover:bg-gray-400',
+                      'relative flex h-full items-center justify-center hover:bg-gray-400 md:w-24 md:text-sm lg:w-32 lg:text-base xl:w-40 xl:text-lg',
                       location.pathname.startsWith(menuItem.href) &&
                         'bg-gray-400'
                     )}
