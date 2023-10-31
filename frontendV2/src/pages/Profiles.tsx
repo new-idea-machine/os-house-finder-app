@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import AddNewProfile from '@components/NewProfile/AddNewProfile';
 
 function Profiles() {
   const [tabs, setTabs] = useState([
@@ -32,9 +32,7 @@ function Profiles() {
             </TabsTrigger>
           ))}
         </section>
-        <Button className=" mx-9 w-[88%] text-xs md:text-sm lg:text-base">
-          + Add New Profile
-        </Button>
+        <AddNewProfile currentTabs={tabs} addTab={setTabs} />
       </TabsList>
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value}>
