@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
+import AddNewProperty from '@components/NewProfile/AddNewProperty';
 
 function Profiles() {
   const [tabs, setTabs] = useState([
@@ -37,6 +38,7 @@ function Profiles() {
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value}>
           <div className="">{tab.value}</div>
+          <AddNewProperty />
         </TabsContent>
       ))}
     </Tabs>
