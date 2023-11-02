@@ -16,7 +16,7 @@ import {
   DialogTrigger,
 } from '@components/ui/dialog';
 import { Button } from '@components/ui/button';
-import FormContainer from '@components/FormContainer';
+import FormContainer from '@components/AuthForms/FormContainer';
 
 function NotLoginDropdown() {
   return (
@@ -49,7 +49,7 @@ function NotLoginDropdown() {
               </DialogHeader>
 
               <FormContainer>
-                <FormContainer.LoginScreen />
+                <FormContainer.LoginForm />
               </FormContainer>
             </DialogContent>
           </Dialog>
@@ -76,7 +76,7 @@ function NotLoginDropdown() {
             </DialogHeader>
 
             <FormContainer>
-              <FormContainer.RegisterScreen />
+              <FormContainer.RegisterForm />
             </FormContainer>
           </DialogContent>
         </Dialog>

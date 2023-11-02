@@ -1,7 +1,8 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import User, { IUser } from '@models/userModel';
 import { UserAuthInfoRequest } from '@middleware/userAuth';
 import {
+  UpdateUserRequest,
   UserAuthInfoParamIdRequest,
   UserLoginRequest,
   UserRegisterRequest,
@@ -13,22 +14,21 @@ import {
   RegisterUserResponse,
 } from '@interfaces/responses/user';
 import { GeneralResponse } from '@interfaces/responses/general';
-import { StatusCodes } from '@src/constant';
+import { StatusCodes } from '../constant';
 
 export const registerUser = async (
   req: UserRegisterRequest,
-  res: Response<RegisterUserResponse>
-) => {
+  res: Response<RegisterUserResponse>,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = req.body;
 
     const existingUser: IUser | null = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Email already in use',
-        status: StatusCodes.BAD_REQUEST,
-      });
+      res.status(StatusCodes.BAD_REQUEST);
+      throw new Error('Email already in use');
     }
 
     const newUser: IUser = new User({ email, password });
@@ -42,62 +42,59 @@ export const registerUser = async (
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
 
-    return res.status(StatusCodes.CREATED).json({
+    res.status(StatusCodes.CREATED).json({
       message: 'success',
       status: StatusCodes.CREATED,
-      data: { token },
+      data: {
+        _id: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };
 
 export const logoutUser = async (
   _: Request,
-  res: Response<GeneralResponse<null>>
-) => {
+  res: Response<GeneralResponse<null>>,
+  next: NextFunction
+): Promise<void> => {
   try {
     res.cookie('jwt', '', {
       httpOnly: true,
       expires: new Date(0),
     });
 
-    return res
+    res
       .status(StatusCodes.OK)
       .json({ message: 'Successfully logged out', status: StatusCodes.OK });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR);
+    next(error);
   }
 };
 
 export const loginUser = async (
   req: UserLoginRequest,
-  res: Response<LoginUserResponse>
-) => {
+  res: Response<LoginUserResponse>,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = req.body;
     const user: IUser | null = await User.findOne({ email });
 
     if (!user) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'Invalid credentials',
-        status: StatusCodes.UNAUTHORIZED,
-      });
+      res.status(StatusCodes.UNAUTHORIZED);
+      throw new Error('Invalid credentials');
     }
 
     const isMatch: boolean = await user.comparePassword(password);
 
     if (!isMatch) {
-      return res.status(StatusCodes.UNAUTHORIZED).json({
-        message: 'Invalid credentials',
-        status: StatusCodes.UNAUTHORIZED,
-      });
+      res.status(StatusCodes.UNAUTHORIZED);
+      throw new Error('Invalid credentials');
     }
 
     const token: string = user.generateToken();
@@ -108,152 +105,127 @@ export const loginUser = async (
       sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days
     });
-    return res.status(StatusCodes.OK).json({
+    res.status(StatusCodes.OK).json({
       message: 'success',
       status: StatusCodes.OK,
       data: { _id: user._id, email: user.email, role: user.role },
     });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };
 
 export const updateUser = async (
-  req: UserAuthInfoParamIdRequest,
-  res: Response<GeneralResponse<null>>
-) => {
+  req: UpdateUserRequest,
+  res: Response<GeneralResponse<null>>,
+  next: NextFunction
+): Promise<void> => {
   try {
     const userId = req.params.id as string;
     const { email, password } = req.body;
-
     const user: IUser | null = await User.findById(userId);
 
     if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'User not found', status: StatusCodes.NOT_FOUND });
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error('User not found');
     }
+
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        message: 'You are not authorized to perform this action',
-        status: StatusCodes.FORBIDDEN,
-      });
+      res.status(StatusCodes.FORBIDDEN);
+      throw new Error('You are not authorized to perform this action');
     }
 
     const temp: IUser | null = await User.findOne({ email });
 
     if (email && email !== user.email && temp) {
-      return res.status(StatusCodes.BAD_REQUEST).json({
-        message: 'Email already in use',
-        status: StatusCodes.BAD_REQUEST,
-      });
+      res.status(StatusCodes.BAD_REQUEST);
+      throw new Error('Email already in use');
     }
 
     user.email = email || user.email;
     user.password = password || user.password;
     await user.save();
 
-    return res
+    res
       .status(StatusCodes.OK)
       .json({ message: 'User updated successfully', status: StatusCodes.OK });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };
 
 export const deleteUser = async (
   req: UserAuthInfoParamIdRequest,
-  res: Response<GeneralResponse<null>>
-) => {
+  res: Response<GeneralResponse<null>>,
+  next: NextFunction
+): Promise<void> => {
   try {
     const userId = req.params.id as string;
 
     const user: IUser | null = await User.findByIdAndDelete(userId);
 
     if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'User not found', status: StatusCodes.NOT_FOUND });
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error('User not found');
     }
 
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        message: 'You are not authorized to perform this action',
-        status: StatusCodes.FORBIDDEN,
-      });
+      res.status(StatusCodes.FORBIDDEN);
+      throw new Error('You are not authorized to perform this action');
     }
 
-    return res
+    res
       .status(StatusCodes.OK)
       .json({ message: 'User deleted successfully', status: StatusCodes.OK });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };
 
 export const getUser = async (
   req: UserAuthInfoParamIdRequest,
-  res: Response<GetUserResponse>
-) => {
+  res: Response<GetUserResponse>,
+  next: NextFunction
+): Promise<void> => {
   try {
     const userId: string = req.params.id as string;
-
     const user: IUser | null = await User.findById(userId);
 
     if (!user) {
-      return res
-        .status(StatusCodes.NOT_FOUND)
-        .json({ message: 'User not found', status: StatusCodes.NOT_FOUND });
+      res.status(StatusCodes.NOT_FOUND);
+      throw new Error('User not found');
     }
 
     if (!(user.email === req.user?.email || req.user?.role === 'admin')) {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        message: 'You are not authorized to perform this action',
-        status: StatusCodes.FORBIDDEN,
-      });
+      res.status(StatusCodes.FORBIDDEN);
+      throw new Error('You are not authorized to perform this action');
     }
 
-    return res
+    res
       .status(StatusCodes.OK)
       .json({ message: 'success', status: StatusCodes.OK, data: user });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };
 
 export const getAllUsers = async (
   req: UserAuthInfoRequest,
-  res: Response<GetUsersResponse>
-) => {
+  res: Response<GetUsersResponse>,
+  next: NextFunction
+): Promise<void> => {
   try {
     if (req.user?.role !== 'admin') {
-      return res.status(StatusCodes.FORBIDDEN).json({
-        message: 'You are not authorized to perform this action',
-        status: StatusCodes.FORBIDDEN,
-      });
+      res.status(StatusCodes.FORBIDDEN);
+      throw new Error('You are not authorized to perform this action');
     }
 
     const users: IUser[] = await User.find();
 
-    return res
+    res
       .status(StatusCodes.OK)
       .json({ message: 'success', status: StatusCodes.OK, data: users });
   } catch (error) {
-    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-      message: 'Server error',
-      status: StatusCodes.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 };

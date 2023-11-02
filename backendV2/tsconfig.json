@@ -10,6 +10,7 @@
       "@models/*": ["src/models/*"],
       "@routers/*": ["src/routers/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@validator/*": ["src/validator/*"],
     },
     "outDir": "dist",
     "sourceMap": true,

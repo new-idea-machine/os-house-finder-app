@@ -1,4 +1,4 @@
-import houseModel from '../models/houseModel.js';
+import houseModel from '@models/houseModel.js';
 // const { spawn } = require('child_process');
 import { spawn } from 'child_process';
 // Get all houses

@@ -3,7 +3,6 @@ import houseRouter from './routers/houseRouter.js';
 import userRouter from './routers/userRouter.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { connectDB } from './config/database.js';
 import dotenv from 'dotenv';
 
 dotenv.config();

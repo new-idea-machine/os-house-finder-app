@@ -3,8 +3,10 @@ export type Credentials = {
   password: string;
 };
 
-export type RegisterResponse = User & {
-  token: string;
+export type RegisterResponse = {
+  data: UserResponse;
+  message: string;
+  status: number;
 };
 
 export type User = {
@@ -15,4 +17,9 @@ export type User = {
 
 export type UserResponse = Omit<User, 'id'> & {
   _id: string;
+};
+export type LoginResponse = {
+  data: UserResponse;
+  message: string;
+  status: number;
 };

@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { Credentials, RegisterResponse, UserResponse } from '@constants/types';
+import {
+  Credentials,
+  RegisterResponse,
+  LoginResponse,
+  UserResponse,
+  User,
+} from '@constants/types';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: import.meta.env.VITE_BASE_URL,
@@ -21,11 +27,11 @@ export const authApi = createApi({
         credentials: 'include',
       }),
       invalidatesTags: ['User'],
-      transformResponse: async (response: UserResponse) => {
-        return response;
+      transformResponse: async (response: LoginResponse) => {
+        return response.data;
       },
     }),
-    register: builder.mutation<RegisterResponse, Credentials>({
+    register: builder.mutation<User, Credentials>({
       query: (credentials) => ({
         url: '/api/users/register',
         method: 'POST',
@@ -38,10 +44,9 @@ export const authApi = createApi({
       }),
       transformResponse(baseQueryReturnValue: RegisterResponse) {
         return {
-          id: baseQueryReturnValue.id,
-          email: baseQueryReturnValue.email,
-          role: baseQueryReturnValue.role,
-          token: baseQueryReturnValue.token,
+          id: baseQueryReturnValue.data._id,
+          email: baseQueryReturnValue.data.email,
+          role: baseQueryReturnValue.data.role,
         };
       },
       transformErrorResponse(baseQueryReturnValue) {
