@@ -43,6 +43,7 @@ module.exports = {
         packageDir: ['./'],
       },
     ],
+    '@typescript-eslint/no-unused-vars': 'warn',
   },
   settings: {
     'import/resolver': {

@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
@@ -27,6 +28,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/users', UserRouter);
 app.use('/api/houses', HouseRouter);
+app.use('/api/preferences', preferenceRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
