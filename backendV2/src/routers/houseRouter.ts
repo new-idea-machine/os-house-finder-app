@@ -27,10 +27,7 @@ houseRouter.get(
 );
 
 // GET a specific house by ID
-//houseRouter.get('/:id', getHouse);
-
-// GET Scraped data by realtor.ca url
-houseRouter.get('/scrape', getScraped);
+houseRouter.get('/:id', getHouse);
 
 // PUT update a specific house by ID
 houseRouter.put('/:id', validateRequest({ body: HouseZodSchema }), updateHouse);
