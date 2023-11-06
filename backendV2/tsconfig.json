@@ -11,6 +11,7 @@
       "@routers/*": ["src/routers/*"],
       "@middleware/*": ["src/middleware/*"],
       "@scripts/*": ["src/scripts/*"],
+      "@validator/*": ["src/validator/*"],
     },
     "outDir": "dist",
     "sourceMap": true,

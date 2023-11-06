@@ -1,6 +1,6 @@
-import LoginScreen from '@pages/LoginScreen';
+import LoginForm from '@components/AuthForms/LoginForm';
 import React from 'react';
-import RegisterScreen from '@pages/RegisterScreen';
+import RegisterForm from '@components/AuthForms/RegisterForm';
 import { PasswordShowProvider } from '@/context/PasswordShowProvider';
 
 interface FormContainerProps {
@@ -19,7 +19,7 @@ function FormContainer({ children }: FormContainerProps) {
   );
 }
 
-FormContainer.LoginScreen = LoginScreen;
-FormContainer.RegisterScreen = RegisterScreen;
+FormContainer.LoginForm = LoginForm;
+FormContainer.RegisterForm = RegisterForm;
 
 export default FormContainer;
