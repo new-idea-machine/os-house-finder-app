@@ -62,13 +62,16 @@ export const getScraped = async (
   req: GetScrapedRequest,
   res: Response,
 ): Promise<void> => {
+  
+  
   try {
     const pythonProcess: ChildProcess = spawn('python', [
-      '../scripts/scraper.py',
-      req.params.url,
+      "src/scripts/scrape.py",
+      req.body.url
     ]) as ChildProcess;
 
     pythonProcess.stdout?.on('data', (data) => {
+      console.log('data done');
       const result: string = data.toString();
       res.send(result);
     });
@@ -81,7 +84,13 @@ export const getScraped = async (
         .send('Error calling Python function');
     });
 
-    pythonProcess.on('close', (code) => {
+    pythonProcess.stderr?.on('data', (data) => {
+      const err: string = data.toString();
+      console.log(err);
+      
+    })
+
+    pythonProcess.on('exit', (code) => {
       if (code !== 0) {
         // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);

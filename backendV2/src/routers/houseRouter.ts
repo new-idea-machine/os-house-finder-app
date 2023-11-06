@@ -11,16 +11,16 @@ import {
 const houseRouter = express.Router();
 
 // GET all houses
-houseRouter.get('/', getHouses);
+//houseRouter.get('/', getHouses);
 
 // POST create a new house
-houseRouter.post('/', createHouse);
+//houseRouter.post('/', createHouse);
 
 // GET a specific house by ID
-houseRouter.get('/:id', getHouse);
+//houseRouter.get('/:id', getHouse);
 
 // GET Scraped data by realtor.ca url
-houseRouter.get('/:url', getScraped);
+houseRouter.get('/scrape', getScraped);
 
 // PUT update a specific house by ID
 houseRouter.put('/:id', updateHouse);

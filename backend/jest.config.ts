@@ -201,6 +201,15 @@ module.exports = {
   transform: {
     '^.+\\.(ts|tsx)?$': 'ts-jest',
     '^.+\\.(js|jsx)$': 'babel-jest',
+  },
+  moduleNameWrapper: {
+    '@src/(.*)': '<rootDir>/src/$1',
+    '@controllers/(.*)': '<rootDir>/src/controllers/$1',
+    '@config/(.*)': '<rootDir>/src/config/$1',
+    '@interfaces/(.*)': '<rootDir>/src/interfaces/$1',
+    '@models/(.*)': '<rootDir>/src/models/$1',
+    '@routers/(.*)': '<rootDir>/src/routers/$1',
+    '@middleware/(.*)': '<rootDir>/src/middleware/$1',
   }
 };
 
