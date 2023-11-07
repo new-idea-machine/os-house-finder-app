@@ -21,7 +21,7 @@ export const googleLogin = async (
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
   res.header('Referrer-Policy', 'no-referrer-when-downgrade');
 
-  const redirectUrl = 'http://127.0.0.1:3000/oauth';
+  const redirectUrl = 'http://localhost:5001/api/oauth/google';
   try {
     // const { tokenId } = req.body;
     const client = new OAuth2Client(
@@ -58,7 +58,7 @@ export const googleUserData = async (
   console.log('code: ', code);
 
   try {
-    const redirectUrl = 'http://127.0.0.1:3000/oauth';
+    const redirectUrl = 'http://localhost:5001/api/oauth/google';
     const client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
