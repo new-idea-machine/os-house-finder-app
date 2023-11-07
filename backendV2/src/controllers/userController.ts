@@ -12,10 +12,8 @@ import {
   GetUsersResponse,
   LoginUserResponse,
   RegisterUserResponse,
-  GoogleLoginResponse,
 } from '@interfaces/responses/user';
 import { GeneralResponse } from '@interfaces/responses/general';
-import { OAuth2Client } from 'google-auth-library';
 import { StatusCodes } from '../constant';
 
 export const registerUser = async (
@@ -112,42 +110,6 @@ export const loginUser = async (
       status: StatusCodes.OK,
       data: { _id: user._id, email: user.email, role: user.role },
     });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const googleLogin = async (
-  req: Request,
-  res: Response<GoogleLoginResponse>,
-  next: NextFunction
-): Promise<void> => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Referrer-Policy', 'no-referrer-when-downgrade');
-
-  const redirectUrl = 'http://127.0.0.1:3000/oauth';
-  try {
-    // const { tokenId } = req.body;
-    const client = new OAuth2Client(
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      redirectUrl
-    );
-
-    const authorizeUrl = client.generateAuthUrl({
-      access_type: 'offline',
-      scope:
-        'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email openid',
-      prompt: 'consent',
-    });
-
-    res.json({
-      message: 'success',
-      status: StatusCodes.OK,
-      data: { url: authorizeUrl },
-    });
-
-    //
   } catch (error) {
     next(error);
   }
