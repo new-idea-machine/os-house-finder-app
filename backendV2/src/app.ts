@@ -8,6 +8,7 @@ import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
+import ctStationRouter from '@routers/ctStationRouter';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use('/api/users', UserRouter);
 app.use('/api/houses', HouseRouter);
 app.use('/api/preferences', preferenceRouter);
+app.use('/api/ctstations', ctStationRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
