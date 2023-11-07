@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import ctStationRouter from '@routers/ctStationRouter';
+import distanceTimeRouter from '@routers/distanceTimeRouter';
 import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
@@ -31,6 +32,7 @@ app.use('/api/users', UserRouter);
 app.use('/api/houses', HouseRouter);
 app.use('/api/preferences', preferenceRouter);
 app.use('/api/ctstations', ctStationRouter);
+app.use('/api/distance', distanceTimeRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
