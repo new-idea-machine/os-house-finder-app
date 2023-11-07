@@ -1,8 +1,7 @@
 import { Response } from 'express';
 import axios from 'axios';
 import { parse } from 'csv-parse';
-import CtStationModel from '@models/ctStationModel';
-import { ICTStation } from '@models/ctStationModel';
+import CtStationModel, { ICTStation } from '@models/ctStationModel';
 import { UpdateCTStations } from '@interfaces/requests/ctstation';
 
 // Update the CTrain stations. Based on the provided URL, fetch the CSV file and parse it.
@@ -42,17 +41,28 @@ export const updateCTStations = async (
       'DIST_WB',
       'ROUTE',
       'STATUS',
-      'the_geom',
+      'THE_GEOM',
     ];
 
     parse(response.data, {
       delimiter: ',',
       columns: headers,
     }, (error, data) => {
-      for (let station of data) {
-        const { STATIONNAM, LEG, DIRECTION, DIST_NB, DIST_SB, DIST_EB, DIST_WB, ROUTE, STATUS, the_geom } = station;
+      data.forEach((station: StationData) => {
+        const {
+          STATIONNAM,
+          LEG,
+          DIRECTION,
+          DIST_NB,
+          DIST_SB,
+          DIST_EB,
+          DIST_WB,
+          ROUTE,
+          STATUS,
+          THE_GEOM,
+        } = station;
 
-        const latlong = the_geom.match(/\(([^)]+)\)/);
+        const latlong = THE_GEOM.match(/\(([^)]+)\)/);
 
         if (latlong) {
           const coordinatesStr = latlong[1];
@@ -72,7 +82,7 @@ export const updateCTStations = async (
           });
           ctStation.save();
         }
-      }
+      });
     });
     return res.status(200).json({ message: 'CTrain stations updated' });
   } catch (error) {
@@ -81,3 +91,16 @@ export const updateCTStations = async (
     return res.status(500).json({ error });
   }
 };
+
+interface StationData {
+  STATIONNAM: string;
+  LEG: string;
+  DIRECTION: string;
+  DIST_NB: number;
+  DIST_SB: number;
+  DIST_EB: number;
+  DIST_WB: number;
+  ROUTE: string;
+  STATUS: string;
+  THE_GEOM: string;
+}

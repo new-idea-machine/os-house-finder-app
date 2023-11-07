@@ -14,7 +14,7 @@ import { URLParamZodSchema } from '@validator/houseValidator';
 const houseRouter = express.Router();
 
 // GET all houses
-//houseRouter.get('/', getHouses);
+// houseRouter.get('/', getHouses);
 
 // POST create a new house
 houseRouter.post('/', validateRequest({ body: HouseZodSchema }), createHouse);

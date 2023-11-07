@@ -83,6 +83,7 @@ export const createPreference = async (
 };
 
 // Update a specific preference by ID
+/* eslint-disable no-console */
 export const updatePreference = async (
   req: UpdatePreferenceRequest,
   res: Response<UpdatePreferenceResponse>

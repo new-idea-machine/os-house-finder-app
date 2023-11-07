@@ -55,6 +55,7 @@ export const getHouse = async (
 };
 
 // Get Scraped data by
+/* eslint-disable no-console */
 export const getScraped = async (
   req: GetScrapedRequest,
   res: Response,
@@ -75,7 +76,6 @@ export const getScraped = async (
     });
 
     pythonProcess.on('error', (error) => {
-      // eslint-disable-next-line no-console
       console.error(error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);
       throw new Error('Error calling Python function');
@@ -89,7 +89,6 @@ export const getScraped = async (
 
     pythonProcess.on('exit', (code) => {
       if (code !== 0) {
-        // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);
       }
     });

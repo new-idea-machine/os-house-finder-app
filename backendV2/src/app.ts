@@ -4,11 +4,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import ctStationRouter from '@routers/ctStationRouter';
 import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
-import ctStationRouter from '@routers/ctStationRouter';
 
 dotenv.config();
 
