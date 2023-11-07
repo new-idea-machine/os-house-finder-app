@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import { OAuth2Client } from 'google-auth-library';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
