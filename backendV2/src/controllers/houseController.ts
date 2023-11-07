@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import HouseModel, { IHouse } from '@models/house.model';
+import HouseModel, { IHouse } from '@models/houseModel';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -60,8 +60,8 @@ export const getScraped = async (
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  
-  
+
+
   try {
     const pythonProcess: ChildProcess = spawn('python', [
       "src/scripts/scrape.py",
@@ -84,7 +84,7 @@ export const getScraped = async (
     pythonProcess.stderr?.on('data', (data) => {
       const err: string = data.toString();
       console.log(err);
-      
+
     })
 
     pythonProcess.on('exit', (code) => {

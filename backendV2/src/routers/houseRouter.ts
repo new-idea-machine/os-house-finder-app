@@ -8,7 +8,7 @@ import {
   getScraped,
 } from '@controllers/houseController';
 import { validateRequest } from '@middleware/validator';
-import { HouseZodSchema } from '@models/house.model';
+import { HouseZodSchema } from '@models/houseModel';
 import { URLParamZodSchema } from '@validator/houseValidator';
 
 const houseRouter = express.Router();

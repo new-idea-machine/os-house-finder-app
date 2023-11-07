@@ -1,4 +1,4 @@
-import { IHouse } from '@models/house.model';
+import { IHouse } from '@models/houseModel';
 import { URLParamZodSchema } from '@validator/houseValidator';
 import { Request } from 'express';
 import { z } from 'zod';
