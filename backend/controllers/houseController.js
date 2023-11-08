@@ -27,6 +27,7 @@ export const getHouse = async (req, res) => {
 
 // Get Scraped data by
 export const getScraped = async (req, res) => {
+  console.log(req);
   try {
     // Now, let's call the Python function
     const pythonProcess = spawn('python', [
