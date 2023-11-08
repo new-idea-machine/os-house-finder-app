@@ -144,8 +144,8 @@ function LoginForm() {
         or
       </div>
       <GoogleLoginButton>
-        <FcGoogle />
-        Login with Google
+        {/* <FcGoogle />
+        Login with Google */}
       </GoogleLoginButton>
       <p className="mt-4 text-center text-sm text-gray-600">
         If you don&apos;t have an account, please&nbsp;

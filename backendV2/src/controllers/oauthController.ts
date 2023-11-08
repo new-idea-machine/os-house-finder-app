@@ -4,8 +4,10 @@ import { OAuth2Client } from 'google-auth-library';
 import { StatusCodes } from '../constant';
 
 const getUserDataFromGoogle = async (access_token: string) => {
+  console.log('access_token: ', access_token);
+
   const response = await fetch(
-    `https://www.googleapis.com/oauth2/v3/userinfo?access_token${access_token}`
+    `https://www.googleapis.com/oauth2/v3/userinfo?access_token=${access_token}`
   );
   const data = await response.json();
   console.log('data: ', data);
@@ -23,7 +25,13 @@ export const googleLogin = async (
 
   const redirectUrl = 'http://localhost:5001/api/oauth/google';
   try {
-    // const { tokenId } = req.body;
+    console.log(
+      '👹',
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      redirectUrl
+    );
+
     const client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -71,8 +79,16 @@ export const googleUserData = async (
     console.log('Tokens Acquired');
     const userData = client.credentials;
     console.log('user Credentials: ', userData);
-    await getUserDataFromGoogle(userData.access_token as string);
-    res.redirect('http://localhost:5173');
+    const getUserRes = await getUserDataFromGoogle(
+      userData.access_token as string
+    );
+    console.log('getUserDataFromGoogle response', getUserRes);
+
+    res.json({
+      message: 'success',
+      status: StatusCodes.OK,
+      data: { url: getUserRes },
+    });
   } catch (error) {
     next(error);
   }

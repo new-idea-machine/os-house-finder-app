@@ -11,21 +11,22 @@ function navigate(url: string) {
   window.location.href = url;
 }
 
-async function auth() {
-  const response = await fetch('http://localhost:5001/api/auth/googlelogin', {
-    method: 'POST',
-  });
-  const data = await response.json();
-  console.log(data);
-  navigate(data.url);
-}
-
 export default function GoogleLoginButton({
   children,
 }: GoogleLoginButtonProps) {
+  const auth = async () => {
+    const response = await fetch(
+      'http://localhost:5001/api/oauth/googlelogin',
+      {
+        method: 'POST',
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    navigate(data.data.url);
+  };
   const handleGoogleLogin = () => {
-    // TODO: Implement Google Login
-    // eslint-disable-next-line no-console
+    auth();
     console.log('Google Login');
   };
 
@@ -35,6 +36,7 @@ export default function GoogleLoginButton({
       type="button"
       className="flex w-full gap-4"
     >
+      <img src={googleButton} alt="Google Logo" />
       {children}
     </Button>
   );
