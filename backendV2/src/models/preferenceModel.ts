@@ -23,7 +23,7 @@ export interface IPreference extends Document {
     bedrooms: number;
     safetyScore: number;
   };
-  userId: string;
+  userId: Schema.Types.ObjectId;
 }
 
 const preferenceSchema: Schema<IPreference> = new Schema(
@@ -61,7 +61,11 @@ const preferenceSchema: Schema<IPreference> = new Schema(
       bedrooms: { type: Number, default: 0 },
       safetyScore: { type: Number, default: 0 },
     },
-    userId: { type: String, required: true, default: 'ab123456' },
+    userId: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     timestamps: true,

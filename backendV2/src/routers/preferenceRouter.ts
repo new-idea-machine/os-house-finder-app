@@ -1,21 +1,21 @@
 import express from 'express';
 import preference from '@controllers/preferenceController';
 
-const preferenceRouter = express.Router();
+const preferenceRouter = express.Router({ mergeParams: true });
 
-// GET all houses
+// GET all preferences
 preferenceRouter.get('/', preference.getAllPreferences);
 
-// POST create a new house
+// POST create a new preference
 preferenceRouter.post('/', preference.createPreference);
 
-// GET a specific house by ID
+// GET a specific preference by ID
 preferenceRouter.get('/:id', preference.getPreference);
 
-// PUT update a specific house by ID
+// PUT update a specific preference by ID
 preferenceRouter.put('/:id', preference.updatePreference);
 
-// DELETE a specific house by ID
+// DELETE a specific preference by ID
 preferenceRouter.delete('/:id', preference.deletePreference);
 
 export default preferenceRouter;
