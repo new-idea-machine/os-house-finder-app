@@ -101,3 +101,58 @@ export const googleUserData = async (
     next(error);
   }
 };
+
+export const getKeys = async () => {
+  const response = await fetch(
+    `https://www.google.com/.well-known/openid-configuration`
+  );
+
+  const data = await response.json();
+  console.log('discovery data: ', data);
+
+  const jwtCerts = await fetch(data.jwks_uri);
+  const jwtCertsData = await jwtCerts.json();
+  console.log('jwtCertsData: ', jwtCertsData);
+  return jwtCertsData;
+};
+
+export const gsiUserCredentials = async (
+  req: Request,
+  res: Response<GoogleUserDataResponse>,
+  next: NextFunction
+) => {
+  const { code } = req.query;
+  console.log('code: ', code);
+
+  try {
+    const redirectUrl = 'http://localhost:5001/api/oauth/gsi';
+    console.log(redirectUrl);
+    const client = new OAuth2Client(
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      redirectUrl
+    );
+    console.log('client: ', client);
+
+    const ticket = await client.verifyIdToken({
+      idToken: code as string,
+      audience: process.env.CLIENT_ID,
+    });
+    console.log('ticket: ', ticket);
+
+    const payload = ticket.getPayload();
+    const userSub = payload?.sub;
+    const userEmail = payload?.email;
+    res.status(StatusCodes.OK).json({
+      message: 'success',
+      status: StatusCodes.OK,
+      data: {
+        _id: userSub as string,
+        email: userEmail as string,
+        role: 'user',
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};

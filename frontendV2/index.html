@@ -4,10 +4,52 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="ico" href="/public/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://accounts.google.com/gsi/client" async></script>
+    <script>
+      async function decodeResponse(credential) {
+        console.log('credential', credential);
+        const url = new URL('http://localhost:5001/api/oauth/gsi');
+        url.searchParams.append('code', credential);
+        const localReq = await fetch(url);
+        const data = await localReq.json();
+        return data;
+      }
+
+      async function handleGoogleLogin(response) {
+        const responsePayload = await decodeResponse(response.credential);
+        console.log('responsePayload', responsePayload);
+
+        console.log('response', response);
+      }
+
+      async function getKeys() {
+        const keys = await fetch('http://localhost:5001/api/oauth/getkeys');
+        const data = await keys.json();
+        console.log(data);
+      }
+    </script>
     <title>Welcome to HouseFinder</title>
   </head>
   <body>
     <div id="root"></div>
+    <div
+      id="g_id_onload"
+      data-client_id="51742808647-gcrgsv9uburntukqo6bm2c1sdbidgoat.apps.googleusercontent.com"
+      data-context="signin"
+      data-ux_mode="popup"
+      data-callback="handleGoogleLogin"
+      data-auto_prompt="false"
+    ></div>
+
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-shape="rectangular"
+      data-theme="outline"
+      data-text="signin_with"
+      data-size="large"
+      data-logo_alignment="left"
+    ></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
