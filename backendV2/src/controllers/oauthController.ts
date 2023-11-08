@@ -1,5 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { GoogleLoginResponse } from '@interfaces/responses/oauth';
+import {
+  GoogleLoginResponse,
+  GoogleUserDataResponse,
+} from '@interfaces/responses/oauth';
 import { OAuth2Client } from 'google-auth-library';
 import { StatusCodes } from '../constant';
 
@@ -59,7 +62,7 @@ export const googleLogin = async (
 
 export const googleUserData = async (
   req: Request,
-  res: Response<any>,
+  res: Response<GoogleUserDataResponse>,
   next: NextFunction
 ) => {
   const { code } = req.query;
@@ -83,11 +86,16 @@ export const googleUserData = async (
       userData.access_token as string
     );
     console.log('getUserDataFromGoogle response', getUserRes);
+    res.cookie('jwt', userData.id_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+    });
 
     res.json({
       message: 'success',
       status: StatusCodes.OK,
-      data: { url: getUserRes },
+      data: { _id: getUserRes.sub, email: getUserRes.email, role: 'user' },
     });
   } catch (error) {
     next(error);

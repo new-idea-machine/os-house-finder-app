@@ -4,7 +4,7 @@ import {
   useRegisterMutation,
   useLogoutMutation,
 } from '@api/auth/authApi';
-import { Credentials, RegisterResponse, UserResponse } from '@constants/types';
+import { Credentials, UserResponse } from '@constants/types';
 import {
   isFetchBaseQueryError,
   isErrorWithMessage,
@@ -19,8 +19,6 @@ export default function useAuth() {
   const navigate = useNavigate();
 
   const { toast } = useToast();
-
-  // const { removeCookie } = useCookies();
 
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, registerResult] = useRegisterMutation();
@@ -68,6 +66,9 @@ export default function useAuth() {
     }
   };
 
+  // const handleGoogleLogin=async () =>
+  // {
+
   const handleLogout = async () => {
     try {
       const response = await logoutMutation();
@@ -109,9 +110,9 @@ export default function useAuth() {
         return;
       }
 
-      const userData: RegisterResponse = response.data!;
+      const userData: UserResponse = response.data!;
 
-      const { id, email, role } = userData;
+      const { _id: id, email, role } = userData;
 
       dispatch(setCredentials({ id, email, role }));
       toast({

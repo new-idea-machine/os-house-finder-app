@@ -4,7 +4,6 @@ import {
   RegisterResponse,
   LoginResponse,
   UserResponse,
-  User,
 } from '@constants/types';
 
 const baseQuery = fetchBaseQuery({
@@ -31,7 +30,7 @@ export const authApi = createApi({
         return response.data;
       },
     }),
-    register: builder.mutation<User, Credentials>({
+    register: builder.mutation<UserResponse, Credentials>({
       query: (credentials) => ({
         url: '/api/users/register',
         method: 'POST',
@@ -44,7 +43,7 @@ export const authApi = createApi({
       }),
       transformResponse(baseQueryReturnValue: RegisterResponse) {
         return {
-          id: baseQueryReturnValue.data._id,
+          _id: baseQueryReturnValue.data._id,
           email: baseQueryReturnValue.data.email,
           role: baseQueryReturnValue.data.role,
         };

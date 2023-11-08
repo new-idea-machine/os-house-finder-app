@@ -1,8 +1,6 @@
 import { Button } from '@components/ui/button';
 import { ReactNode } from 'react';
 
-import googleButton from '@assets/google_signin_buttons/web/1x/btn_google_signin_dark_pressed_web.png';
-
 interface GoogleLoginButtonProps {
   children: ReactNode;
 }
@@ -36,7 +34,6 @@ export default function GoogleLoginButton({
       type="button"
       className="flex w-full gap-4"
     >
-      <img src={googleButton} alt="Google Logo" />
       {children}
     </Button>
   );
