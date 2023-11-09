@@ -1,20 +1,20 @@
 import express from 'express';
 import {
   getHouse,
-  getHouses,
+  // getHouses,
   createHouse,
   updateHouse,
   deleteHouse,
   getScraped,
 } from '@controllers/houseController';
 import { validateRequest } from '@middleware/validator';
-import { HouseZodSchema } from '@models/house.model';
+import { HouseZodSchema } from '@models/houseModel';
 import { URLParamZodSchema } from '@validator/houseValidator';
 
 const houseRouter = express.Router();
 
 // GET all houses
-//houseRouter.get('/', getHouses);
+// houseRouter.get('/', getHouses);
 
 // POST create a new house
 houseRouter.post('/', validateRequest({ body: HouseZodSchema }), createHouse);
