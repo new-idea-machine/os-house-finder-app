@@ -11,6 +11,7 @@ import {
 import { userAuth } from '@middleware/userAuth';
 import { validateRequest } from '@middleware/validator';
 import { UpdateUser, UserLogin, UserRegister } from '@validator/userValidator';
+import preferenceRouter from './preferenceRouter';
 
 const userRouter = express.Router();
 
@@ -44,6 +45,9 @@ userRouter.put(
   }),
   updateUser
 );
+
+// Re-route into other resource routers
+userRouter.use('/:userId/preferences', userAuth, preferenceRouter);
 
 // Delete a user
 userRouter.delete('/:id', userAuth, deleteUser);

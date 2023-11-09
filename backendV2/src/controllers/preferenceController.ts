@@ -14,14 +14,29 @@ import {
   UpdatePreferenceResponse,
 } from '@interfaces/responses/preference';
 import { GeneralResponse } from '@interfaces/responses/general';
+import User from '@src/models/userModel';
 
 // Get all preferences
+// @route GET /api/preferences
+// @route GET /api/users/:userId/preferences
 export const getAllPreferences = async (
-  _: Request,
+  req: Request,
   res: Response<GetPreferencesResponse>
 ): Promise<void> => {
   try {
-    const preferences = await Preference.find();
+    let query;
+
+    if (req.params.userId) {
+      query = Preference.find({ userId: req.params.userId }).populate({
+        path: 'userId',
+        select: 'email',
+        model: User,
+      });
+    } else {
+      query = Preference.find();
+    }
+
+    const preferences = (await query) as IPreference[];
 
     res.status(StatusCodes.OK).json({
       message: 'Preferences found',

@@ -1,7 +1,7 @@
 import express from 'express';
 import preference from '@controllers/preferenceController';
 
-const preferenceRouter = express.Router();
+const preferenceRouter = express.Router({ mergeParams: true });
 
 // GET all preferences
 preferenceRouter.get('/', preference.getAllPreferences);

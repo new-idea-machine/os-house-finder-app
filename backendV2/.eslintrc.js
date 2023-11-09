@@ -44,6 +44,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': 'warn',
+    'prefer-const': 'warn',
   },
   settings: {
     'import/resolver': {
