@@ -3,8 +3,9 @@ import {
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,
+  useLazyGoogleLoginQuery,
 } from '@api/auth/authApi';
-import { Credentials, RegisterResponse, UserResponse } from '@constants/types';
+import { Credentials, UserResponse } from '@constants/types';
 import {
   isFetchBaseQueryError,
   isErrorWithMessage,
@@ -13,6 +14,11 @@ import { setCredentials, logout } from '@features/authSlice';
 import { useToast } from '@components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 
+interface GoogleLoginResponse {
+  client_id: string;
+  credential: string;
+}
+
 export default function useAuth() {
   const dispatch = useAppDispatch();
 
@@ -20,11 +26,25 @@ export default function useAuth() {
 
   const { toast } = useToast();
 
-  // const { removeCookie } = useCookies();
-
   const [login, { isLoading: isLoginLoading }] = useLoginMutation();
   const [register, registerResult] = useRegisterMutation();
   const [logoutMutation] = useLogoutMutation();
+  const [getGoogleUser, googleLoginResult] = useLazyGoogleLoginQuery();
+
+  const handleGoogleLogin = async (googleResponse: GoogleLoginResponse) => {
+    const responsePayload = await getGoogleUser(googleResponse.credential);
+
+    toast({
+      title: 'Login Successful',
+      description: `Welcome back ${responsePayload?.data?.email}!`,
+      duration: 2000,
+    });
+
+    const { _id: id, email, role } = responsePayload.data as UserResponse;
+    dispatch(setCredentials({ id, email, role }));
+
+    navigate('/profiles');
+  };
 
   const handleLogin = async (credentials: Credentials) => {
     try {
@@ -109,9 +129,9 @@ export default function useAuth() {
         return;
       }
 
-      const userData: RegisterResponse = response.data!;
+      const userData: UserResponse = response.data!;
 
-      const { id, email, role } = userData;
+      const { _id: id, email, role } = userData;
 
       dispatch(setCredentials({ id, email, role }));
       toast({
@@ -144,5 +164,7 @@ export default function useAuth() {
     handleLogout,
     handleRegister,
     registerResult,
+    handleGoogleLogin,
+    googleLoginResult,
   };
 }

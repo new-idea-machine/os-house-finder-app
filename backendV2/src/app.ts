@@ -10,6 +10,7 @@ import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
+import OauthRouter from './routers/oauthRouter';
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use('/api/users', UserRouter);
 app.use('/api/houses', HouseRouter);
+app.use('/api/oauth', OauthRouter);
 app.use('/api/preferences', preferenceRouter);
 app.use('/api/ctstations', ctStationRouter);
 app.use('/api/distance', distanceTimeRouter);

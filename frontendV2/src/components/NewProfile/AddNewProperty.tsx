@@ -76,7 +76,7 @@ function AddNewProperty() {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="no-scrollbar h-auto w-full overflow-auto"
+            className="h-auto w-full overflow-auto no-scrollbar"
           >
             <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg bg-[#dcdcdc] p-5">
               <DialogTitle>New Property</DialogTitle>
@@ -112,7 +112,7 @@ function AddNewProperty() {
               </div>
               <hr className="bg-black" />
 
-              {/*Custom Variable Input */}
+              {/* Custom Variable Input */}
               <h3 className="mb-2 mt-0 font-bold">Custom Variable #1</h3>
               <FormField
                 control={form.control}
