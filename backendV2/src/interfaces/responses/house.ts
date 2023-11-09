@@ -1,4 +1,4 @@
-import { IHouse } from '@models/house.model';
+import { IHouse } from '@models/houseModel';
 import { GeneralResponse } from './general';
 
 export type GetHouseResponse = GeneralResponse<IHouse>;

@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { spawn, ChildProcess } from 'child_process';
-import HouseModel, { IHouse } from '@models/house.model';
+import HouseModel, { IHouse } from '@models/houseModel';
 import {
   CreateHouseRequest,
   DeleteHouseRequest,
@@ -55,13 +55,14 @@ export const getHouse = async (
 };
 
 // Get Scraped data by
+/* eslint-disable no-console */
 export const getScraped = async (
   req: GetScrapedRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> => {
-  
-  
+
+
   try {
     const pythonProcess: ChildProcess = spawn('python', [
       "src/scripts/scrape.py",
@@ -75,7 +76,6 @@ export const getScraped = async (
     });
 
     pythonProcess.on('error', (error) => {
-      // eslint-disable-next-line no-console
       console.error(error);
       res.status(StatusCodes.INTERNAL_SERVER_ERROR);
       throw new Error('Error calling Python function');
@@ -84,12 +84,11 @@ export const getScraped = async (
     pythonProcess.stderr?.on('data', (data) => {
       const err: string = data.toString();
       console.log(err);
-      
+
     })
 
     pythonProcess.on('exit', (code) => {
       if (code !== 0) {
-        // eslint-disable-next-line no-console
         console.error(`Python process exited with code ${code}`);
       }
     });
