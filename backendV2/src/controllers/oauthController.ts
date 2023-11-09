@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { GoogleUserDataResponse } from '@interfaces/responses/oauth';
 import { OAuth2Client } from 'google-auth-library';
 import User, { IUser } from '@models/userModel';
+import generatePassword from '@src/utils/generatePassword';
 import { StatusCodes } from '../constant';
 
 export const gsiUserCredentials = async (
@@ -28,11 +29,14 @@ export const gsiUserCredentials = async (
     const payload = ticket.getPayload();
     const userSub = payload?.sub;
     const userEmail = payload?.email;
-    const userPassword = 'password';
+    // generate random password for user
+    const userPassword = generatePassword(8);
     // TODO - figure out way to get user from db by _id
     // const existingUser: IUser | null = await User.findById(userSub);
     // Because user can change Google account email, we need to check primary identifier instead
     const existingUser: IUser | null = await User.findOne({ email: userEmail });
+
+    let token: string = '';
 
     if (!existingUser) {
       const newUser: IUser = new User({
@@ -40,9 +44,11 @@ export const gsiUserCredentials = async (
         password: userPassword,
       });
       await newUser.save();
+      token = newUser.generateToken();
     }
+    token = token === '' ? (existingUser?.generateToken() as string) : token;
 
-    res.cookie('jwt', code, {
+    res.cookie('jwt', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV !== 'development',
       sameSite: 'strict',
