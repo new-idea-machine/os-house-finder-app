@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "rootDir": ".",
+    "rootDir": "src",
     "baseUrl": ".",
     "paths": {
       "@src/*": ["src/*"],
@@ -10,6 +10,7 @@
       "@models/*": ["src/models/*"],
       "@routers/*": ["src/routers/*"],
       "@middleware/*": ["src/middleware/*"],
+      "@scripts/*": ["src/scripts/*"],
       "@validator/*": ["src/validator/*"],
     },
     "outDir": "dist",

@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import User, { IUser } from '@models/userModel';
+import { Preference } from '@models/preferenceModel';
 import { UserAuthInfoRequest } from '@middleware/userAuth';
 import {
   UpdateUserRequest,
@@ -162,7 +163,7 @@ export const deleteUser = async (
   try {
     const userId = req.params.id as string;
 
-    const user: IUser | null = await User.findByIdAndDelete(userId);
+    const user: IUser | null = await User.findById(userId);
 
     if (!user) {
       res.status(StatusCodes.NOT_FOUND);
@@ -173,6 +174,7 @@ export const deleteUser = async (
       res.status(StatusCodes.FORBIDDEN);
       throw new Error('You are not authorized to perform this action');
     }
+    user.deleteOne();
 
     res
       .status(StatusCodes.OK)
@@ -189,7 +191,11 @@ export const getUser = async (
 ): Promise<void> => {
   try {
     const userId: string = req.params.id as string;
-    const user: IUser | null = await User.findById(userId);
+    const user: IUser | null = await User.findById(userId).populate({
+      path: 'preferences',
+      select: 'squareFoot transportation bedrooms',
+      model: Preference,
+    });
 
     if (!user) {
       res.status(StatusCodes.NOT_FOUND);
