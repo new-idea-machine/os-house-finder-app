@@ -1,17 +1,35 @@
-import { Button } from '@components/ui/button';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useCallback } from 'react';
+import { useLazyGoogleLoginQuery } from '@api/auth/authApi';
+import { useToast } from '@components/ui/use-toast';
+import { useAppDispatch } from '@app/hooks';
+import { setCredentials } from '@features/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { UserResponse } from '@constants/types';
+import useAuth from '@hooks/useAuth';
 
 interface GoogleLoginButtonProps {
   children: ReactNode;
 }
 
-function navigate(url: string) {
-  window.location.href = url;
+interface GoogleLoginCredentials {
+  client_id: string;
+  credential: string;
 }
+
+// function navigate(url: string) {
+//   window.location.href = url;
+// }
 
 export default function GoogleLoginButton({
   children,
 }: GoogleLoginButtonProps) {
+  const { toast } = useToast();
+  const dispatch = useAppDispatch();
+  const [getGoogleUser, result] = useLazyGoogleLoginQuery();
+  const navigate = useNavigate();
+
+  const { handleGoogleLogin } = useAuth();
+
   const auth = async () => {
     const response = await fetch(
       'http://localhost:5001/api/oauth/googlelogin',
@@ -28,53 +46,75 @@ export default function GoogleLoginButton({
   //   console.log('Google Login');
   // };
 
-  const decodeResponse = async (credential) => {
+  async function decodeResponse(credential: string) {
+    console.log('credential', credential);
     const url = new URL('http://localhost:5001/api/oauth/gsi');
     url.searchParams.append('code', credential);
     const localReq = await fetch(url);
     const data = await localReq.json();
     return data;
-  };
+  }
 
-  const handleGoogleLogin = async (response) => {
-    // const responsePayload = await decodeResponse(response.credentials);
-    // console.log('responsePayload', responsePayload);
+  // const handleGoogleLogin = useCallback(
+  //   async (response: GoogleLoginCredentials) => {
+  //     // const responsePayload = await decodeResponse(response.credential);
+  //     // console.log('Encoded JWT ID token', response.credential);
+  //     // console.log('responsePayload', responsePayload);
 
-    console.log('response', response);
-  };
+  //     const responsePayload = await getGoogleUser(response.credential);
+  //     console.log('responsePayload', responsePayload);
+  //     console.log('googleUser', result);
+  //     if (responsePayload.isSuccess) {
+  //       const { data } = result;
+  //       console.log('data', data);
+  //       toast({
+  //         title: 'Login Successful',
+  //         description: `Welcome back ${responsePayload?.data?.email}!`,
+  //         duration: 2000,
+  //       });
+  //       const { _id: id, email, role } = responsePayload?.data as UserResponse;
+  //       dispatch(setCredentials({ id, email, role }));
 
-  const getKeys = async () => {
+  //       navigate('/profiles');
+  //       console.log('response', response);
+  //     }
+  //   },
+  //   []
+  // );
+
+  async function getKeys() {
     const keys = await fetch('http://localhost:5001/api/oauth/getkeys');
     const data = await keys.json();
     console.log(data);
-  };
+  }
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleGoogleLogin,
+    });
+
+    google.accounts.id.renderButton(
+      document.getElementById('google-login-button'),
+      {
+        theme: 'outline',
+        size: 'large',
+        type: 'standard',
+        text: 'continue_with',
+        shape: 'rectangular',
+        width: 'auto',
+      }
+    );
+  }, [handleGoogleLogin]);
 
   return (
-    <Button
-      onClick={handleGoogleLogin}
-      type="button"
-      className="flex w-full gap-4"
+    <div
+      id="google-login-button"
+      // onClick={handleGoogleLogin}
+      className="flex w-full justify-center gap-4"
     >
       {children}
-
-      <div
-        id="g_id_onload"
-        data-client_id="51742808647-gcrgsv9uburntukqo6bm2c1sdbidgoat.apps.googleusercontent.com"
-        data-context="signin"
-        data-ux_mode="popup"
-        data-callback="handleGoogleLogin"
-        data-auto_prompt="false"
-      />
-
-      <div
-        className="g_id_signin"
-        data-type="standard"
-        data-shape="rectangular"
-        data-theme="outline"
-        data-text="signin_with"
-        data-size="large"
-        data-logo_alignment="left"
-      />
-    </Button>
+    </div>
   );
 }

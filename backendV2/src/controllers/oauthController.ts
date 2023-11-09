@@ -4,6 +4,7 @@ import {
   GoogleUserDataResponse,
 } from '@interfaces/responses/oauth';
 import { OAuth2Client } from 'google-auth-library';
+import User, { IUser } from '@models/userModel';
 import { StatusCodes } from '../constant';
 
 const getUserDataFromGoogle = async (access_token: string) => {
@@ -28,13 +29,6 @@ export const googleLogin = async (
 
   const redirectUrl = 'http://localhost:5001/api/oauth/google';
   try {
-    console.log(
-      '👹',
-      process.env.CLIENT_ID,
-      process.env.CLIENT_SECRET,
-      redirectUrl
-    );
-
     const client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -132,7 +126,6 @@ export const gsiUserCredentials = async (
       process.env.CLIENT_SECRET,
       redirectUrl
     );
-    console.log('client: ', client);
 
     const ticket = await client.verifyIdToken({
       idToken: code as string,
@@ -143,6 +136,33 @@ export const gsiUserCredentials = async (
     const payload = ticket.getPayload();
     const userSub = payload?.sub;
     const userEmail = payload?.email;
+    // const userPassword = '';
+
+    // const existingUser: IUser|null=await User.findOne({email: userEmail});
+
+    // if(existingUser){
+    //   res.cookie('jwt', existingUser.generateToken(), {
+    //     httpOnly: true,
+    //     secure: process.env.NODE_ENV !== 'development',
+    //     sameSite: 'strict',
+    //   });
+    //   return res.status(StatusCodes.OK).json({
+    //     message: 'success',
+    //     status: StatusCodes.OK,
+    //     data: {
+    //       _id: existingUser._id,
+    //       email: existingUser.email,
+    //       role: 'user',
+    //     },
+    //   });
+    // }
+
+    res.cookie('jwt', code, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== 'development',
+      sameSite: 'strict',
+    });
+
     res.status(StatusCodes.OK).json({
       message: 'success',
       status: StatusCodes.OK,
