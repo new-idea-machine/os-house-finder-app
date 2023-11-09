@@ -14,7 +14,7 @@ export const gsiUserCredentials = async (
   const { code } = req.query;
 
   try {
-    const redirectUrl = 'http://localhost:5001/api/oauth/gsi';
+    const redirectUrl = `http://localhost:${process.env.PORT}/api/oauth/gsi`;
     const client = new OAuth2Client(
       process.env.CLIENT_ID,
       process.env.CLIENT_SECRET,
@@ -37,7 +37,7 @@ export const gsiUserCredentials = async (
     const existingUser: IUser | null = await User.findOne({ email: userEmail });
 
     let token: string = '';
-
+    // if user does not exist, create new user
     if (!existingUser) {
       const newUser: IUser = new User({
         email: userEmail,

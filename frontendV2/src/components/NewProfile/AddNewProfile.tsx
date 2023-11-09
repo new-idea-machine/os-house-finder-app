@@ -145,7 +145,7 @@ function AddNewProfile({ currentTabs, addTab }) {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="no-scrollbar h-[35rem] w-full overflow-auto"
+            className="h-[35rem] w-full overflow-auto no-scrollbar"
           >
             <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg bg-[#dcdcdc] p-5">
               <DialogTitle>New Profile</DialogTitle>
@@ -181,7 +181,7 @@ function AddNewProfile({ currentTabs, addTab }) {
               </div>
               <hr className="bg-black" />
 
-              {/*Square Footage Input */}
+              {/* Square Footage Input */}
 
               <h3 className="mb-2 font-bold">Square Footage</h3>
               <FormField
@@ -251,7 +251,7 @@ function AddNewProfile({ currentTabs, addTab }) {
               />
               <hr className="bg-black" />
 
-              {/*Bedroom Input */}
+              {/* Bedroom Input */}
 
               <h3 className="mb-2 font-bold">Bedroom</h3>
               <FormField
@@ -301,7 +301,7 @@ function AddNewProfile({ currentTabs, addTab }) {
               />
               <hr className="bg-black" />
 
-              {/*Travel Requirements Input */}
+              {/* Travel Requirements Input */}
 
               <h3 className="mb-2 font-bold">Travel Requirements</h3>
               <FormField

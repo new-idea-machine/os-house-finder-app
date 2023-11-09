@@ -5,22 +5,20 @@ interface GoogleLoginButtonProps {
   children: ReactNode;
 }
 
-// function navigate(url: string) {
-//   window.location.href = url;
-// }
-
 export default function GoogleLoginButton({
   children,
 }: GoogleLoginButtonProps) {
   const { handleGoogleLogin } = useAuth();
 
   useEffect(() => {
-    /* global google */
+    // eslint-disable-next-line
+    // @ts-ignore
     google.accounts.id.initialize({
       client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
       callback: handleGoogleLogin,
     });
-
+    // eslint-disable-next-line
+    // @ts-ignore
     google.accounts.id.renderButton(
       document.getElementById('google-login-button'),
       {
@@ -28,8 +26,9 @@ export default function GoogleLoginButton({
         size: 'large',
         type: 'standard',
         text: 'continue_with',
-        shape: 'rectangular',
-        width: 'auto',
+        shape: 'pill',
+        width: '250px',
+        height: 'auto',
       }
     );
   }, [handleGoogleLogin]);
@@ -38,7 +37,7 @@ export default function GoogleLoginButton({
     <div
       id="google-login-button"
       // onClick={handleGoogleLogin}
-      className="flex w-full justify-center gap-4"
+      className="flex h-12 w-full justify-center"
     >
       {children}
     </div>
