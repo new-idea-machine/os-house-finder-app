@@ -12,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { propertyFormSchema } from '@constants/formSchemas';
 import {
   Dialog,
   DialogContent,
@@ -24,31 +25,11 @@ import {
 
 import { Slider } from '@/components/ui/slider';
 
-const formSchema = z.object({
-  propertyURL: z
-    .string()
-    .min(1, {
-      message: 'Profile name must be at least 1 character.',
-    })
-    .max(100, {
-      message: 'Profile name must be at most 100 character.',
-    }),
-  customVariable: z // Square Footage Input
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(10, {
-      message: 'Weight must be at most 100.',
-    })
-    .default(0),
-});
-
 function AddNewProperty() {
   const [open, setOpen] = useState(false); // use to close dialog after submitting is successful
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof propertyFormSchema>>({
+    resolver: zodResolver(propertyFormSchema),
     defaultValues: {
       propertyURL: '',
       customVariable: 0,
@@ -56,7 +37,7 @@ function AddNewProperty() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof propertyFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // eslint-disable-next-line no-console

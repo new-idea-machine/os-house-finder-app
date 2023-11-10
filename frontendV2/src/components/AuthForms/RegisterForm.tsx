@@ -15,34 +15,8 @@ import { Button } from '@components/ui/button';
 import { useContext } from 'react';
 import { Checkbox } from '@components/ui/checkbox';
 import useAuth from '@hooks/useAuth';
+import { registerFormSchema } from '@constants/formSchemas';
 import { PasswordShowContext } from '@/context/PasswordShowProvider';
-
-const registerFormSchema = z
-  .object({
-    email: z.string().email({
-      message: 'You must enter a valid email.',
-    }),
-    password: z
-      .string()
-      .min(6, {
-        message: `Your password isn't long enough.`,
-      })
-      .max(24, {
-        message: `Your password is to long.`,
-      }),
-    passwordConfirmation: z
-      .string()
-      .min(6, {
-        message: `Your password isn't long enough.`,
-      })
-      .max(24, {
-        message: `Your password is to long.`,
-      }),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords don't match",
-    path: ['passwordConfirmation'],
-  });
 
 type RegisterSchemaType = z.infer<typeof registerFormSchema>;
 

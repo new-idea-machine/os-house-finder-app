@@ -1,3 +1,11 @@
+import {
+  profileFormSchema,
+  loginFormSchema,
+  registerFormSchema,
+  propertyFormSchema,
+} from '@constants/formSchemas';
+import * as z from 'zod';
+
 export type Credentials = {
   email: string;
   password: string;
@@ -23,3 +31,5 @@ export type LoginResponse = {
   message: string;
   status: number;
 };
+
+export type ProfileFormValues = z.infer<typeof profileFormSchema>;

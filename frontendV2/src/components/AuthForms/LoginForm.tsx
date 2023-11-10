@@ -28,27 +28,8 @@ import GoogleLoginButton from '@components/GoogleLoginButton';
 import { FcGoogle } from 'react-icons/fc';
 import { AiFillEyeInvisible, AiFillEye } from 'react-icons/ai';
 import SpinnerButton from '@components/SpinnerButton';
+import { loginFormSchema } from '@constants/formSchemas';
 import { PasswordShowContext } from '@/context/PasswordShowProvider';
-
-const loginFormSchema = z.object({
-  email: z
-    .string()
-    .email()
-    .min(4, {
-      message: 'Email must be at least 4 characters long',
-    })
-    .max(85, {
-      message: 'Email must be at most 85 characters long',
-    }),
-  password: z
-    .string()
-    .min(8, {
-      message: 'Password must be at least 8 characters long',
-    })
-    .max(85, {
-      message: 'Password must be at most 85 characters long',
-    }),
-});
 
 function LoginForm() {
   const navigate = useNavigate();
