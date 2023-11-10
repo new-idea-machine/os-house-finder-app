@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
-
+import { ProfileFormValues } from '@constants/types';
 import {
   ColumnDef,
   flexRender,
@@ -31,6 +31,10 @@ type ProfileTableDataType = {
   address: string;
   score: number;
   vfm: number;
+};
+
+export type ProfileTabType = ProfileFormValues & {
+  value: string;
 };
 
 export const columns: ColumnDef<ProfileTableDataType>[] = [
@@ -109,12 +113,67 @@ const mockHouseTableData: ProfileTableDataType[] = [
 ];
 
 export default function Profiles() {
-  const [tabs, setTabs] = useState([
-    { name: 'Profile 1', value: 'profile1' },
-    { name: 'Profile 2', value: 'profile2' },
-    { name: 'Profile 3', value: 'profile3' },
-    { name: 'Profile 4', value: 'profile4' },
-    { name: 'Profile 5', value: 'profile5' },
+  const [tabs, setTabs] = useState<ProfileTabType[]>([
+    {
+      profileName: 'Profile 1',
+      value: 'profile1',
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
+    },
+    {
+      profileName: 'Profile 2',
+      value: 'profile2',
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
+    },
+    {
+      profileName: 'Profile 3',
+      value: 'profile3',
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
+    },
+    {
+      profileName: 'Profile 4',
+      value: 'profile4',
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
+    },
+    {
+      profileName: 'Profile 5',
+      value: 'profile5',
+      squareFootageWeight: 0,
+      squareFootageMin: 0,
+      squareFootageMax: 0,
+      bedroomWeight: 0,
+      bedroomAmount: 0,
+      travelRequirementWeight: 0,
+      travelRequirementMin: 0,
+      travelRequirementMax: 0,
+    },
   ]);
   const table = useReactTable({
     data: mockHouseTableData,
@@ -139,7 +198,7 @@ export default function Profiles() {
               value={tab.value}
               className="mx-4 bg-primary text-xl text-white data-[state=active]:bg-secondary data-[state=active]:text-white"
             >
-              {tab.name}
+              {tab.profileName}
             </TabsTrigger>
           ))}
         </section>

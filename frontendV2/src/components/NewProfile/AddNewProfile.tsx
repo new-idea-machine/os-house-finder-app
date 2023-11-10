@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -13,6 +12,7 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { profileFormSchema } from '@constants/formSchemas';
+import { ProfileTabType } from '@pages/Profiles';
 import {
   Dialog,
   DialogContent,
@@ -25,9 +25,12 @@ import {
 
 import { Slider } from '@/components/ui/slider';
 
-type ProfileTabType = z.infer<typeof profileFormSchema>;
+type AddNewProfileProps = {
+  currentTabs: ProfileTabType[];
+  addTab: React.Dispatch<ProfileTabType[]>;
+};
 
-function AddNewProfile({ currentTabs, addTab }) {
+function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -45,11 +48,19 @@ function AddNewProfile({ currentTabs, addTab }) {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // eslint-disable-next-line no-console
     console.log(values);
-    const newTab = { name: values.profileName, value: values.profileName };
+    const newTab = {
+      profileName: values.profileName,
+      value: values.profileName.toLowerCase(),
+      squareFootageWeight: values.squareFootageWeight,
+      squareFootageMin: values.squareFootageMin,
+      squareFootageMax: values.squareFootageMax,
+      bedroomWeight: values.bedroomWeight,
+      bedroomAmount: values.bedroomAmount,
+      travelRequirementWeight: values.travelRequirementWeight,
+      travelRequirementMin: values.travelRequirementMin,
+      travelRequirementMax: values.travelRequirementMax,
+    };
     const newTabs = [...currentTabs, newTab];
     addTab(newTabs);
     console.log('Added new tab!');
@@ -291,6 +302,7 @@ function AddNewProfile({ currentTabs, addTab }) {
                 )}
               />
               <hr className="bg-black" />
+              <FormMessage />
             </div>
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
