@@ -308,7 +308,15 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
             <DialogFooter className="sticky bottom-0">
               <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
                 <DialogClose asChild>
-                  <Button className="w-24 bg-[#cccccc] text-sm" type="submit">
+                  <Button
+                    className="w-24 bg-[#cccccc] text-sm"
+                    type="submit"
+                    onClick={(e) => {
+                      if (!form.formState.isValid) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
                     ADD
                   </Button>
                 </DialogClose>
