@@ -12,6 +12,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@components/ui/form';
+import { profileFormSchema } from '@constants/formSchemas';
 import {
   Dialog,
   DialogContent,
@@ -24,90 +25,11 @@ import {
 
 import { Slider } from '@/components/ui/slider';
 
-const formSchema = z.object({
-  profileName: z
-    .string()
-    .min(1, {
-      message: 'Profile name must be at least 1 character.',
-    })
-    .max(100, {
-      message: 'Profile name must be at most 100 character.',
-    }),
-  squareFootageWeight: z // Square Footage Input
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    })
-    .default(0),
-  squareFootageMin: z
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    }),
-  squareFootageMax: z
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    }),
-  bedroomWeight: z // Bedroom Input
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    })
-    .default(0),
-  bedroomAmount: z
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    })
-    .default(0),
-  travelRequirementWeight: z // Travel Requirement Input
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    })
-    .default(0),
-  travelRequirementMin: z
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    }),
-  travelRequirementMax: z
-    .number()
-    .min(1, {
-      message: 'Weight must be at least 1.',
-    })
-    .max(100, {
-      message: 'Weight must be at most 100.',
-    }),
-});
+type ProfileTabType = z.infer<typeof profileFormSchema>;
 
 function AddNewProfile({ currentTabs, addTab }) {
-  const [open, setOpen] = useState(false); // use to close dialog after submitting is successful
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof profileFormSchema>>({
+    resolver: zodResolver(profileFormSchema),
     defaultValues: {
       profileName: '',
       squareFootageWeight: 0,
@@ -122,7 +44,7 @@ function AddNewProfile({ currentTabs, addTab }) {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof profileFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // eslint-disable-next-line no-console
@@ -131,11 +53,10 @@ function AddNewProfile({ currentTabs, addTab }) {
     const newTabs = [...currentTabs, newTab];
     addTab(newTabs);
     console.log('Added new tab!');
-    setOpen(false); // close dialog after submitting is successful
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button className="mx-9 w-[88%] text-xs md:text-sm lg:text-base">
           + Add New Profile
@@ -374,9 +295,11 @@ function AddNewProfile({ currentTabs, addTab }) {
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
               <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
-                <Button className="w-24 bg-[#cccccc] text-sm" type="submit">
-                  ADD
-                </Button>
+                <DialogClose asChild>
+                  <Button className="w-24 bg-[#cccccc] text-sm" type="submit">
+                    ADD
+                  </Button>
+                </DialogClose>
                 <DialogClose asChild>
                   <Button className="ml-3 w-24 bg-[#cccccc] text-sm">
                     CLOSE
