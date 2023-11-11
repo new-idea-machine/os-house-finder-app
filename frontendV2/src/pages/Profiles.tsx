@@ -183,15 +183,11 @@ export default function Profiles() {
 
   return (
     <Tabs
-      defaultValue="profile1"
-      className="flex h-full max-w-none px-9 animate-in animate-out"
+      defaultValue={tabs[0].value}
+      className="flex h-full max-w-none animate-in animate-out"
     >
-      <TabsList
-        className="flex h-full min-h-[85vh] flex-col justify-between rounded-none border-r-2
-      border-primary bg-white"
-      >
+      <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
         <section className="mt-8 flex w-full flex-col space-y-4">
-          <h2 className="mx-4 text-2xl font-bold">Profiles</h2>
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
@@ -205,12 +201,8 @@ export default function Profiles() {
         <AddNewProfile currentTabs={tabs} addTab={setTabs} />
       </TabsList>
       {tabs.map((tab) => (
-        <TabsContent
-          key={tab.value}
-          value={tab.value}
-          className="container w-full pt-4"
-        >
-          <div className="container flex flex-col gap-y-8 px-16 pt-16">
+        <TabsContent key={tab.value} value={tab.value} className="w-3/4">
+          <div className="flex flex-col gap-y-8 pt-16">
             <div className="flex h-16 w-full items-center rounded-2xl bg-gray-200 px-4">
               <p className="font-bold">House score list (With introduction)</p>
             </div>

@@ -60,7 +60,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="sticky top-0 z-40 bg-gray-300 px-9">
+      <div className="sticky top-0 z-40 bg-gray-300">
         <div className="flex h-20 items-center justify-between">
           <a
             href="/"
@@ -77,7 +77,7 @@ export default function Header() {
             </p>
           </a>
 
-          <div className="md:hidden">
+          <div className="pr-9 md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Menu className="h-6 w-6 hover:text-gray-500" />
@@ -136,7 +136,7 @@ export default function Header() {
             {userInfo ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
+                  <div className="flex items-center justify-center  text-gray-500 hover:cursor-pointer hover:text-gray-600">
                     <UserCircle className="h-7 w-7" />
                   </div>
                 </DropdownMenuTrigger>
