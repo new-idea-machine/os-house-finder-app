@@ -22,7 +22,6 @@ import {
   DialogTrigger,
   DialogClose,
 } from '@/components/ui/dialog';
-
 import { Slider } from '@/components/ui/slider';
 
 type AddNewProfileProps = {
@@ -302,7 +301,6 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
                 )}
               />
               <hr className="bg-black" />
-              <FormMessage />
             </div>
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
@@ -313,6 +311,7 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
                     type="submit"
                     onClick={(e) => {
                       if (!form.formState.isValid) {
+                        form.trigger();
                         e.preventDefault();
                       }
                     }}

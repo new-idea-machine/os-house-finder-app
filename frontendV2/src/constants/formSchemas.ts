@@ -74,20 +74,14 @@ export const profileFormSchema = z
         message: 'Weight must be at most 100.',
       }),
   })
-  .refine(
-    (data) => {
-      if (
-        data.squareFootageMax >= data.squareFootageMin &&
-        data.travelRequirementMax >= data.travelRequirementMin
-      ) {
-        return true;
-      }
-      return false;
-    },
-    {
-      message: 'Max must be greater than or equal to min.',
-    }
-  );
+  .refine((data) => data.travelRequirementMax >= data.travelRequirementMin, {
+    path: ['travelRequirementMax'],
+    message: 'Max must be greater than or equal to min.',
+  })
+  .refine((data) => data.squareFootageMax >= data.squareFootageMin, {
+    path: ['squareFootageMax'],
+    message: 'Max must be greater than or equal to min.',
+  });
 
 export const loginFormSchema = z
   .object({
