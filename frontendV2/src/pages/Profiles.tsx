@@ -27,6 +27,7 @@ import {
 } from '@components/ui/dropdown';
 import { Button } from '@components/ui/button';
 import { MoreHorizontal } from 'lucide-react';
+import AddNewProperty from '@components/NewProfile/AddNewProperty';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type ProfileTableDataType = {
@@ -115,6 +116,9 @@ const mockHouseTableData: ProfileTableDataType[] = [
 ];
 
 export default function Profiles() {
+  const [properties, setProperties] =
+    useState<ProfileTableDataType[]>(mockHouseTableData);
+
   const [tabs, setTabs] = useState<ProfileTabType[]>([
     {
       profileName: 'Profile 1',
@@ -178,7 +182,7 @@ export default function Profiles() {
     },
   ]);
   const table = useReactTable({
-    data: mockHouseTableData,
+    data: properties,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -194,7 +198,7 @@ export default function Profiles() {
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="mx-4 justify-start bg-white py-2 text-xl text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+              className="mx-4 justify-start bg-white py-2 text-xl text-primary hover:scale-95 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
             </TabsTrigger>
@@ -204,9 +208,9 @@ export default function Profiles() {
       </TabsList>
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
-          <div className="flex flex-col">
-            <div className="flex w-full items-center px-4">
-              <h3 className="text-2xl font-bold text-gray-400">
+          <div className="flex flex-col space-y-4">
+            <div className="mt-3 flex w-full items-center">
+              <h3 className="text-3xl font-bold text-gray-400">
                 {tab.profileName}
               </h3>
               <div className="ml-auto flex gap-5">
@@ -226,7 +230,11 @@ export default function Profiles() {
                 </Button>
               </div>
             </div>
-            <p className="font-bold">House score list (With introduction)</p>
+            <p className="font-bold text-gray-400">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt
+            </p>
+            <AddNewProperty />
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
                 <TableHeader className="border-b-2 bg-gray-300 bg-opacity-20">

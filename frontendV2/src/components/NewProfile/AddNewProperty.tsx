@@ -49,7 +49,7 @@ function AddNewProperty() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="mx-9 w-[88%] text-xs md:text-sm lg:text-base">
+        <Button className=" w-fit self-end text-xs hover:text-gray-700 md:text-sm lg:text-base">
           + Add Property
         </Button>
       </DialogTrigger>

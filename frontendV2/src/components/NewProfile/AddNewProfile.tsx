@@ -68,7 +68,7 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mx-9 w-[88%] text-xs md:text-sm lg:text-base">
+        <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
           + Add New Profile
         </Button>
       </DialogTrigger>
@@ -78,10 +78,10 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="h-[35rem] w-full overflow-auto no-scrollbar"
           >
-            <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg bg-[#dcdcdc] p-5">
+            <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg border-b-2 bg-secondary p-5">
               <DialogTitle>New Profile</DialogTitle>
             </DialogHeader>
-            <div className="mt-0 flex flex-col space-y-8 rounded-md bg-[#efefef] p-10">
+            <div className="mt-0 flex flex-col space-y-8 rounded-md bg-secondary p-10">
               <FormField
                 control={form.control}
                 name="profileName"
@@ -304,10 +304,10 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
             </div>
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
-              <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
+              <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg border-t-2 bg-secondary  p-3">
                 <DialogClose asChild>
                   <Button
-                    className="w-24 bg-primary text-sm"
+                    className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
                       if (!form.formState.isValid) {
@@ -321,7 +321,7 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
                   </Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button className="ml-3 w-24 bg-[#cccccc] text-sm">
+                  <Button className="ml-3 w-24 bg-[#cccccc] text-sm hover:text-stone-600">
                     CLOSE
                   </Button>
                 </DialogClose>
