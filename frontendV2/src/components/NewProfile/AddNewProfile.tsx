@@ -47,7 +47,6 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    console.log(values);
     const newTab = {
       profileName: values.profileName,
       value: values.profileName.toLowerCase(),
@@ -62,7 +61,6 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
     };
     const newTabs = [...currentTabs, newTab];
     addTab(newTabs);
-    console.log('Added new tab!');
   }
 
   return (

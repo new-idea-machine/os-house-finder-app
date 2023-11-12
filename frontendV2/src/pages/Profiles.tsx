@@ -30,7 +30,7 @@ import { MoreHorizontal } from 'lucide-react';
 import AddNewProperty from '@components/NewProfile/AddNewProperty';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type ProfileTableDataType = {
+export type PropertyDataType = {
   address: string;
   score: number;
   vfm: number;
@@ -40,7 +40,7 @@ export type ProfileTabType = ProfileFormValues & {
   value: string;
 };
 
-export const columns: ColumnDef<ProfileTableDataType>[] = [
+export const columns: ColumnDef<PropertyDataType>[] = [
   {
     accessorKey: 'address',
     header: () => {
@@ -89,7 +89,7 @@ export const columns: ColumnDef<ProfileTableDataType>[] = [
   },
 ];
 
-const mockHouseTableData: ProfileTableDataType[] = [
+const mockHouseTableData: PropertyDataType[] = [
   {
     address: '485 Broadway',
     score: 78,
@@ -117,7 +117,7 @@ const mockHouseTableData: ProfileTableDataType[] = [
 
 export default function Profiles() {
   const [properties, setProperties] =
-    useState<ProfileTableDataType[]>(mockHouseTableData);
+    useState<PropertyDataType[]>(mockHouseTableData);
 
   const [tabs, setTabs] = useState<ProfileTabType[]>([
     {
@@ -234,7 +234,10 @@ export default function Profiles() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt
             </p>
-            <AddNewProperty />
+            <AddNewProperty
+              currentProperties={properties}
+              addProperty={setProperties}
+            />
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
                 <TableHeader className="border-b-2 bg-gray-300 bg-opacity-20">
