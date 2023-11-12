@@ -307,11 +307,12 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
               <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
                 <DialogClose asChild>
                   <Button
-                    className="w-24 bg-[#cccccc] text-sm"
+                    className="w-24 bg-primary text-sm"
                     type="submit"
                     onClick={(e) => {
                       if (!form.formState.isValid) {
                         form.trigger();
+
                         e.preventDefault();
                       }
                     }}

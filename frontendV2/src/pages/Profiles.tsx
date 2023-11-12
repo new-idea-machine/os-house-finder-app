@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
+import { FiEdit } from 'react-icons/fi';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import {
   ColumnDef,
   flexRender,
@@ -187,12 +189,12 @@ export default function Profiles() {
       className="flex h-full max-w-none animate-in animate-out"
     >
       <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
-        <section className="mt-8 flex w-full flex-col space-y-4">
+        <section className="mt-8 flex w-full flex-col space-y-3">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="mx-4 bg-primary text-xl text-white data-[state=active]:bg-secondary data-[state=active]:text-white"
+              className="mx-4 justify-start bg-white py-2 text-xl text-primary data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
             </TabsTrigger>
@@ -201,11 +203,30 @@ export default function Profiles() {
         <AddNewProfile currentTabs={tabs} addTab={setTabs} />
       </TabsList>
       {tabs.map((tab) => (
-        <TabsContent key={tab.value} value={tab.value} className="w-3/4">
-          <div className="flex flex-col gap-y-8 pt-16">
-            <div className="flex h-16 w-full items-center rounded-2xl bg-gray-200 px-4">
-              <p className="font-bold">House score list (With introduction)</p>
+        <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
+          <div className="flex flex-col">
+            <div className="flex w-full items-center px-4">
+              <h3 className="text-2xl font-bold text-gray-400">
+                {tab.profileName}
+              </h3>
+              <div className="ml-auto flex gap-5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full bg-primary"
+                >
+                  <FiEdit size="1.2rem" className="text-white" />
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="mr-4 rounded-full"
+                >
+                  <RiDeleteBinLine size="1.4rem" />
+                </Button>
+              </div>
             </div>
+            <p className="font-bold">House score list (With introduction)</p>
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
                 <TableHeader className="border-b-2 bg-gray-300 bg-opacity-20">
