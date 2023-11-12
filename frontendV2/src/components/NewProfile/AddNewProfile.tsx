@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
+import { FiEdit } from 'react-icons/fi';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import {
@@ -26,22 +27,29 @@ import { Slider } from '@/components/ui/slider';
 
 type AddNewProfileProps = {
   currentTabs: ProfileTabType[];
+  defualtTab: ProfileTabType;
   addTab: React.Dispatch<ProfileTabType[]>;
+  type: 'update' | 'create';
 };
 
-function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
+function AddNewProfile({
+  currentTabs,
+  addTab,
+  defualtTab,
+  type,
+}: AddNewProfileProps) {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      profileName: '',
-      squareFootageWeight: 0,
-      squareFootageMin: 0,
-      squareFootageMax: 0,
-      bedroomWeight: 0,
-      bedroomAmount: 0,
-      travelRequirementWeight: 0,
-      travelRequirementMin: 0,
-      travelRequirementMax: 0,
+      profileName: defualtTab.profileName,
+      squareFootageWeight: defualtTab.squareFootageWeight,
+      squareFootageMin: defualtTab.squareFootageMin,
+      squareFootageMax: defualtTab.squareFootageMax,
+      bedroomWeight: defualtTab.bedroomWeight,
+      bedroomAmount: defualtTab.bedroomAmount,
+      travelRequirementWeight: defualtTab.travelRequirementWeight,
+      travelRequirementMin: defualtTab.travelRequirementMin,
+      travelRequirementMax: defualtTab.travelRequirementMax,
     },
   });
 
@@ -59,16 +67,38 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
       travelRequirementMin: values.travelRequirementMin,
       travelRequirementMax: values.travelRequirementMax,
     };
-    const newTabs = [...currentTabs, newTab];
+
+    let newTabs: ProfileTabType[] = [];
+
+    // if type is update, renew tabs when the tab has same value
+    // when type is create, leave the new tab as last element
+    if (type === 'update') {
+      newTabs = currentTabs.map((tab) => {
+        return tab.value === defualtTab.value ? newTab : tab;
+      });
+    } else if (type === 'create') {
+      newTabs = [...currentTabs, newTab];
+    }
+
     addTab(newTabs);
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
-          + Add New Profile
-        </Button>
+        {defualtTab.profileName === '' ? (
+          <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
+            + Add New Profile
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full bg-primary"
+          >
+            <FiEdit size="1.2rem" className="text-white" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="p-0">
         <Form {...form}>

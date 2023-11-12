@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
-import { FiEdit } from 'react-icons/fi';
 import { RiDeleteBinLine } from 'react-icons/ri';
 import {
   ColumnDef,
@@ -181,6 +180,20 @@ export default function Profiles() {
       travelRequirementMax: 0,
     },
   ]);
+
+  const defaultTab = {
+    profileName: '',
+    value: '',
+    squareFootageWeight: 0,
+    squareFootageMin: 0,
+    squareFootageMax: 0,
+    bedroomWeight: 0,
+    bedroomAmount: 0,
+    travelRequirementWeight: 0,
+    travelRequirementMin: 0,
+    travelRequirementMax: 0,
+  };
+
   const table = useReactTable({
     data: properties,
     columns,
@@ -204,7 +217,12 @@ export default function Profiles() {
             </TabsTrigger>
           ))}
         </section>
-        <AddNewProfile currentTabs={tabs} addTab={setTabs} />
+        <AddNewProfile
+          currentTabs={tabs}
+          addTab={setTabs}
+          defualtTab={defaultTab}
+          type="create"
+        />
       </TabsList>
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
@@ -214,17 +232,19 @@ export default function Profiles() {
                 {tab.profileName}
               </h3>
               <div className="ml-auto flex gap-5">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full bg-primary"
-                >
-                  <FiEdit size="1.2rem" className="text-white" />
-                </Button>
+                <AddNewProfile
+                  currentTabs={tabs}
+                  addTab={setTabs}
+                  defualtTab={tab}
+                  type="update"
+                />
                 <Button
                   variant="destructive"
                   size="icon"
                   className="mr-4 rounded-full"
+                  onClick={() => {
+                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                  }}
                 >
                   <RiDeleteBinLine size="1.4rem" />
                 </Button>
