@@ -230,30 +230,6 @@ export default function Profiles() {
           defualtTab={defaultTab}
         />
       </TabsList>
-      {/* {tabs.map((tab) => (
-        <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
-          <div className="flex flex-col space-y-4">
-            <div className="mt-3 flex w-full items-center">
-              <h3 className="text-3xl font-bold text-gray-400">
-                {tab.profileName}
-              </h3>
-              <div className="ml-auto flex gap-5">
-                <AddNewProfile
-                  currentTabs={tabs}
-                  addTab={setTabs}
-                  defualtTab={tab}
-                />
-                <Button
-                  variant="destructive"
-                  size="icon"
-                  className="mr-4 rounded-full"
-                  onClick={() => {
-                    setTabs(tabs.filter((t) => t.value !== tab.value));
-                  }}
-                >
-                  <RiDeleteBinLine size="1.4rem" />
-                </Button>
-              </div> */}
       {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
           <div className="flex flex-col gap-y-8">
