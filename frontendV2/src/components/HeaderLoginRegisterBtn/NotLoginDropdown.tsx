@@ -22,7 +22,7 @@ function NotLoginDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
+        <div className="flex items-center justify-center pr-9 text-gray-500 hover:cursor-pointer hover:text-gray-600">
           <UserCircle className="h-7 w-7" />
         </div>
       </DropdownMenuTrigger>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
+import { RiDeleteBinLine } from 'react-icons/ri';
 import {
   ColumnDef,
   flexRender,
@@ -24,19 +25,18 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown';
 import { Button } from '@components/ui/button';
+import AddNewProperty from '@components/NewProfile/AddNewProperty';
 import {
   ExternalLink,
   Eye,
   FileImage,
   MoreHorizontal,
-  PenSquare,
-  Plus,
   Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-type ProfileTableDataType = {
+export type PropertyDataType = {
   address: string;
   score: number;
   vfm: number;
@@ -46,7 +46,7 @@ export type ProfileTabType = ProfileFormValues & {
   value: string;
 };
 
-export const columns: ColumnDef<ProfileTableDataType>[] = [
+export const columns: ColumnDef<PropertyDataType>[] = [
   {
     accessorKey: 'address',
     header: () => {
@@ -95,7 +95,7 @@ export const columns: ColumnDef<ProfileTableDataType>[] = [
   },
 ];
 
-const mockHouseTableData: ProfileTableDataType[] = [
+const mockHouseTableData: PropertyDataType[] = [
   {
     address: '485 Broadway',
     score: 78,
@@ -122,6 +122,9 @@ const mockHouseTableData: ProfileTableDataType[] = [
 ];
 
 export default function Profiles() {
+  const [properties, setProperties] =
+    useState<PropertyDataType[]>(mockHouseTableData);
+
   const [tabs, setTabs] = useState<ProfileTabType[]>([
     {
       profileName: 'Profile 1',
@@ -184,63 +187,84 @@ export default function Profiles() {
       travelRequirementMax: 0,
     },
   ]);
+
+  const defaultTab = {
+    profileName: '',
+    value: '',
+    squareFootageWeight: 0,
+    squareFootageMin: 0,
+    squareFootageMax: 0,
+    bedroomWeight: 0,
+    bedroomAmount: 0,
+    travelRequirementWeight: 0,
+    travelRequirementMin: 0,
+    travelRequirementMax: 0,
+  };
+
   const table = useReactTable({
-    data: mockHouseTableData,
+    data: properties,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
 
   return (
     <Tabs
-      defaultValue="profile1"
-      className="flex h-full max-w-none px-9 animate-in animate-out"
+      defaultValue={tabs[0].value}
+      className="flex h-full max-w-none animate-in animate-out"
     >
-      <TabsList
-        className="flex h-full min-h-[85vh] flex-col justify-between rounded-none border-r-2
-      border-primary bg-white"
-      >
-        <section className="mt-8 flex w-full flex-col space-y-4">
-          <h2 className="mx-4 text-2xl font-bold">Profiles</h2>
+      <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
+        <section className="mt-8 flex w-full flex-col space-y-3">
           {tabs.map((tab) => (
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="mx-4 bg-primary text-xl text-white data-[state=active]:bg-secondary data-[state=active]:text-white"
+              className="mx-4 justify-start bg-white py-2 text-xl text-primary hover:scale-95 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
             </TabsTrigger>
           ))}
         </section>
-        <AddNewProfile currentTabs={tabs} addTab={setTabs} />
+        <AddNewProfile
+          currentTabs={tabs}
+          addTab={setTabs}
+          defualtTab={defaultTab}
+        />
       </TabsList>
-      {tabs.map((tab, index) => (
-        <TabsContent key={tab.value} value={tab.value} className="w-full p-3">
+      {tabs.map((tab) => (
+        <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
           <div className="flex flex-col gap-y-8">
             <div className="flex justify-between space-y-3">
-              <div>
-                <p className="text-4xl font-bold">Profile {index + 1}</p>
-                <p className="font-semibold">
+              <div className="space-y-3">
+                <h3 className="text-3xl font-bold text-gray-400">
+                  {tab.profileName}
+                </h3>
+                <p className="font-semibold text-gray-400">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
                   do eiusmod tempor incididunt{' '}
                 </p>
               </div>
-              <div className="space-x-2">
-                <Button size="icon" className="rounded-full bg-gray-500">
-                  <PenSquare className="h-5 w-5" />
-                </Button>
-                <Button size="icon" className="rounded-full bg-destructive">
-                  <Trash2 className="h-5 w-5" />
-                </Button>
-                <Button size="icon" className="rounded-full bg-gray-500">
-                  <Eye className="h-5 w-5" />
+              <div className="ml-auto flex gap-5">
+                <AddNewProfile
+                  currentTabs={tabs}
+                  addTab={setTabs}
+                  defualtTab={tab}
+                />
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="mr-4 rounded-full"
+                  onClick={() => {
+                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                  }}
+                >
+                  <RiDeleteBinLine size="1.4rem" />
                 </Button>
               </div>
             </div>
-            <div className="flex justify-end">
-              <Button size="default" className="bg-gray-500">
-                <Plus className="mr-2 h-5 w-5" /> Add Property
-              </Button>
-            </div>
+            <AddNewProperty
+              currentProperties={properties}
+              addProperty={setProperties}
+            />
             <div>
               <Card className="rounded-none border-black bg-gray-100 shadow-none">
                 <CardContent className="flex justify-between py-2">
@@ -279,6 +303,10 @@ export default function Profiles() {
                 </CardContent>
               </Card>
             </div>
+            <p className="font-bold text-gray-400">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt
+            </p>
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
                 <TableHeader className="border-b-2 bg-gray-300 bg-opacity-20">

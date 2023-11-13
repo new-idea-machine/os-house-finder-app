@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -13,6 +12,7 @@ import {
   FormMessage,
 } from '@components/ui/form';
 import { propertyFormSchema } from '@constants/formSchemas';
+import { PropertyDataType } from '@pages/Profiles';
 import {
   Dialog,
   DialogContent,
@@ -23,33 +23,38 @@ import {
   DialogClose,
 } from '@/components/ui/dialog';
 
-import { Slider } from '@/components/ui/slider';
+type AddNewPropertyProps = {
+  currentProperties: PropertyDataType[];
+  addProperty: React.Dispatch<React.SetStateAction<PropertyDataType[]>>;
+};
 
-function AddNewProperty() {
-  const [open, setOpen] = useState(false); // use to close dialog after submitting is successful
-
+function AddNewProperty({
+  currentProperties,
+  addProperty,
+}: AddNewPropertyProps) {
   const form = useForm<z.infer<typeof propertyFormSchema>>({
     resolver: zodResolver(propertyFormSchema),
     defaultValues: {
-      propertyURL: '',
-      customVariable: 0,
+      address: '',
+      score: 0,
+      vfm: 10,
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof propertyFormSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    // eslint-disable-next-line no-console
-    console.log(values);
-    console.log('Added new property!');
-    setOpen(false); // close dialog after submitting is successful
+    const newProperty: PropertyDataType = {
+      address: values.address,
+      score: values.score,
+      vfm: values.vfm,
+    };
+    addProperty([...currentProperties, newProperty]);
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
-        <Button className="mx-9 w-[88%] text-xs md:text-sm lg:text-base">
+        <Button className=" w-fit self-end text-xs hover:text-gray-700 md:text-sm lg:text-base">
           + Add Property
         </Button>
       </DialogTrigger>
@@ -65,10 +70,10 @@ function AddNewProperty() {
             <div className="mt-0 flex flex-col space-y-8 rounded-md bg-[#efefef] px-10 py-5">
               <FormField
                 control={form.control}
-                name="propertyURL"
+                name="address"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-bold">Name</FormLabel>
+                    <FormLabel className="font-bold">Address</FormLabel>
                     <FormControl>
                       <Input
                         className="bg-white"
@@ -97,12 +102,36 @@ function AddNewProperty() {
               <h3 className="mb-2 mt-0 font-bold">Custom Variable #1</h3>
               <FormField
                 control={form.control}
-                name="customVariable"
+                name="score"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-bold">Score out of 10</FormLabel>
+                    <FormLabel className="font-bold">
+                      Score out of 100
+                    </FormLabel>
                     <FormControl>
                       <Input
+                        type="number"
+                        className="bg-white"
+                        placeholder="Profile Name"
+                        {...field}
+                        onChange={(event) =>
+                          field.onChange(+event.target.value)
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="vfm"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Value for Money</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="number"
                         className="bg-white"
                         placeholder="Profile Name"
                         {...field}
@@ -119,9 +148,19 @@ function AddNewProperty() {
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
               <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
-                <Button className="w-24 bg-[#cccccc] text-sm" type="submit">
-                  ADD
-                </Button>
+                <DialogClose asChild>
+                  <Button
+                    className="w-24 bg-[#cccccc] text-sm"
+                    type="submit"
+                    onClick={(e) => {
+                      if (!form.formState.isValid) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    ADD
+                  </Button>
+                </DialogClose>
                 <DialogClose asChild>
                   <Button className="ml-3 w-24 bg-[#cccccc] text-sm">
                     CLOSE

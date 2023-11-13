@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
+import { FiEdit } from 'react-icons/fi';
 import { Button } from '@components/ui/button';
 import { Input } from '@components/ui/input';
 import {
@@ -26,28 +27,32 @@ import { Slider } from '@/components/ui/slider';
 
 type AddNewProfileProps = {
   currentTabs: ProfileTabType[];
+  defualtTab: ProfileTabType;
   addTab: React.Dispatch<ProfileTabType[]>;
 };
 
-function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
+function AddNewProfile({
+  currentTabs,
+  addTab,
+  defualtTab,
+}: AddNewProfileProps) {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
-      profileName: '',
-      squareFootageWeight: 0,
-      squareFootageMin: 0,
-      squareFootageMax: 0,
-      bedroomWeight: 0,
-      bedroomAmount: 0,
-      travelRequirementWeight: 0,
-      travelRequirementMin: 0,
-      travelRequirementMax: 0,
+      profileName: defualtTab.profileName,
+      squareFootageWeight: defualtTab.squareFootageWeight,
+      squareFootageMin: defualtTab.squareFootageMin,
+      squareFootageMax: defualtTab.squareFootageMax,
+      bedroomWeight: defualtTab.bedroomWeight,
+      bedroomAmount: defualtTab.bedroomAmount,
+      travelRequirementWeight: defualtTab.travelRequirementWeight,
+      travelRequirementMin: defualtTab.travelRequirementMin,
+      travelRequirementMax: defualtTab.travelRequirementMax,
     },
   });
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    console.log(values);
     const newTab = {
       profileName: values.profileName,
       value: values.profileName.toLowerCase(),
@@ -60,17 +65,38 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
       travelRequirementMin: values.travelRequirementMin,
       travelRequirementMax: values.travelRequirementMax,
     };
-    const newTabs = [...currentTabs, newTab];
+
+    let newTabs: ProfileTabType[] = [];
+
+    // if tab value is empty string, then new created tab will the be last element of all tabs
+    // if tab value is not empty string, then tabs should be renewed
+    if (defualtTab.value === '') {
+      newTabs = [...currentTabs, newTab];
+    } else {
+      newTabs = currentTabs.map((tab) => {
+        return tab.value === defualtTab.value ? newTab : tab;
+      });
+    }
+
     addTab(newTabs);
-    console.log('Added new tab!');
   }
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="mx-9 w-[88%] text-xs md:text-sm lg:text-base">
-          + Add New Profile
-        </Button>
+        {defualtTab.profileName === '' ? (
+          <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
+            + Add New Profile
+          </Button>
+        ) : (
+          <Button
+            variant="ghost"
+            size="icon"
+            className="rounded-full bg-primary"
+          >
+            <FiEdit size="1.2rem" className="text-white" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="p-0">
         <Form {...form}>
@@ -78,10 +104,10 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
             onSubmit={form.handleSubmit(onSubmit)}
             className="h-[35rem] w-full overflow-auto no-scrollbar"
           >
-            <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg bg-[#dcdcdc] p-5">
+            <DialogHeader className="sticky top-0  m-0 w-full rounded-t-lg border-b-2 bg-secondary p-5">
               <DialogTitle>New Profile</DialogTitle>
             </DialogHeader>
-            <div className="mt-0 flex flex-col space-y-8 rounded-md bg-[#efefef] p-10">
+            <div className="mt-0 flex flex-col space-y-8 rounded-md bg-secondary p-10">
               <FormField
                 control={form.control}
                 name="profileName"
@@ -304,14 +330,15 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
             </div>
             {/* Form Buttons */}
             <DialogFooter className="sticky bottom-0">
-              <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg bg-[#dcdcdc]  p-3">
+              <div className="sticky bottom-0 flex w-full flex-row justify-end rounded-b-lg border-t-2 bg-secondary  p-3">
                 <DialogClose asChild>
                   <Button
-                    className="w-24 bg-[#cccccc] text-sm"
+                    className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
                       if (!form.formState.isValid) {
                         form.trigger();
+
                         e.preventDefault();
                       }
                     }}
@@ -320,7 +347,7 @@ function AddNewProfile({ currentTabs, addTab }: AddNewProfileProps) {
                   </Button>
                 </DialogClose>
                 <DialogClose asChild>
-                  <Button className="ml-3 w-24 bg-[#cccccc] text-sm">
+                  <Button className="ml-3 w-24 bg-[#cccccc] text-sm hover:text-stone-600">
                     CLOSE
                   </Button>
                 </DialogClose>

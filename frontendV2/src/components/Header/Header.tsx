@@ -60,7 +60,7 @@ export default function Header() {
 
   return (
     <header>
-      <div className="sticky top-0 z-40 bg-gray-300 px-9">
+      <div className="sticky top-0 z-40 bg-secondary">
         <div className="flex h-20 items-center justify-between">
           <a
             href="/"
@@ -72,12 +72,12 @@ export default function Header() {
               alt="HouseFinder"
               className="rounded-sm"
             />
-            <p className="text-sm sm:text-base lg:text-lg xl:text-3xl">
+            <p className="text-sm hover:scale-95 sm:text-base lg:text-lg xl:text-3xl">
               HouseFinder
             </p>
           </a>
 
-          <div className="md:hidden">
+          <div className="pr-9 md:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Menu className="h-6 w-6 hover:text-gray-500" />
@@ -120,13 +120,13 @@ export default function Header() {
                     key={menuItem.title}
                     href={menuItem.href}
                     className={cn(
-                      'relative flex h-full items-center justify-center hover:bg-gray-400 md:w-24 md:text-sm lg:w-32 lg:text-base xl:w-40 xl:text-lg',
+                      'relative flex h-full items-center justify-center hover:scale-95 hover:bg-gray-400 md:w-24 md:text-sm lg:w-32 lg:text-base xl:w-40 xl:text-lg',
                       location.pathname.startsWith(menuItem.href) &&
-                        'bg-gray-400'
+                        'bg-gray-500 text-white'
                     )}
                   >
                     {location.pathname.startsWith(menuItem.href) && (
-                      <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-gray-500" />
+                      <div className="absolute top-[calc(50%+34px)] z-50 h-1.5 w-full bg-gray-600" />
                     )}
                     <div>{menuItem.title}</div>
                   </a>
@@ -136,7 +136,7 @@ export default function Header() {
             {userInfo ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <div className="flex items-center justify-center text-gray-500 hover:cursor-pointer hover:text-gray-600">
+                  <div className="flex items-center justify-center  text-gray-500 hover:cursor-pointer hover:text-gray-600">
                     <UserCircle className="h-7 w-7" />
                   </div>
                 </DropdownMenuTrigger>

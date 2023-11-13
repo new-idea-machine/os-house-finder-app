@@ -136,21 +136,22 @@ export const registerFormSchema = z
   });
 
 export const propertyFormSchema = z.object({
-  propertyURL: z
+  address: z
     .string()
     .min(1, {
-      message: 'Profile name must be at least 1 character.',
+      message: 'Address must be at least 1 character.',
     })
     .max(100, {
-      message: 'Profile name must be at most 100 character.',
+      message: 'Address must be at most 100 character.',
     }),
-  customVariable: z // Square Footage Input
+  score: z
     .number()
     .min(1, {
       message: 'Weight must be at least 1.',
     })
-    .max(10, {
+    .max(100, {
       message: 'Weight must be at most 100.',
     })
     .default(0),
+  vfm: z.number(),
 });
