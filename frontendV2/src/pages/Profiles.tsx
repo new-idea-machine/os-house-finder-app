@@ -25,8 +25,15 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown';
 import { Button } from '@components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
 import AddNewProperty from '@components/NewProfile/AddNewProperty';
+import {
+  ExternalLink,
+  Eye,
+  FileImage,
+  MoreHorizontal,
+  Trash2,
+} from 'lucide-react';
+import { Card, CardContent } from '@components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export type PropertyDataType = {
@@ -223,7 +230,7 @@ export default function Profiles() {
           defualtTab={defaultTab}
         />
       </TabsList>
-      {tabs.map((tab) => (
+      {/* {tabs.map((tab) => (
         <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
           <div className="flex flex-col space-y-4">
             <div className="mt-3 flex w-full items-center">
@@ -246,16 +253,84 @@ export default function Profiles() {
                 >
                   <RiDeleteBinLine size="1.4rem" />
                 </Button>
+              </div> */}
+      {tabs.map((tab) => (
+        <TabsContent key={tab.value} value={tab.value} className="w-3/4 px-4">
+          <div className="flex flex-col gap-y-8">
+            <div className="flex justify-between space-y-3">
+              <div className="space-y-3">
+                <h3 className="text-3xl font-bold text-gray-400">
+                  {tab.profileName}
+                </h3>
+                <p className="font-semibold text-gray-400">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt{' '}
+                </p>
               </div>
+              <div className="ml-auto flex gap-5">
+                <AddNewProfile
+                  currentTabs={tabs}
+                  addTab={setTabs}
+                  defualtTab={tab}
+                />
+                <Button
+                  variant="destructive"
+                  size="icon"
+                  className="mr-4 rounded-full"
+                  onClick={() => {
+                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                  }}
+                >
+                  <RiDeleteBinLine size="1.4rem" />
+                </Button>
+              </div>
+            </div>
+            <AddNewProperty
+              currentProperties={properties}
+              addProperty={setProperties}
+            />
+            <div>
+              <Card className="rounded-none border-black bg-gray-100 shadow-none">
+                <CardContent className="flex justify-between py-2">
+                  <div className="flex space-x-5">
+                    <div className="flex h-16 w-20 items-center justify-center border-4 border-gray-400 bg-white">
+                      <FileImage className="text-gray-500" />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <p className="font-semibold text-black">180 Cedar</p>
+                      <p className="font-semibold text-black">
+                        St.Gloucester, ON, K1B 2P4
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex flex-col">
+                        <p className="font-bold text-black">House Score:</p>
+                        <p className="font-bold text-black">House VFM:</p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-black">78</p>
+                        <p className="font-bold text-black">10</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end space-x-2">
+                    <Button size="icon" className="rounded-full bg-gray-500">
+                      <Eye className="h-5 w-5" />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-gray-500">
+                      <ExternalLink className="h-5 w-5" />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-destructive">
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
             <p className="font-bold text-gray-400">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt
             </p>
-            <AddNewProperty
-              currentProperties={properties}
-              addProperty={setProperties}
-            />
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
                 <TableHeader className="border-b-2 bg-gray-300 bg-opacity-20">
