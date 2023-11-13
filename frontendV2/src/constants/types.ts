@@ -1,9 +1,4 @@
-import {
-  profileFormSchema,
-  loginFormSchema,
-  registerFormSchema,
-  propertyFormSchema,
-} from '@constants/formSchemas';
+import { profileFormSchema } from '@constants/formSchemas';
 import * as z from 'zod';
 
 export type Credentials = {

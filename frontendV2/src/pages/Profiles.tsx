@@ -221,7 +221,6 @@ export default function Profiles() {
           currentTabs={tabs}
           addTab={setTabs}
           defualtTab={defaultTab}
-          type="create"
         />
       </TabsList>
       {tabs.map((tab) => (
@@ -236,7 +235,6 @@ export default function Profiles() {
                   currentTabs={tabs}
                   addTab={setTabs}
                   defualtTab={tab}
-                  type="update"
                 />
                 <Button
                   variant="destructive"

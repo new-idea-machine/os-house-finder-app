@@ -29,14 +29,12 @@ type AddNewProfileProps = {
   currentTabs: ProfileTabType[];
   defualtTab: ProfileTabType;
   addTab: React.Dispatch<ProfileTabType[]>;
-  type: 'update' | 'create';
 };
 
 function AddNewProfile({
   currentTabs,
   addTab,
   defualtTab,
-  type,
 }: AddNewProfileProps) {
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -70,14 +68,14 @@ function AddNewProfile({
 
     let newTabs: ProfileTabType[] = [];
 
-    // if type is update, renew tabs when the tab has same value
-    // when type is create, leave the new tab as last element
-    if (type === 'update') {
+    // if tab value is empty string, then new created tab will the be last element of all tabs
+    // if tab value is not empty string, then tabs should be renewed
+    if (defualtTab.value === '') {
+      newTabs = [...currentTabs, newTab];
+    } else {
       newTabs = currentTabs.map((tab) => {
         return tab.value === defualtTab.value ? newTab : tab;
       });
-    } else if (type === 'create') {
-      newTabs = [...currentTabs, newTab];
     }
 
     addTab(newTabs);
