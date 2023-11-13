@@ -24,7 +24,16 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown';
 import { Button } from '@components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
+import {
+  ExternalLink,
+  Eye,
+  FileImage,
+  MoreHorizontal,
+  PenSquare,
+  Plus,
+  Trash2,
+} from 'lucide-react';
+import { Card, CardContent } from '@components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type ProfileTableDataType = {
@@ -204,15 +213,71 @@ export default function Profiles() {
         </section>
         <AddNewProfile currentTabs={tabs} addTab={setTabs} />
       </TabsList>
-      {tabs.map((tab) => (
-        <TabsContent
-          key={tab.value}
-          value={tab.value}
-          className="container w-full pt-4"
-        >
-          <div className="container flex flex-col gap-y-8 px-16 pt-16">
-            <div className="flex h-16 w-full items-center rounded-2xl bg-gray-200 px-4">
-              <p className="font-bold">House score list (With introduction)</p>
+      {tabs.map((tab, index) => (
+        <TabsContent key={tab.value} value={tab.value} className="w-full p-3">
+          <div className="flex flex-col gap-y-8">
+            <div className="flex justify-between space-y-3">
+              <div>
+                <p className="text-4xl font-bold">Profile {index + 1}</p>
+                <p className="font-semibold">
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                  do eiusmod tempor incididunt{' '}
+                </p>
+              </div>
+              <div className="space-x-2">
+                <Button size="icon" className="rounded-full bg-gray-500">
+                  <PenSquare className="h-5 w-5" />
+                </Button>
+                <Button size="icon" className="rounded-full bg-destructive">
+                  <Trash2 className="h-5 w-5" />
+                </Button>
+                <Button size="icon" className="rounded-full bg-gray-500">
+                  <Eye className="h-5 w-5" />
+                </Button>
+              </div>
+            </div>
+            <div className="flex justify-end">
+              <Button size="default" className="bg-gray-500">
+                <Plus className="mr-2 h-5 w-5" /> Add Property
+              </Button>
+            </div>
+            <div>
+              <Card className="rounded-none border-black bg-gray-100 shadow-none">
+                <CardContent className="flex justify-between py-2">
+                  <div className="flex space-x-5">
+                    <div className="flex h-16 w-20 items-center justify-center border-4 border-gray-400 bg-white">
+                      <FileImage className="text-gray-500" />
+                    </div>
+                    <div className="flex flex-col justify-center">
+                      <p className="font-semibold text-black">180 Cedar</p>
+                      <p className="font-semibold text-black">
+                        St.Gloucester, ON, K1B 2P4
+                      </p>
+                    </div>
+                    <div className="flex items-center justify-center space-x-4">
+                      <div className="flex flex-col">
+                        <p className="font-bold text-black">House Score:</p>
+                        <p className="font-bold text-black">House VFM:</p>
+                      </div>
+                      <div className="flex flex-col">
+                        <p className="font-bold text-black">78</p>
+                        <p className="font-bold text-black">10</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end space-x-2">
+                    <Button size="icon" className="rounded-full bg-gray-500">
+                      <Eye className="h-5 w-5" />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-gray-500">
+                      <ExternalLink className="h-5 w-5" />
+                    </Button>
+                    <Button size="icon" className="rounded-full bg-destructive">
+                      <Trash2 className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
             <div className="relative w-full overflow-auto rounded-lg border-2 border-primary">
               <Table>
