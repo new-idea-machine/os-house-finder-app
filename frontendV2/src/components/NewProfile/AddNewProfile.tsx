@@ -37,7 +37,7 @@ function AddNewProfile({
   addTab,
   defualtTab,
 }: AddNewProfileProps) {
-  const [isInputDuplicated, setisInputDuplicated] = useState(false);
+  // const [isInputDuplicated, setisInputDuplicated] = useState(false);
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -56,48 +56,61 @@ function AddNewProfile({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    console.log('current tabs: ', currentTabs);
+    // console.log('current tabs: ', currentTabs);
 
     // obtains an array of current existing profile names
-    const profileNamesArray = currentTabs.map((tab) => tab.profileName);
+    // const profileNamesArray = currentTabs.map((tab) => tab.profileName);
 
-    if (profileNamesArray.includes(values.profileName)) {
-      console.log('Profile Name Already Exists!');
-      // form.setError('profileName', {
-      //   type: 'manual',
-      //   message: 'Profile Name Already Exists!',
-      // });
-      setisInputDuplicated(true);
-      console.log('IsInputDuplicated: ', isInputDuplicated);
+    // if (profileNamesArray.includes(values.profileName)) {
+    //   console.log('Profile Name Already Exists!');
+    //   // form.setError('profileName', {
+    //   //   type: 'manual',
+    //   //   message: 'Profile Name Already Exists!',
+    //   // });
+    //   setisInputDuplicated(true);
+    //   console.log('IsInputDuplicated: ', isInputDuplicated);
+    // } else {
+    // setisInputDuplicated(false);
+
+    const newTab = {
+      profileName: values.profileName,
+      value: values.profileName.toLowerCase(),
+      squareFootageWeight: values.squareFootageWeight,
+      squareFootageMin: values.squareFootageMin,
+      squareFootageMax: values.squareFootageMax,
+      bedroomWeight: values.bedroomWeight,
+      bedroomAmount: values.bedroomAmount,
+      travelRequirementWeight: values.travelRequirementWeight,
+      travelRequirementMin: values.travelRequirementMin,
+      travelRequirementMax: values.travelRequirementMax,
+    };
+
+    let newTabs: ProfileTabType[] = [];
+
+    // if tab value is empty string, then new created tab will the be last element of all tabs
+    // if tab value is not empty string, then tabs should be renewed
+    if (defualtTab.value === '') {
+      newTabs = [...currentTabs, newTab];
     } else {
-      setisInputDuplicated(false);
-
-      const newTab = {
-        profileName: values.profileName,
-        value: values.profileName.toLowerCase(),
-        squareFootageWeight: values.squareFootageWeight,
-        squareFootageMin: values.squareFootageMin,
-        squareFootageMax: values.squareFootageMax,
-        bedroomWeight: values.bedroomWeight,
-        bedroomAmount: values.bedroomAmount,
-        travelRequirementWeight: values.travelRequirementWeight,
-        travelRequirementMin: values.travelRequirementMin,
-        travelRequirementMax: values.travelRequirementMax,
-      };
-
-      let newTabs: ProfileTabType[] = [];
-
-      // if tab value is empty string, then new created tab will the be last element of all tabs
-      // if tab value is not empty string, then tabs should be renewed
-      if (defualtTab.value === '') {
-        newTabs = [...currentTabs, newTab];
-      } else {
-        newTabs = currentTabs.map((tab) => {
-          return tab.value === defualtTab.value ? newTab : tab;
-        });
-      }
-      addTab(newTabs);
+      newTabs = currentTabs.map((tab) => {
+        return tab.value === defualtTab.value ? newTab : tab;
+      });
     }
+    addTab(newTabs);
+
+    // resets all input fields to the beginning
+    form.reset({
+      profileName: defualtTab.profileName,
+      squareFootageWeight: defualtTab.squareFootageWeight,
+      squareFootageMin: defualtTab.squareFootageMin,
+      squareFootageMax: defualtTab.squareFootageMax,
+      bedroomWeight: defualtTab.bedroomWeight,
+      bedroomAmount: defualtTab.bedroomAmount,
+      travelRequirementWeight: defualtTab.travelRequirementWeight,
+      travelRequirementMin: defualtTab.travelRequirementMin,
+      travelRequirementMax: defualtTab.travelRequirementMax,
+    });
+    // }
   }
 
   return (
@@ -143,6 +156,25 @@ function AddNewProfile({
                         className="bg-white"
                         placeholder="Profile Name"
                         {...field}
+                        // onChange={(event) => {
+                        //   field.onChange(event.target.value);
+                        //   setisInputDuplicated(() => {
+                        //     if (
+                        //       currentTabs
+                        //         .map((tab) => tab.profileName)
+                        //         .includes(event.target.value)
+                        //     ) {
+                        //       console.log('#1: ', true);
+                        //       return true;
+                        //     }
+                        //     console.log('#1: ', false);
+                        //     return false;
+                        //   });
+                        //   console.log(
+                        //     '#2 event.target.value: ',
+                        //     event.target.value
+                        //   );
+                        // }}
                       />
                     </FormControl>
                     {form.formState.errors.profileName && (
@@ -364,21 +396,25 @@ function AddNewProfile({
                     className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
-                      console.log(
-                        'ISINPURDUPLICATED IN CLICK: ',
-                        isInputDuplicated
-                      );
+                      // console.log(
+                      //   'ISINPURDUPLICATED IN CLICK: ',
+                      //   isInputDuplicated
+                      // );
 
-                      if (isInputDuplicated) {
+                      const profileNameTest = currentTabs
+                        .map((tab) => tab.profileName)
+                        .includes(form.getValues('profileName'));
+
+                      // console.log(profileNameTest);
+
+                      if (profileNameTest) {
                         form.setError('profileName', {
                           type: 'manual',
                           message: 'Profile Name Already Exists!',
                         });
                         // form.trigger();
                         e.preventDefault();
-                      }
-
-                      if (!form.formState.isValid || isInputDuplicated) {
+                      } else if (!form.formState.isValid) {
                         form.trigger();
                         e.preventDefault();
                       }
