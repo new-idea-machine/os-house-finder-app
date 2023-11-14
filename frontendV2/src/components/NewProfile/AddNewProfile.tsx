@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -36,6 +37,8 @@ function AddNewProfile({
   addTab,
   defualtTab,
 }: AddNewProfileProps) {
+  const [isDialogOpen, setDialogOpen] = useState(false);
+
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -53,37 +56,51 @@ function AddNewProfile({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    const newTab = {
-      profileName: values.profileName,
-      value: values.profileName.toLowerCase(),
-      squareFootageWeight: values.squareFootageWeight,
-      squareFootageMin: values.squareFootageMin,
-      squareFootageMax: values.squareFootageMax,
-      bedroomWeight: values.bedroomWeight,
-      bedroomAmount: values.bedroomAmount,
-      travelRequirementWeight: values.travelRequirementWeight,
-      travelRequirementMin: values.travelRequirementMin,
-      travelRequirementMax: values.travelRequirementMax,
-    };
+    console.log('current tabs: ', currentTabs);
 
-    let newTabs: ProfileTabType[] = [];
+    // obtains an array of current existing profile names
+    const profileNamesArray = currentTabs.map((tab) => tab.profileName);
 
-    // if tab value is empty string, then new created tab will the be last element of all tabs
-    // if tab value is not empty string, then tabs should be renewed
-    if (defualtTab.value === '') {
-      newTabs = [...currentTabs, newTab];
-    } else {
-      newTabs = currentTabs.map((tab) => {
-        return tab.value === defualtTab.value ? newTab : tab;
+    if (profileNamesArray.includes(values.profileName)) {
+      console.log('Profile Name Already Exists!');
+      form.setError('profileName', {
+        type: 'manual',
+        message: 'Profile Name Already Exists!',
       });
-    }
+    } else {
+      setDialogOpen(false);
 
-    addTab(newTabs);
+      const newTab = {
+        profileName: values.profileName,
+        value: values.profileName.toLowerCase(),
+        squareFootageWeight: values.squareFootageWeight,
+        squareFootageMin: values.squareFootageMin,
+        squareFootageMax: values.squareFootageMax,
+        bedroomWeight: values.bedroomWeight,
+        bedroomAmount: values.bedroomAmount,
+        travelRequirementWeight: values.travelRequirementWeight,
+        travelRequirementMin: values.travelRequirementMin,
+        travelRequirementMax: values.travelRequirementMax,
+      };
+
+      let newTabs: ProfileTabType[] = [];
+
+      // if tab value is empty string, then new created tab will the be last element of all tabs
+      // if tab value is not empty string, then tabs should be renewed
+      if (defualtTab.value === '') {
+        newTabs = [...currentTabs, newTab];
+      } else {
+        newTabs = currentTabs.map((tab) => {
+          return tab.value === defualtTab.value ? newTab : tab;
+        });
+      }
+      addTab(newTabs);
+    }
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
+    <Dialog isOpen={isDialogOpen} onDismiss={() => setDialogOpen(false)}>
+      <DialogTrigger asChild onClick={() => setDialogOpen(true)}>
         {defualtTab.profileName === '' ? (
           <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
             + Add New Profile
@@ -121,7 +138,11 @@ function AddNewProfile({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {form.formState.errors.profileName && (
+                      <FormMessage>
+                        {form.formState.errors.profileName.message}
+                      </FormMessage>
+                    )}
                   </FormItem>
                 )}
               />
@@ -336,7 +357,7 @@ function AddNewProfile({
                     className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
-                      if (!form.formState.isValid) {
+                      if (!form.formState.isValid && !isDialogOpen) {
                         form.trigger();
 
                         e.preventDefault();
