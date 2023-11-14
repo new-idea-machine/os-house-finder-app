@@ -37,7 +37,7 @@ function AddNewProfile({
   addTab,
   defualtTab,
 }: AddNewProfileProps) {
-  const [isDialogOpen, setDialogOpen] = useState(false);
+  const [isInputDuplicated, setisInputDuplicated] = useState(false);
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -63,12 +63,14 @@ function AddNewProfile({
 
     if (profileNamesArray.includes(values.profileName)) {
       console.log('Profile Name Already Exists!');
-      form.setError('profileName', {
-        type: 'manual',
-        message: 'Profile Name Already Exists!',
-      });
+      // form.setError('profileName', {
+      //   type: 'manual',
+      //   message: 'Profile Name Already Exists!',
+      // });
+      setisInputDuplicated(true);
+      console.log('IsInputDuplicated: ', isInputDuplicated);
     } else {
-      setDialogOpen(false);
+      setisInputDuplicated(false);
 
       const newTab = {
         profileName: values.profileName,
@@ -99,8 +101,13 @@ function AddNewProfile({
   }
 
   return (
-    <Dialog isOpen={isDialogOpen} onDismiss={() => setDialogOpen(false)}>
-      <DialogTrigger asChild onClick={() => setDialogOpen(true)}>
+    <Dialog
+    // isOpen={isDialogOpen} onDismiss={() => setDialogOpen(false)}
+    >
+      <DialogTrigger
+        asChild
+        // onClick={() => setDialogOpen(true)}
+      >
         {defualtTab.profileName === '' ? (
           <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
             + Add New Profile
@@ -357,9 +364,22 @@ function AddNewProfile({
                     className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
-                      if (!form.formState.isValid && !isDialogOpen) {
-                        form.trigger();
+                      console.log(
+                        'ISINPURDUPLICATED IN CLICK: ',
+                        isInputDuplicated
+                      );
 
+                      if (isInputDuplicated) {
+                        form.setError('profileName', {
+                          type: 'manual',
+                          message: 'Profile Name Already Exists!',
+                        });
+                        // form.trigger();
+                        e.preventDefault();
+                      }
+
+                      if (!form.formState.isValid || isInputDuplicated) {
+                        form.trigger();
                         e.preventDefault();
                       }
                     }}
