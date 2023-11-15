@@ -1,3 +1,4 @@
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -77,8 +78,20 @@ function AddNewProfile({
         return tab.value === defualtTab.value ? newTab : tab;
       });
     }
-
     addTab(newTabs);
+
+    // resets all input fields to the beginning
+    form.reset({
+      profileName: defualtTab.profileName,
+      squareFootageWeight: defualtTab.squareFootageWeight,
+      squareFootageMin: defualtTab.squareFootageMin,
+      squareFootageMax: defualtTab.squareFootageMax,
+      bedroomWeight: defualtTab.bedroomWeight,
+      bedroomAmount: defualtTab.bedroomAmount,
+      travelRequirementWeight: defualtTab.travelRequirementWeight,
+      travelRequirementMin: defualtTab.travelRequirementMin,
+      travelRequirementMax: defualtTab.travelRequirementMax,
+    });
   }
 
   return (
@@ -121,7 +134,11 @@ function AddNewProfile({
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    {form.formState.errors.profileName && (
+                      <FormMessage>
+                        {form.formState.errors.profileName.message}
+                      </FormMessage>
+                    )}
                   </FormItem>
                 )}
               />
@@ -336,7 +353,20 @@ function AddNewProfile({
                     className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
-                      if (!form.formState.isValid) {
+                      const profileNameTest = currentTabs
+                        .map((tab) => tab.profileName)
+                        .includes(form.getValues('profileName'));
+
+                      // console.log(profileNameTest);
+
+                      if (profileNameTest) {
+                        form.setError('profileName', {
+                          type: 'manual',
+                          message: 'Profile Name Already Exists!',
+                        });
+                        // form.trigger();
+                        e.preventDefault();
+                      } else if (!form.formState.isValid) {
                         form.trigger();
 
                         e.preventDefault();
