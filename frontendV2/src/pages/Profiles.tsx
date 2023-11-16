@@ -45,7 +45,7 @@ export type PropertyDataType = {
 export type ProfileTabType = ProfileFormValues & {
   value: string;
 };
-
+// eslint-disable-next-line
 export const columns: ColumnDef<PropertyDataType>[] = [
   {
     accessorKey: 'address',
@@ -261,12 +261,20 @@ export default function Profiles() {
                   className="mr-4 rounded-full"
                   onClick={() => {
                     setTabs((prevTabs) => {
-                      const updatedTabs = prevTabs.filter(
-                        (t) => t.value !== tab.value
-                      );
+                      let deletedIndex = 0;
+                      const updatedTabs = prevTabs.filter((t, index) => {
+                        if (t.value === tab.value) {
+                          deletedIndex = index;
+                          return false;
+                        }
+                        return true;
+                      });
 
-                      const newDefaultValue = updatedTabs[0].value;
-                      setCurrentTabValue(newDefaultValue);
+                      if (deletedIndex === 0) {
+                        setCurrentTabValue(updatedTabs[0].value);
+                      } else {
+                        setCurrentTabValue(updatedTabs[deletedIndex - 1].value);
+                      }
 
                       return updatedTabs;
                     });
