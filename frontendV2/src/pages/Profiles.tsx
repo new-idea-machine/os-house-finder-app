@@ -188,6 +188,8 @@ export default function Profiles() {
     },
   ]);
 
+  const [currentTabValue, setCurrentTabValue] = useState<string>(tabs[0].value);
+
   const defaultTab = {
     profileName: '',
     value: '',
@@ -210,6 +212,7 @@ export default function Profiles() {
   return (
     <Tabs
       defaultValue={tabs[0].value}
+      value={currentTabValue}
       className="flex h-full max-w-none animate-in animate-out"
     >
       <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
@@ -218,6 +221,9 @@ export default function Profiles() {
             <TabsTrigger
               key={tab.value}
               value={tab.value}
+              onClick={() => {
+                setCurrentTabValue(tab.value);
+              }}
               className="mx-4 justify-start bg-white py-2 text-xl text-primary hover:scale-95 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
@@ -254,7 +260,16 @@ export default function Profiles() {
                   size="icon"
                   className="mr-4 rounded-full"
                   onClick={() => {
-                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                    setTabs((prevTabs) => {
+                      const updatedTabs = prevTabs.filter(
+                        (t) => t.value !== tab.value
+                      );
+
+                      const newDefaultValue = updatedTabs[0].value;
+                      setCurrentTabValue(newDefaultValue);
+
+                      return updatedTabs;
+                    });
                   }}
                 >
                   <RiDeleteBinLine size="1.4rem" />
