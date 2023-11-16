@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -37,8 +37,6 @@ function AddNewProfile({
   addTab,
   defualtTab,
 }: AddNewProfileProps) {
-  // const [isInputDuplicated, setisInputDuplicated] = useState(false);
-
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
     defaultValues: {
@@ -56,22 +54,6 @@ function AddNewProfile({
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    // console.log('current tabs: ', currentTabs);
-
-    // obtains an array of current existing profile names
-    // const profileNamesArray = currentTabs.map((tab) => tab.profileName);
-
-    // if (profileNamesArray.includes(values.profileName)) {
-    //   console.log('Profile Name Already Exists!');
-    //   // form.setError('profileName', {
-    //   //   type: 'manual',
-    //   //   message: 'Profile Name Already Exists!',
-    //   // });
-    //   setisInputDuplicated(true);
-    //   console.log('IsInputDuplicated: ', isInputDuplicated);
-    // } else {
-    // setisInputDuplicated(false);
-
     const newTab = {
       profileName: values.profileName,
       value: values.profileName.toLowerCase(),
@@ -110,17 +92,11 @@ function AddNewProfile({
       travelRequirementMin: defualtTab.travelRequirementMin,
       travelRequirementMax: defualtTab.travelRequirementMax,
     });
-    // }
   }
 
   return (
-    <Dialog
-    // isOpen={isDialogOpen} onDismiss={() => setDialogOpen(false)}
-    >
-      <DialogTrigger
-        asChild
-        // onClick={() => setDialogOpen(true)}
-      >
+    <Dialog>
+      <DialogTrigger asChild>
         {defualtTab.profileName === '' ? (
           <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
             + Add New Profile
@@ -156,25 +132,6 @@ function AddNewProfile({
                         className="bg-white"
                         placeholder="Profile Name"
                         {...field}
-                        // onChange={(event) => {
-                        //   field.onChange(event.target.value);
-                        //   setisInputDuplicated(() => {
-                        //     if (
-                        //       currentTabs
-                        //         .map((tab) => tab.profileName)
-                        //         .includes(event.target.value)
-                        //     ) {
-                        //       console.log('#1: ', true);
-                        //       return true;
-                        //     }
-                        //     console.log('#1: ', false);
-                        //     return false;
-                        //   });
-                        //   console.log(
-                        //     '#2 event.target.value: ',
-                        //     event.target.value
-                        //   );
-                        // }}
                       />
                     </FormControl>
                     {form.formState.errors.profileName && (
@@ -396,11 +353,6 @@ function AddNewProfile({
                     className="w-24 bg-primary text-sm hover:text-stone-600"
                     type="submit"
                     onClick={(e) => {
-                      // console.log(
-                      //   'ISINPURDUPLICATED IN CLICK: ',
-                      //   isInputDuplicated
-                      // );
-
                       const profileNameTest = currentTabs
                         .map((tab) => tab.profileName)
                         .includes(form.getValues('profileName'));
@@ -416,6 +368,7 @@ function AddNewProfile({
                         e.preventDefault();
                       } else if (!form.formState.isValid) {
                         form.trigger();
+
                         e.preventDefault();
                       }
                     }}
