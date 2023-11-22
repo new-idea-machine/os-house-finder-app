@@ -5,10 +5,12 @@ import {
 } from '@reduxjs/toolkit';
 import { authApi } from '@api/auth/authApi';
 import authSliceReducer from '@features/authSlice';
+import houseReducer from '@features/houseSlice';
 
 const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   auth: authSliceReducer,
+  house: houseReducer,
 });
 
 const store = configureStore({

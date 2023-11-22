@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -35,6 +35,9 @@ import {
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@app/hooks'; // Import the hook for dispatching actions
+import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
 
 export type PropertyDataType = {
   address: string;
@@ -188,7 +191,21 @@ export default function Profiles() {
     },
   ]);
 
-  const [currentTabValue, setCurrentTabValue] = useState<string>(tabs[0].value);
+
+  const house = useSelector((state) => state.house.value);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const houseId = '6535f02e3cf2f28c9fb6a168'; // Replace with the actual ID or a prop
+    dispatch(fetchHouse(houseId)); // Dispatch the thunk action to fetch house data
+    console.log('222: ', house);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (house) {
+      console.log('Fetched house data:', house); // Console log the house data
+    }
+  }, [house]);
 
   const defaultTab = {
     profileName: '',
@@ -296,19 +313,21 @@ export default function Profiles() {
                       <FileImage className="text-gray-500" />
                     </div>
                     <div className="flex flex-col justify-center">
-                      <p className="font-semibold text-black">180 Cedar</p>
                       <p className="font-semibold text-black">
-                        St.Gloucester, ON, K1B 2P4
+                        Address: {house.data.address}
+                      </p>
+                      <p className="font-semibold text-black">
+                        City: {house.data.city}
                       </p>
                     </div>
                     <div className="flex items-center justify-center space-x-4">
                       <div className="flex flex-col">
-                        <p className="font-bold text-black">House Score:</p>
-                        <p className="font-bold text-black">House VFM:</p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-bold text-black">78</p>
-                        <p className="font-bold text-black">10</p>
+                        <p className="font-bold text-black">
+                          Price: ${house.data.price}
+                        </p>
+                        <p className="font-bold text-black">
+                          Square Footage: {house.data.squareFootage}
+                        </p>
                       </div>
                     </div>
                   </div>
