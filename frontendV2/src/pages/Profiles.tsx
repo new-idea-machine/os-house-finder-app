@@ -48,7 +48,7 @@ export type PropertyDataType = {
 export type ProfileTabType = ProfileFormValues & {
   value: string;
 };
-
+// eslint-disable-next-line
 export const columns: ColumnDef<PropertyDataType>[] = [
   {
     accessorKey: 'address',
@@ -191,6 +191,7 @@ export default function Profiles() {
     },
   ]);
 
+
   const house = useSelector((state) => state.house.value);
   const dispatch = useAppDispatch();
 
@@ -228,6 +229,7 @@ export default function Profiles() {
   return (
     <Tabs
       defaultValue={tabs[0].value}
+      value={currentTabValue}
       className="flex h-full max-w-none animate-in animate-out"
     >
       <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
@@ -236,6 +238,9 @@ export default function Profiles() {
             <TabsTrigger
               key={tab.value}
               value={tab.value}
+              onClick={() => {
+                setCurrentTabValue(tab.value);
+              }}
               className="mx-4 justify-start bg-white py-2 text-xl text-primary hover:scale-95 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
@@ -272,7 +277,24 @@ export default function Profiles() {
                   size="icon"
                   className="mr-4 rounded-full"
                   onClick={() => {
-                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                    setTabs((prevTabs) => {
+                      let deletedIndex = 0;
+                      const updatedTabs = prevTabs.filter((t, index) => {
+                        if (t.value === tab.value) {
+                          deletedIndex = index;
+                          return false;
+                        }
+                        return true;
+                      });
+
+                      if (deletedIndex === 0) {
+                        setCurrentTabValue(updatedTabs[0].value);
+                      } else {
+                        setCurrentTabValue(updatedTabs[deletedIndex - 1].value);
+                      }
+
+                      return updatedTabs;
+                    });
                   }}
                 >
                   <RiDeleteBinLine size="1.4rem" />
