@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
 import { RiDeleteBinLine } from 'react-icons/ri';
@@ -34,6 +34,9 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '@app/hooks'; // Import the hook for dispatching actions
+import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export type PropertyDataType = {
@@ -45,7 +48,7 @@ export type PropertyDataType = {
 export type ProfileTabType = ProfileFormValues & {
   value: string;
 };
-
+// eslint-disable-next-line
 export const columns: ColumnDef<PropertyDataType>[] = [
   {
     accessorKey: 'address',
@@ -188,6 +191,23 @@ export default function Profiles() {
     },
   ]);
 
+  const house = useSelector((state) => state.house.value);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const houseId = '6535f02e3cf2f28c9fb6a168'; // Replace with the actual ID or a prop
+    dispatch(fetchHouse(houseId)); // Dispatch the thunk action to fetch house data
+    console.log('222: ', house);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (house) {
+      console.log('Fetched house data:', house); // Console log the house data
+    }
+  }, [house]);
+
+  const [currentTabValue, setCurrentTabValue] = useState<string>(tabs[0].value);
+
   const defaultTab = {
     profileName: '',
     value: '',
@@ -210,6 +230,7 @@ export default function Profiles() {
   return (
     <Tabs
       defaultValue={tabs[0].value}
+      value={currentTabValue}
       className="flex h-full max-w-none animate-in animate-out"
     >
       <TabsList className="flex h-full min-h-[85vh] w-1/4 flex-col justify-between rounded-none border-r-2 border-primary bg-white">
@@ -218,6 +239,9 @@ export default function Profiles() {
             <TabsTrigger
               key={tab.value}
               value={tab.value}
+              onClick={() => {
+                setCurrentTabValue(tab.value);
+              }}
               className="mx-4 justify-start bg-white py-2 text-xl text-primary hover:scale-95 data-[state=active]:bg-primary data-[state=active]:text-white"
             >
               {tab.profileName}
@@ -254,7 +278,24 @@ export default function Profiles() {
                   size="icon"
                   className="mr-4 rounded-full"
                   onClick={() => {
-                    setTabs(tabs.filter((t) => t.value !== tab.value));
+                    setTabs((prevTabs) => {
+                      let deletedIndex = 0;
+                      const updatedTabs = prevTabs.filter((t, index) => {
+                        if (t.value === tab.value) {
+                          deletedIndex = index;
+                          return false;
+                        }
+                        return true;
+                      });
+
+                      if (deletedIndex === 0) {
+                        setCurrentTabValue(updatedTabs[0].value);
+                      } else {
+                        setCurrentTabValue(updatedTabs[deletedIndex - 1].value);
+                      }
+
+                      return updatedTabs;
+                    });
                   }}
                 >
                   <RiDeleteBinLine size="1.4rem" />
@@ -273,19 +314,21 @@ export default function Profiles() {
                       <FileImage className="text-gray-500" />
                     </div>
                     <div className="flex flex-col justify-center">
-                      <p className="font-semibold text-black">180 Cedar</p>
                       <p className="font-semibold text-black">
-                        St.Gloucester, ON, K1B 2P4
+                        Address: {house.data.address}
+                      </p>
+                      <p className="font-semibold text-black">
+                        City: {house.data.city}
                       </p>
                     </div>
                     <div className="flex items-center justify-center space-x-4">
                       <div className="flex flex-col">
-                        <p className="font-bold text-black">House Score:</p>
-                        <p className="font-bold text-black">House VFM:</p>
-                      </div>
-                      <div className="flex flex-col">
-                        <p className="font-bold text-black">78</p>
-                        <p className="font-bold text-black">10</p>
+                        <p className="font-bold text-black">
+                          Price: ${house.data.price}
+                        </p>
+                        <p className="font-bold text-black">
+                          Square Footage: {house.data.squareFootage}
+                        </p>
                       </div>
                     </div>
                   </div>
