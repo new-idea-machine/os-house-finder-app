@@ -34,10 +34,10 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useSelector } from 'react-redux';
 import { useAppDispatch } from '@app/hooks'; // Import the hook for dispatching actions
 import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export type PropertyDataType = {
   address: string;
@@ -191,7 +191,6 @@ export default function Profiles() {
     },
   ]);
 
-
   const house = useSelector((state) => state.house.value);
   const dispatch = useAppDispatch();
 
@@ -206,6 +205,8 @@ export default function Profiles() {
       console.log('Fetched house data:', house); // Console log the house data
     }
   }, [house]);
+
+  const [currentTabValue, setCurrentTabValue] = useState<string>(tabs[0].value);
 
   const defaultTab = {
     profileName: '',

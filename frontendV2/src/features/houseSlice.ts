@@ -13,6 +13,8 @@ export const fetchHouse = createAsyncThunk(
   async (id: string, thunkAPI) => {
     const response = await fetch(`http://localhost:5001/api/houses/${id}`);
     const data = await response.json();
+    console.log('data in slice', data);
+
     return data;
   }
 );
