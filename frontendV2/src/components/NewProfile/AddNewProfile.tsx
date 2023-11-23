@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useForm } from 'react-hook-form';
@@ -114,13 +113,8 @@ function AddNewProfile({
   }
 
   return (
-    <Dialog
-    // isOpen={isDialogOpen} onDismiss={() => setDialogOpen(false)}
-    >
-      <DialogTrigger
-        asChild
-        // onClick={() => setDialogOpen(true)}
-      >
+    <Dialog>
+      <DialogTrigger asChild>
         {defualtTab.profileName === '' ? (
           <Button className="mx-9 w-[88%] text-xs hover:text-stone-600 md:text-sm lg:text-base">
             + Add New Profile
@@ -400,7 +394,6 @@ function AddNewProfile({
                         .map((tab) => tab.profileName)
                         .includes(form.getValues('profileName'));
 
-
                       if (profileNameTest) {
                         form.setError('profileName', {
                           type: 'manual',
@@ -411,16 +404,17 @@ function AddNewProfile({
                       } else if (!form.formState.isValid) {
                         form.trigger();
 
-                      if (profileNameTest) {
-                        form.setError('profileName', {
-                          type: 'manual',
-                          message: 'Profile Name Already Exists!',
-                        });
-                        // form.trigger();
-                        e.preventDefault();
-                      } else if (!form.formState.isValid) {
-                        form.trigger();
-                        e.preventDefault();
+                        if (profileNameTest) {
+                          form.setError('profileName', {
+                            type: 'manual',
+                            message: 'Profile Name Already Exists!',
+                          });
+                          // form.trigger();
+                          e.preventDefault();
+                        } else if (!form.formState.isValid) {
+                          form.trigger();
+                          e.preventDefault();
+                        }
                       }
                     }}
                   >
