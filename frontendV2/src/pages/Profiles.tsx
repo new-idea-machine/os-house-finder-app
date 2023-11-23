@@ -192,6 +192,8 @@ export default function Profiles() {
   ]);
 
   const house = useSelector((state) => state.house.value);
+  console.log('house in Profiles page: ', house);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
