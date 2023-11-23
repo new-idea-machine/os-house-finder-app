@@ -34,8 +34,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '@app/hooks'; // Import the hook for dispatching actions
+import { useAppDispatch, useAppSelector } from '@app/hooks'; // Import the hook for dispatching actions
 import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -191,7 +190,8 @@ export default function Profiles() {
     },
   ]);
 
-  const house = useSelector((state) => state.house.value);
+  // const house = useSelector((state) => state.house.value);
+  const house = useAppSelector((state) => state.house.value); // Get the house data from the store
   console.log('house in Profiles page: ', house);
 
   const dispatch = useAppDispatch();
