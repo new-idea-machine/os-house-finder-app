@@ -11,15 +11,12 @@
       "@routers/*": ["src/routers/*"],
       "@middleware/*": ["src/middleware/*"],
       "@scripts/*": ["src/scripts/*"],
-      "@validator/*": ["src/validator/*"],
+      "@validator/*": ["src/validator/*"]
     },
     "outDir": "dist",
     "sourceMap": true,
     "target": "esnext",
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     "module": "commonjs",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -30,15 +27,7 @@
   "ts-node": {
     "require": ["tsconfig-paths/register"]
   },
-  "exclude": [
-    "node_modules",
-    "dist",
-    "__tests__",
-    "coverage"
-  ],
-  "include": [
-    "./*.js",
-    "src/**/*.ts",
-  ],
-  // "files": ["src/types.d.ts"]
+  "exclude": ["node_modules", "dist", "__tests__", "coverage"],
+  "include": ["./*.js", "src/**/*.ts"]
+  // "files": ["src/config/types.d.ts"]
 }

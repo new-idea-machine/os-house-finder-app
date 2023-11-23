@@ -19,6 +19,7 @@ import User from '@src/models/userModel';
 // Get all preferences
 // @route GET /api/preferences
 // @route GET /api/users/:userId/preferences
+
 export const getAllPreferences = async (
   req: Request,
   res: Response<GetPreferencesResponse>
@@ -81,6 +82,8 @@ export const createPreference = async (
   req: CreatePreferenceRequest,
   res: Response<CreatePreferenceResponse>
 ) => {
+  if (req.user) req.body.userId = req.user.id;
+
   const newPreference = await Preference.create(req.body);
 
   try {
@@ -108,9 +111,7 @@ export const updatePreference = async (
   try {
     const newData = req.body;
 
-    const updatedPreference = (await Preference.findByIdAndUpdate(id, newData, {
-      new: true,
-    })) as IPreference;
+    let updatedPreference = (await Preference.findById(id)) as IPreference;
 
     if (!updatedPreference) {
       res.status(StatusCodes.NOT_FOUND).json({
@@ -119,6 +120,30 @@ export const updatePreference = async (
       });
       return;
     }
+
+    console.log(
+      `updatedPreference userid is ${typeof updatedPreference.userId.toString()}`
+    );
+    if (req.user) console.log(`req.user is ${typeof req.user._id.toString()}`);
+
+    // make sure the user is the owner of the preference
+
+    if (
+      req.user &&
+      updatedPreference.userId.toString() !== req.user._id.toString()
+    ) {
+      console.log(updatedPreference.userId === req.user._id);
+
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: 'You are not authorized to update this preference',
+        status: StatusCodes.FORBIDDEN,
+      });
+      return;
+    }
+
+    updatedPreference = (await Preference.findByIdAndUpdate(id, newData, {
+      new: true,
+    })) as IPreference;
 
     res.status(StatusCodes.OK).json({
       message: `Preference with ID ${id} updated successfully.`,
@@ -140,12 +165,24 @@ export const deletePreference = async (
   const { id } = req.params;
 
   try {
-    const deletedPreference = await Preference.findByIdAndDelete(id);
+    let deletedPreference = (await Preference.findById(id)) as IPreference;
+    deletedPreference = (await Preference.findByIdAndDelete(id)) as IPreference;
 
     if (!deletedPreference) {
       res.status(StatusCodes.NOT_FOUND).json({
         message: `Preference with ID ${id} not found.`,
         status: StatusCodes.NOT_FOUND,
+      });
+      return;
+    }
+
+    if (
+      req.user &&
+      deletedPreference.userId.toString() !== req.user.id.toString()
+    ) {
+      res.status(StatusCodes.FORBIDDEN).json({
+        message: 'You are not authorized to delete this preference',
+        status: StatusCodes.FORBIDDEN,
       });
       return;
     }
@@ -162,10 +199,10 @@ export const deletePreference = async (
   }
 };
 
-export default {
-  getAllPreferences,
-  getPreference,
-  createPreference,
-  updatePreference,
-  deletePreference,
-};
+// export default {
+//   getAllPreferences,
+//   getPreference,
+//   createPreference,
+//   updatePreference,
+//   deletePreference,
+// };

@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { IUser } from './userModel';
 
 export interface IPreference extends Document {
   squareFoot: { min: number; max: number };
@@ -23,7 +24,7 @@ export interface IPreference extends Document {
     bedrooms: number;
     safetyScore: number;
   };
-  userId: Schema.Types.ObjectId;
+  userId: IUser['_id'];
 }
 
 const preferenceSchema: Schema<IPreference> = new Schema(
@@ -62,7 +63,7 @@ const preferenceSchema: Schema<IPreference> = new Schema(
       safetyScore: { type: Number, default: 0 },
     },
     userId: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },

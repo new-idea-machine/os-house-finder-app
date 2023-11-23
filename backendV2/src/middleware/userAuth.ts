@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import User, { IUser } from '@models/userModel';
+import User from '@models/userModel';
 import { StatusCodes } from '@src/constant';
 
 export interface UserAuthInfoRequest extends Request {
@@ -8,16 +8,20 @@ export interface UserAuthInfoRequest extends Request {
 }
 
 interface DecodedToken {
-  _id?: string;
+  id: string;
   email: string;
   role: string;
 }
 
-interface DecodedTokenFromCookie extends DecodedToken {
-  id: string;
-  iat: number;
-  exp: number;
-}
+// interface DecodedToken {
+//   [key: string]: Types.ObjectId;
+// }
+
+// interface DecodedTokenFromCookie extends DecodedToken {
+//   id: string;
+//   iat: number;
+//   exp: number;
+// }
 
 export const userAuth = async (
   req: UserAuthInfoRequest,
@@ -33,10 +37,10 @@ export const userAuth = async (
 
   try {
     // Verify the token and extract the payload
-    const decoded: DecodedTokenFromCookie = jwt.verify(
+    const decoded: DecodedToken = jwt.verify(
       token,
       process.env.JWT_SECRET || 'Bearer'
-    ) as DecodedTokenFromCookie;
+    ) as DecodedToken;
 
     // Attach the user's ID and email to the request object
     // req.user = {
@@ -45,7 +49,9 @@ export const userAuth = async (
     //   role: decoded.role,
     // };
 
-    req.user = (await User.findById(decoded.id).select('-password')) as IUser;
+    req.user = (await User.findById(decoded.id).select(
+      '-password'
+    )) as DecodedToken;
 
     return next(); // Move to the next middleware or route handler
   } catch (error) {

@@ -44,6 +44,7 @@ module.exports = {
       },
     ],
     '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/lines-between-class-members': 'off',
     'prefer-const': 'warn',
   },
   settings: {
