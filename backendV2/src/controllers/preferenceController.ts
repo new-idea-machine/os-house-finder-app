@@ -101,13 +101,11 @@ export const createPreference = async (
 };
 
 // Update a specific preference by ID
-/* eslint-disable no-console */
 export const updatePreference = async (
   req: UpdatePreferenceRequest,
   res: Response<UpdatePreferenceResponse>
 ): Promise<void> => {
   const { id } = req.params;
-  console.log(`request parameters is ${req.params}`);
   try {
     const newData = req.body;
 
@@ -121,19 +119,12 @@ export const updatePreference = async (
       return;
     }
 
-    console.log(
-      `updatedPreference userid is ${typeof updatedPreference.userId.toString()}`
-    );
-    if (req.user) console.log(`req.user is ${typeof req.user._id.toString()}`);
-
     // make sure the user is the owner of the preference
 
     if (
       req.user &&
       updatedPreference.userId.toString() !== req.user._id.toString()
     ) {
-      console.log(updatedPreference.userId === req.user._id);
-
       res.status(StatusCodes.FORBIDDEN).json({
         message: 'You are not authorized to update this preference',
         status: StatusCodes.FORBIDDEN,
@@ -198,11 +189,3 @@ export const deletePreference = async (
     });
   }
 };
-
-// export default {
-//   getAllPreferences,
-//   getPreference,
-//   createPreference,
-//   updatePreference,
-//   deletePreference,
-// };
