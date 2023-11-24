@@ -1,7 +1,13 @@
 import { IPreference } from '@models/preferenceModel';
+import { IUser } from '@src/models/userModel';
 import { Request } from 'express';
 
-export interface GetAPreferenceRequest extends Request {
+export interface CreatePreferenceRequest extends Request {
+  user?: IUser;
+  body: IPreference;
+}
+
+export interface GetAPreferenceRequest extends CreatePreferenceRequest {
   params: {
     id: string;
   };
@@ -9,13 +15,6 @@ export interface GetAPreferenceRequest extends Request {
 
 export interface DeletePreferenceRequest extends GetAPreferenceRequest {}
 
-export interface CreatePreferenceRequest extends Request {
-  body: IPreference;
-}
-
-export interface UpdatePreferenceRequest extends CreatePreferenceRequest {
-  params: {
-    id: string;
-  };
+export interface UpdatePreferenceRequest extends GetAPreferenceRequest {
   body: IPreference;
 }

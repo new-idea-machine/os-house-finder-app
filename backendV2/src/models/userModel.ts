@@ -69,7 +69,7 @@ userSchema.methods.generateToken = function generateToken() {
   };
 
   // Sign the token with a secret key and set expiration time
-  return jwt.sign(payload, process.env.JWT_SECRET as string, {
+  return jwt.sign(payload, (process.env.JWT_SECRET || 'Bearer') as string, {
     expiresIn: process.env.JWT_EXPIRE ? process.env.JWT_EXPIRE : '24h',
   });
 };
