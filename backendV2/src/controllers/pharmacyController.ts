@@ -1,9 +1,8 @@
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import PharmacyModel, { IPharmacy, Pharmacy, PharmacyZodSchema } from '../models/pharmacyModel';
 
-const router = express.Router();
 
 export const updatePharmacy = async (req: Request, res: Response) => {
   let deletedData: IPharmacy[] = [];
@@ -19,7 +18,6 @@ export const updatePharmacy = async (req: Request, res: Response) => {
     //   "url":"https://medimap.ca/_next/data/4IM8akTNHNJ5kBGswctIf/clinics/pharmacies/ab/calgary.json?page=1&facilityType=pharmacies&region=ab&city=calgary"
     // }
 
-    console.log('Fetching data from:', url);
     const response = await axios.get(url);
 
     if (response.status !== 200) {
@@ -31,23 +29,22 @@ export const updatePharmacy = async (req: Request, res: Response) => {
     // Clear existing pharmacy data
     await PharmacyModel.deleteMany({});
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const originalPharmacies: any[] = response.data.pageProps.clinicData;
 
     // Transform and filter the data to match the Mongoose model
-    const transformedPharmacies: Pharmacy[] = originalPharmacies.map((originalPharmacy) => {
-      return {
-        name: originalPharmacy.name || '',
-        address: originalPharmacy.address || '',
-        address_unit: originalPharmacy.address_unit || '',
-        city: originalPharmacy.city || '',
-        province: originalPharmacy.region || originalPharmacy.province || '',
-        post_code: originalPharmacy.post_code || '',
-        phone: originalPharmacy.phone || '',
-        email: originalPharmacy.email || '',
-        lat: originalPharmacy.lat,
-        lng: originalPharmacy.lng,
-      };
-    });
+    const transformedPharmacies: Pharmacy[] = originalPharmacies.map((originalPharmacy) => ({
+      name: originalPharmacy.name || '',
+      address: originalPharmacy.address || '',
+      address_unit: originalPharmacy.address_unit || '',
+      city: originalPharmacy.city || '',
+      province: originalPharmacy.region || originalPharmacy.province || '',
+      post_code: originalPharmacy.post_code || '',
+      phone: originalPharmacy.phone || '',
+      email: originalPharmacy.email || '',
+      lat: originalPharmacy.lat,
+      lng: originalPharmacy.lng,
+    }));
 
     // Validate the transformed data using Zod schema
     transformedPharmacies.forEach((pharmacy) => {
@@ -60,15 +57,12 @@ export const updatePharmacy = async (req: Request, res: Response) => {
     // Insert data into the database
     const insertResult = await PharmacyModel.insertMany(transformedPharmacies);
 
-    console.log('Pharmacies imported successfully:', insertResult);
-
-    res.status(200).json({ message: 'Pharmacies imported successfully' });
+    return res.status(200).json({ message: 'Pharmacies imported successfully', data: insertResult });
   } catch (error) {
     // Restore the backup data
     if (deletedData.length > 0) {
       await PharmacyModel.insertMany(deletedData);
     }
-    console.error('Error importing pharmacies:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error });
   }
 };

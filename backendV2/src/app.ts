@@ -6,12 +6,12 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import ctStationRouter from '@routers/ctStationRouter';
 import distanceTimeRouter from '@routers/distanceTimeRouter';
+import pharmacyRouter from '@routers/pharmacyRouter';
 import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
 import OauthRouter from './routers/oauthRouter';
-import pharmacyRouter from '@routers/pharmacyRouter';
 
 dotenv.config();
 

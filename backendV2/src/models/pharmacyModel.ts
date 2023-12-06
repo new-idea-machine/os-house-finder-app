@@ -1,4 +1,4 @@
-import mongoose, { model, Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import { z } from 'zod';
 
 export interface IPharmacy extends Document {
