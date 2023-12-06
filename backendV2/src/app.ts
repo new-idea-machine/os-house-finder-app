@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import ctStationRouter from '@routers/ctStationRouter';
 import distanceTimeRouter from '@routers/distanceTimeRouter';
+import pharmacyRouter from '@routers/pharmacyRouter';
 import preferenceRouter from './routers/preferenceRouter';
 import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
@@ -35,6 +36,7 @@ app.use('/api/oauth', OauthRouter);
 app.use('/api/preferences', preferenceRouter);
 app.use('/api/ctstations', ctStationRouter);
 app.use('/api/distance', distanceTimeRouter);
+app.use('/api/pharmacy', pharmacyRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
