@@ -37,6 +37,7 @@ import { Card, CardContent } from '@components/ui/card';
 import { useAppDispatch, useAppSelector } from '@app/hooks'; // Import the hook for dispatching actions
 import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import useHouse from '@hooks/useHouse';
 
 export type PropertyDataType = {
   address: string;
@@ -191,22 +192,26 @@ export default function Profiles() {
   ]);
 
   // const house = useSelector((state) => state.house.value);
-  const house = useAppSelector((state) => state.house.value); // Get the house data from the store
-  console.log('house in Profiles page: ', house);
+  // const house = useAppSelector((state) => state.house.value); // Get the house data from the store
+  // console.log('house in Profiles page: ', house);
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const houseId = '6535f02e3cf2f28c9fb6a168'; // Replace with the actual ID or a prop
-    dispatch(fetchHouse(houseId)); // Dispatch the thunk action to fetch house data
-    console.log('222: ', house);
-  }, [dispatch]);
+  const { houseData } = useHouse();
 
-  useEffect(() => {
-    if (house) {
-      console.log('Fetched house data:', house); // Console log the house data
-    }
-  }, [house]);
+  console.log(houseData);
+
+  // useEffect(() => {
+  //   const houseId = '6535f02e3cf2f28c9fb6a168'; // Replace with the actual ID or a prop
+  //   dispatch(fetchHouse(houseId)); // Dispatch the thunk action to fetch house data
+  //   console.log('222: ', house);
+  // }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (house) {
+  //     console.log('Fetched house data:', house); // Console log the house data
+  //   }
+  // }, [house]);
 
   const [currentTabValue, setCurrentTabValue] = useState<string>(tabs[0].value);
 
@@ -317,19 +322,20 @@ export default function Profiles() {
                     </div>
                     <div className="flex flex-col justify-center">
                       <p className="font-semibold text-black">
-                        Address: {house.data.address}
+                        {/* {houseData?.data ? houseData.data.address : null} */}
+                        {houseData ? houseData.address : null}
                       </p>
                       <p className="font-semibold text-black">
-                        City: {house.data.city}
+                        {/* City: {house.data.city} */}
                       </p>
                     </div>
                     <div className="flex items-center justify-center space-x-4">
                       <div className="flex flex-col">
                         <p className="font-bold text-black">
-                          Price: ${house.data.price}
+                          {/* Price: ${house.data.price} */}
                         </p>
                         <p className="font-bold text-black">
-                          Square Footage: {house.data.squareFootage}
+                          {/* Square Footage: {house.data.squareFootage} */}
                         </p>
                       </div>
                     </div>
