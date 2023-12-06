@@ -11,6 +11,7 @@ import * as middlewares from './middleware/middlewares';
 import UserRouter from './routers/userRouter';
 import HouseRouter from './routers/houseRouter';
 import OauthRouter from './routers/oauthRouter';
+import pharmacyRouter from '@routers/pharmacyRouter';
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ app.use('/api/oauth', OauthRouter);
 app.use('/api/preferences', preferenceRouter);
 app.use('/api/ctstations', ctStationRouter);
 app.use('/api/distance', distanceTimeRouter);
+app.use('/api/pharmacy', pharmacyRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
