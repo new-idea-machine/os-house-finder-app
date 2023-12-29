@@ -1,10 +1,10 @@
-import HomeCarousel from '../components/HomeCarousel';
+import HomeHero from '../components/HomeHero';
 import About from '../components/About';
 
 function HomeScreen() {
   return (
     <>
-      <HomeCarousel />
+      <HomeHero />
       <About />
     </>
   );

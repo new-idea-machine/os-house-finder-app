@@ -97,12 +97,8 @@ export const fetchHouse = createAsyncThunk(
   'house/fetchHouse',
   async (id: string) => {
     const response = await fetch(`http://localhost:5001/api/houses/${id}`);
-    console.log('url in slice', `http://localhost:5001/api/houses/${id}`);
-
-    console.log('response in slice', response);
 
     const data = await response.json();
-    console.log('data in slice', data);
 
     return data;
   }

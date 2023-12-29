@@ -6,10 +6,6 @@ const baseQuery = fetchBaseQuery({
 
 type HouseId = string;
 
-console.log(
-  import.meta.env.VITE_BASE_URL + 'api/houses/6535f02e3cf2f28c9fb6a168'
-);
-
 export const houseApi = createApi({
   baseQuery,
   reducerPath: 'houseApi',
@@ -40,7 +36,6 @@ export const houseApi = createApi({
         };
       },
       transformResponse: async (response: any) => {
-        console.log('House Api Respponse: ', response);
         return response.data;
       },
     }),

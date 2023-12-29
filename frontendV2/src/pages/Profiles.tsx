@@ -199,8 +199,6 @@ export default function Profiles() {
 
   const { houseData } = useHouse();
 
-  console.log(houseData);
-
   // useEffect(() => {
   //   const houseId = '6535f02e3cf2f28c9fb6a168'; // Replace with the actual ID or a prop
   //   dispatch(fetchHouse(houseId)); // Dispatch the thunk action to fetch house data
