@@ -26,7 +26,7 @@
     --accent-foreground: 24, 9.8%, 10%;
 
     --navy: 209 58% 23%;
-    --navy-foreground: 60 9.1% 97.8%;
+    --navy-secondary: 210 53% 28%;
 
     --destructive: 0 100% 45.1%;
     --destructive-foreground: 60 9.1% 97.8%;
@@ -61,6 +61,7 @@
     --accent-foreground: 60 9.1% 97.8%;
 
     --navy: 209 58% 23%;
+    --navy-secondary: 210 53% 28%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 60 9.1% 97.8%;

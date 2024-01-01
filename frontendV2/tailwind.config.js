@@ -52,7 +52,7 @@ module.exports = {
         },
         navy: {
           DEFAULT: 'hsl(var(--navy))',
-          foreground: 'hsl(var(--navy-foreground))',
+          secondary: 'hsl(var(--navy-secondary))',
         },
       },
       borderRadius: {
