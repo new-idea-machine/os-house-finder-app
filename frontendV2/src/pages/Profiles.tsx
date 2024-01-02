@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import AddNewProfile from '@components/NewProfile/AddNewProfile';
 import { ProfileFormValues } from '@constants/types';
@@ -8,6 +9,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import useHouse from '@hooks/useHouse';
 import {
   Table,
   TableBody,
@@ -34,10 +36,10 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Card, CardContent } from '@components/ui/card';
-import { useAppDispatch, useAppSelector } from '@app/hooks'; // Import the hook for dispatching actions
+import { useAppSelector } from '@app/hooks';
+import { useToast } from '@components/ui/use-toast';
 import { fetchHouse } from '@features/houseSlice'; // Import the async thunk you defined
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import useHouse from '@hooks/useHouse';
 
 export type PropertyDataType = {
   address: string;
@@ -127,6 +129,10 @@ const mockHouseTableData: PropertyDataType[] = [
 export default function Profiles() {
   const [properties, setProperties] =
     useState<PropertyDataType[]>(mockHouseTableData);
+
+  const { userInfo } = useAppSelector((state) => state.auth);
+
+  const { toast } = useToast();
 
   const [tabs, setTabs] = useState<ProfileTabType[]>([
     {
@@ -231,6 +237,23 @@ export default function Profiles() {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!userInfo) {
+      navigate('/');
+      setTimeout(() => {
+        toast({
+          title: 'Please login first',
+          description: `You need to login to access this page`,
+          variant: 'destructive',
+          duration: 2000,
+        });
+      }, 800);
+    }
+    // eslint-disable-next-line
+  }, [userInfo]);
 
   return (
     <Tabs
