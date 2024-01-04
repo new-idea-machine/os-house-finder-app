@@ -13,7 +13,7 @@ import {
 } from '@components/ui/dropdown';
 
 import { Cross2Icon } from '@radix-ui/react-icons';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import NotLoginDropdown from '@components/HeaderLoginRegisterBtn/NotLoginDropdown';
 import NotLoginHamburger from '@components/HeaderLoginRegisterBtn/NotLoginHamburger';
@@ -57,6 +57,7 @@ export default function Header() {
   const { userInfo } = useAppSelector((state) => state.auth);
   const { handleLogout } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <header>
@@ -96,7 +97,15 @@ export default function Header() {
                       Profile
                     </Button>
                     {userInfo ? (
-                      <Button variant="ghost" onClick={handleLogout}>
+                      <Button
+                        variant="ghost"
+                        onClick={() => {
+                          handleLogout();
+                          setTimeout(() => {
+                            navigate('/');
+                          }, 800);
+                        }}
+                      >
                         Logout
                       </Button>
                     ) : (
@@ -153,7 +162,15 @@ export default function Header() {
                   </DropdownMenuGroup>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Button variant="ghost" onClick={handleLogout}>
+                    <Button
+                      variant="ghost"
+                      onClick={() => {
+                        handleLogout();
+                        setTimeout(() => {
+                          navigate('/');
+                        }, 800);
+                      }}
+                    >
                       <LogOut className="mr-2 h-4 w-4" />
                       Log out
                     </Button>

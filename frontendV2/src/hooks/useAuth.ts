@@ -12,9 +12,9 @@ import {
 } from '@utils/IsFetchBaseQueryError';
 import { setCredentials, logout } from '@features/authSlice';
 import { useToast } from '@components/ui/use-toast';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
-interface GoogleLoginResponse {
+export interface GoogleLoginResponse {
   client_id: string;
   credential: string;
 }
@@ -22,7 +22,7 @@ interface GoogleLoginResponse {
 export default function useAuth() {
   const dispatch = useAppDispatch();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { toast } = useToast();
 
@@ -42,8 +42,6 @@ export default function useAuth() {
 
     const { _id: id, email, role } = responsePayload.data as UserResponse;
     dispatch(setCredentials({ id, email, role }));
-
-    navigate('/profiles');
   };
 
   const handleLogin = async (credentials: Credentials) => {
@@ -65,10 +63,15 @@ export default function useAuth() {
       const { _id: id, email, role } = userData;
 
       dispatch(setCredentials({ id, email, role }));
-      toast({
-        title: 'Success',
-        description: 'Login successful',
-      });
+      // navigate('/profiles');
+      // console.log('Login successful');
+
+      setTimeout(() => {
+        toast({
+          title: 'Success',
+          description: 'Login successful',
+        });
+      }, 800);
     } catch (error) {
       if (isFetchBaseQueryError(error)) {
         const { data } = error;
@@ -106,6 +109,7 @@ export default function useAuth() {
         title: 'Success',
         description: 'Logout successful',
       });
+      // navigate('/');
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -138,7 +142,7 @@ export default function useAuth() {
         title: 'Success',
         description: 'Register successful',
       });
-      navigate('/');
+      // navigate('/');
     } catch (error) {
       if (isFetchBaseQueryError(error)) {
         const { data } = error;

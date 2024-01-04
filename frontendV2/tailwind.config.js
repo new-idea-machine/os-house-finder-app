@@ -50,6 +50,10 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        navy: {
+          DEFAULT: 'hsl(var(--navy))',
+          secondary: 'hsl(var(--navy-secondary))',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -70,11 +74,16 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      textShadow: {
+        sm: '0 1px 2px var(--tw-shadow-color)',
+        default: '0 2px 4px var(--tw-shadow-color)',
+        lg: '0 8px 16px var(--tw-shadow-color)',
+      },
     },
   },
   plugins: [
     require('tailwindcss-animate'),
-    function ({ addUtilities }) {
+    function ({ addUtilities, matchUtilities, theme }) {
       const newUtilites = {
         // targets webkit browsers (chrome and safari)
         '.no-scrollbar::-webkit-scrollbar': {
@@ -86,6 +95,15 @@ module.exports = {
         },
       };
       addUtilities(newUtilites);
+
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      );
     },
   ],
 };

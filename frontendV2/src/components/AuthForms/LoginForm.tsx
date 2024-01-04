@@ -52,7 +52,9 @@ function LoginForm() {
 
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     handleLogin(values);
-    // axiosLogin(values);
+    setTimeout(() => {
+      navigate('/profiles');
+    }, 800);
   }
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
